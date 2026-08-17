@@ -39,8 +39,10 @@ also the easiest to skip when the build feels finished — don't.
 ### Deployment
 
 - Vercel project on the free tier
-- Env vars set in production: `DATABASE_URI`, `PAYLOAD_SECRET`,
-  `NEXT_PUBLIC_SERVER_URL`, `RESEND_API_KEY`, blob/R2 credentials
+- Env vars set in production: `DATABASE_URI`, `PAYLOAD_SECRET`, `RESEND_API_KEY`,
+  blob/R2 credentials. `NEXT_PUBLIC_SERVER_URL` is deliberately *not* set on
+  Vercel — `payload.config.ts` derives it from `VERCEL_PROJECT_PRODUCTION_URL`,
+  which follows the custom domain automatically.
 - Custom domain + HTTPS
 - Confirm image storage works in production (**local disk does not persist on
   Vercel** — this is the classic launch-day failure)

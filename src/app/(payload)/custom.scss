@@ -1,0 +1,22 @@
+:root {
+  --admin-font-sans:
+    var(--font-vazirmatn-arabic), var(--font-vazirmatn-latin), 'Vazirmatn', system-ui,
+    sans-serif;
+  --font-body: var(--admin-font-sans);
+  --font-heading: var(--admin-font-sans);
+}
+
+html[data-theme] {
+  --font-body: var(--admin-font-sans);
+  --font-heading: var(--admin-font-sans);
+}
+
+html[data-theme] body,
+html[data-theme] input,
+html[data-theme] textarea,
+html[data-theme] select,
+html[data-theme] button,
+html[data-theme] label,
+html[data-theme] legend {
+  font-family: var(--admin-font-sans) !important;
+}

@@ -28,7 +28,9 @@
   --color-border: #e8dfcf;
   --color-blob-pink: #f6d2cb;
 
-  --font-sans: var(--font-vazirmatn), 'Vazirmatn', system-ui, sans-serif;
+  --font-sans:
+    var(--font-vazirmatn-arabic), var(--font-vazirmatn-latin), 'Vazirmatn', system-ui,
+    sans-serif;
 
   /* ── radii: highly rounded ── */
   --radius-sm: 0.6rem;
@@ -123,6 +125,7 @@
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+    text-align: start;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

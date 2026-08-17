@@ -31,7 +31,7 @@ src/app/
 ├── (site)/          # public site — RTL layout, Vazirmatn
 │   ├── layout.tsx
 │   └── page.tsx
-└── (payload)/       # Payload admin — generated, do not hand-edit
+└── (payload)/       # Payload admin — generated, edit only for the font wiring
 ```
 
 ### Font — partly done
@@ -96,7 +96,8 @@ NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 ## Notes
 
 - Payload owns its database tables — no separate ORM or migration tool
-- Do not hand-edit anything under `src/app/(payload)/`
+- Treat `src/app/(payload)/` as generated, except the Vazirmatn wiring in
+  `layout.tsx` and `custom.scss` — see the note in @context/current-feature.md
 - Keep the first admin user's credentials; the client's real account is created in phase 7
 
 ## References
