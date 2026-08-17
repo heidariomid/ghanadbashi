@@ -60,8 +60,8 @@ gets. No hosting invoice to chase.
 ### 1. Copy the scaffolding
 
 ```bash
-cp -r new-website/ ../client-name/
-cd ../client-name && git init
+cp -r bakery/ ../client-name/
+cd ../client-name && rm -rf .git .vercel node_modules .next && git init
 ```
 
 ### 2. Rewrite `context/project-overview.md`
@@ -82,6 +82,14 @@ request, their content types, and their contact details.
 
 ### 4. Work the phases
 
+Read `context/template/lessons-learned.md` first — it lists every mistake the
+first build hit, with the fix.
+
+Start with **phase 0**: a static demo, deployed, approved by the client before
+any backend work. `context/template/client-brief-template.md` is the brief to
+hand over. On the first project the client approved a design that contradicted
+the written brief, so everything built before approval would have been wasted.
+
 The `context/features/phase-*.md` specs are ordered and independently
 implementable. Feed them to Claude Code one at a time, following the workflow in
 `context/ai-interaction.md`.
@@ -92,6 +100,7 @@ For a site of this size, once you've done it once:
 
 | Phase | Work |
 | --- | --- |
+| 0 — Design demo | Half a day |
 | 1 — Setup | Half a day |
 | 2 — CMS schema | Half a day |
 | 3 — Homepage | Half a day |
@@ -124,7 +133,6 @@ The economics only work if the client never needs you after delivery:
 
 ```
 .
-├── IMPLEMENTATION-PLAN.md      # full plan & rationale for the first build
 ├── TEMPLATE-README.md          # this file
 ├── CLAUDE.md                   # generic — conventions for Claude Code
 └── context/
@@ -132,6 +140,12 @@ The economics only work if the client never needs you after delivery:
     ├── coding-standards.md     # generic
     ├── ai-interaction.md       # generic — workflow & verification
     ├── client-handoff.md       # CLIENT-SPECIFIC — the guide you deliver
-    ├── current-feature.md      # blank working template
-    └── features/               # phased, implementable specs
+    ├── current-feature.md      # status of the phase in progress
+    ├── template/               # generic — start here for a new client
+    │   ├── README.md
+    │   ├── implementation-plan.md
+    │   ├── client-brief-template.md
+    │   ├── lessons-learned.md  # pitfalls with fixes — read before building
+    │   └── examples/
+    └── features/               # phased, implementable specs (phase 0–7)
 ```

@@ -1,4 +1,13 @@
-# Reusable Client-Site Template + Bakery Site Specs
+# Implementation plan — small client sites
+
+> **Status: executed.** This produced the `context/` docs and phase specs, and
+> the bakery site was then built from them. Kept as the template's rationale:
+> when a future project asks "why Payload?" or "why these phases?", the answer
+> is here. Update it when a decision changes — do not let it drift.
+>
+> One change since it was written: **phase 0 was added** — a static demo
+> approved by the client before any backend work. See
+> @context/features/phase-0-design-demo-spec.md.
 
 ## Context
 
@@ -6,10 +15,10 @@ Omid needs to take on small client websites (like this Persian home-bakery site)
 
 So this deliverable is two things at once:
 
-1. **A portable, reusable template** in `new-website/` that turns "small client site" into a repeatable, mostly-copy-paste job — the real economic goal.
+1. **A portable, reusable template** that turns "small client site" into a repeatable, mostly-copy-paste job — the real economic goal.
 2. **A filled-in set of specs** for the first client (the bakery) that proves the template works.
 
-Nothing is implemented here — this produces **documentation and specs only**, in `/Users/omid/Desktop/Brad/devstash/new-website`, mirroring the structure of `context/` so it's ready to move to its own repo. A copy of this plan is also written to `new-website/IMPLEMENTATION-PLAN.md` so it travels with the docs.
+This plan produced **documentation and specs only**; the site was built from them afterwards. The plan lives alongside the docs so it travels with them to the next project.
 
 ### What Payload CMS 3 is (for the record)
 
@@ -33,18 +42,26 @@ Research findings that drove this (verified August 2026):
 
 ## Deliverable: file tree
 
+As built:
+
 ```
-new-website/
-├── IMPLEMENTATION-PLAN.md          # this plan, copied so it travels with the docs
+.
 ├── TEMPLATE-README.md              # how to reuse this for the NEXT client
 ├── CLAUDE.md                       # generic, project-agnostic
 └── context/
-    ├── project-overview.md         # BAKERY-specific
+    ├── project-overview.md         # CLIENT-specific
     ├── coding-standards.md         # generic (lighter stack)
     ├── ai-interaction.md           # generic (adapted workflow)
-    ├── client-handoff.md           # BAKERY — Persian guide for the client
-    ├── current-feature.md          # blank template
+    ├── client-handoff.md           # CLIENT — guide in their language
+    ├── current-feature.md          # working status of the active phase
+    ├── template/                   # generic — reuse material
+    │   ├── README.md               # how to start the next client site
+    │   ├── implementation-plan.md  # this file
+    │   ├── client-brief-template.md
+    │   ├── lessons-learned.md      # pitfalls with fixes — read first
+    │   └── examples/               # the first project's real brief
     └── features/
+        ├── phase-0-design-demo-spec.md
         ├── phase-1-setup-spec.md
         ├── phase-2-cms-schema-spec.md
         ├── phase-3-homepage-spec.md
@@ -54,7 +71,7 @@ new-website/
         └── phase-7-launch-handoff-spec.md
 ```
 
-Two layers, clearly separated: generic files are copy-paste-ready for any future client; bakery files are the worked example.
+Two layers, clearly separated: generic files are copy-paste-ready for any future client; client-specific files are the worked example.
 
 ---
 
@@ -77,6 +94,8 @@ Two layers, clearly separated: generic files are copy-paste-ready for any future
 ## Phase specs (content to write into each file)
 
 Each follows the existing `context/features/*.md` house style: `# Title`, `## Overview`, `## Requirements`, `## References` with `@path` links.
+
+**Phase 0 — Design demo.** Added after the fact, and the most valuable change to this plan. A static, frontend-only homepage with mock data, deployed and sent to the client for approval before any backend exists. On the first project the client approved a design that contradicted the written brief; without this phase that work would have been built on top of a CMS and thrown away.
 
 **Phase 1 — Setup.** Next.js 16 + Tailwind v4 init; Vazirmatn via `next/font/local`; `<html lang="fa" dir="rtl">`; `@theme` bakery palette (warm cream/caramel/pink); Payload 3 installed with Postgres adapter + `fa` locale; `/admin` reachable; Neon connected.
 
@@ -112,7 +131,7 @@ Access control: one admin user (the client); public read via API only.
 
 Docs-only, so verification is review-based:
 
-1. `ls -R new-website/` matches the tree above, including `IMPLEMENTATION-PLAN.md` at the root.
+1. `ls -R` matches the tree above.
 2. Generic files contain **no bakery references** — grep for `کیک`/`bakery` in `coding-standards.md`, `ai-interaction.md`, `CLAUDE.md` returns nothing.
 3. Every one of the client's 6 sections and 7 product categories is traceable to a phase spec.
 4. `@` cross-references between specs resolve to real paths.
@@ -122,6 +141,17 @@ Real validation comes later, when Phase 1 is executed in a fresh repo.
 
 ---
 
-## Open item (non-blocking)
+## Open items
 
-Persian/Jalali date input in the order form: use a light `react-multi-date-picker` or a plain text field with a Persian placeholder. Decide during Phase 5 — it doesn't affect the docs.
+- **Jalali date input** in the order form: a light `react-multi-date-picker`, or a plain text field with a Persian placeholder. Decide during phase 5.
+- **One page or many.** The phase-0 demo put products, gallery, about and contact on a single page. Separate routes give category filtering, product detail and better SEO; one page gives fewer clicks for an audience arriving from social. Decide before phase 4.
+
+---
+
+## What the first build actually taught
+
+Recorded in @context/template/lessons-learned.md — read it before starting the next site. The short version:
+
+- The demo phase pays for itself immediately.
+- A stale spec is worse than no spec; update the plan the moment the design changes.
+- Most of the lost time went to tooling, not design: Tailwind v4's source scanning, a `backdrop-filter` containing block, and linter version incompatibilities.
