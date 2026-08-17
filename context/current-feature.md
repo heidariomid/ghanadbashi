@@ -1,51 +1,37 @@
-# Current Feature
-
-Phase 0 — Design demo for client approval
+# Current Feature: Phase 1 — Project Setup
 
 ## Status
 
-Completed — deployed, awaiting the client's confirmation.
+In Progress
 
 ## Goals
 
-Show the client a real, clickable homepage before any backend work starts, so the
-look is agreed before it becomes expensive to change.
-
-- Frontend only. No Payload, no database, no auth, no APIs — deliberately.
-- Implement the design the client already approved in Claude Design
-  (`RTL Bakery Homepage Demo/`), not a fresh interpretation.
-- All copy, prices, contact details and images in `src/data/content.ts`, so the
-  demo can be re-branded in one file and later swapped for the CMS.
-- Persian, RTL, mobile-first — she will open this on a phone.
+- Keep the existing homepage rendering unchanged while introducing CMS
+  infrastructure.
+- Move the public site into `src/app/(site)/` and keep admin routing under
+  `src/app/(payload)/`.
+- Integrate Payload CMS with Neon Postgres and configure the admin for Persian
+  (`fa`) locale.
+- Add and verify core Payload setup (`Users`, `Media`, `@payload-config` alias,
+  and `pnpm generate:types` workflow).
+- Configure environment values (`DATABASE_URI`, `PAYLOAD_SECRET`,
+  `NEXT_PUBLIC_SERVER_URL`) and commit safe placeholders in `.env.example`.
+- Pass phase verification: `pnpm dev`, Persian `/admin`, unchanged homepage RTL,
+  `pnpm build`, and `pnpm lint`.
 
 ## Notes
 
-**Deployed:** https://ghanadbashi.vercel.app (Vercel project `ghanadbashi`).
-Vercel Authentication is still on, so the link shows a login page until it is
-disabled in Project Settings → Deployment Protection.
-
-**Repo:** https://github.com/heidariomid/ghanadbashi — not connected to Vercel
-yet, so pushes do not deploy automatically. `vercel git connect` failed; the
-Vercel GitHub app likely needs access to the repo.
-
-**Not connected to a CMS yet.** `src/data/content.ts` is shaped to map onto the
-phase 2 collections almost one-to-one:
-
-| content.ts | Payload |
-| --- | --- |
-| `brand`, `contact`, `about` | `site-settings` global |
-| `products.items` | `products` collection |
-| `gallery.items` | `gallery` collection |
-| `categories.items` | the `category` select options |
-
-**Known gaps against the plan**, all deliberate for a demo: no `/products`,
-`/products/[slug]`, `/order`, `/gallery`, `/about` or `/contact` routes; no order
-form; no gallery lightbox; photos are Unsplash placeholders rather than her own;
-Vazirmatn loads from `next/font/google` rather than self-hosted.
-
-**Leftovers to clean when the direction is settled:** `src/components/illustrations/`
-holds 18 unused SVGs from an earlier illustration-led draft, and `scripts/`
-holds screenshot helpers used for review.
+- Phase 0 already delivered the Next.js 16 base, RTL behavior, theme tokens, and
+  initial Vazirmatn wiring for the demo.
+- This phase is partly done: remaining work is Payload + Neon setup, route-group
+  split, and local font self-hosting with the required weights.
+- Tailwind must remain CSS-configured (no `tailwind.config.ts`), and the explicit
+  source setup in `globals.css` should remain intact.
+- Keep the phase 0 dependency constraints: TypeScript 6 and ESLint 9 compatible
+  package pins.
+- Do not hand-edit generated files under `src/app/(payload)/`.
+- Definition of done: `/admin` loads in Persian and the homepage still renders
+  unchanged.
 
 ## History
 

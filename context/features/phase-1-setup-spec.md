@@ -2,40 +2,29 @@
 
 ## Overview
 
-Phase 1 of 7. Stand up the Next.js project with Persian RTL support, the theme,
-and Payload CMS connected to Neon.
+Phase 1 of 7. Stand up the Next.js project with Persian RTL support, the theme, and Payload CMS connected to Neon.
 
-**Partly done already.** Phase 0 built the Next.js app, RTL, the theme and the
-fonts in order to ship the demo. What remains here is Payload, Neon, and moving
-the public site into a `(site)` route group. Treat the sections below as a
-checklist of what is already true versus what is outstanding.
+**Partly done already.** Phase 0 built the Next.js app, RTL, the theme and the fonts in order to ship the demo. What remains here is Payload, Neon, and moving the public site into a `(site)` route group. Treat the sections below as a checklist of what is already true versus what is outstanding.
 
-This phase is done when `/admin` loads in Persian and the existing homepage
-still renders unchanged.
+This phase is done when `/admin` loads in Persian and the existing homepage still renders unchanged.
 
 ## Requirements
 
 ### Project init — done in phase 0
 
 - Next.js 16, App Router, TypeScript strict, pnpm
-- Path alias `@/*` → `./src/*` in `tsconfig.json` (note: **not** the repo root —
-  imports read `@/components/...` with no `src/` prefix)
+- Path alias `@/*` → `./src/*` in `tsconfig.json` (note: **not** the repo root — imports read `@/components/...` with no `src/` prefix)
 - ESLint with `next/core-web-vitals`
 - **No** `tailwind.config.ts` — Tailwind v4 is configured in CSS
 
 Two setup details worth knowing, both discovered the hard way in phase 0:
 
-- Tailwind's automatic source detection crawls the whole project and dies on
-  stray non-source files. `globals.css` therefore uses
-  `@import 'tailwindcss' source(none)` with an explicit `@source "../**/*.{ts,tsx}"`.
-- ESLint pins matter: `typescript-eslint` does not support TypeScript 7, and
-  `eslint-plugin-react` breaks on ESLint 10. The project runs TypeScript 6 and
-  ESLint 9.
+- Tailwind's automatic source detection crawls the whole project and dies on stray non-source files. `globals.css` therefore uses `@import 'tailwindcss' source(none)` with an explicit `@source "../**/*.{ts,tsx}"`.
+- ESLint pins matter: `typescript-eslint` does not support TypeScript 7, and `eslint-plugin-react` breaks on ESLint 10. The project runs TypeScript 6 and ESLint 9.
 
 ### Route groups — outstanding
 
-Separate the public site from the admin so they can have different layouts. The
-demo's page currently sits at `src/app/page.tsx` and must move into `(site)/`:
+Separate the public site from the admin so they can have different layouts. The demo's page currently sits at `src/app/page.tsx` and must move into `(site)/`:
 
 ```
 src/app/
@@ -47,12 +36,10 @@ src/app/
 
 ### Font — partly done
 
-- **Vazirmatn**, currently via `next/font/google`. Still to do: self-host with
-  `next/font/local`, woff2 files in `src/app/fonts/`, no CDN
+- **Vazirmatn**, currently via `next/font/google`. Still to do: self-host with `next/font/local`, woff2 files in `src/app/fonts/`, no CDN
 - Subset to Arabic + Latin; `display: 'swap'`
 - Expose as a CSS variable and wire it to `--font-sans` in `@theme` — done
-- Weights: 300, 400, 500, 600, 700, 900 — the approved design sets headings at
-  900, so the original 400/500/700 is not enough
+- Weights: 300, 400, 500, 600, 700, 900 — the approved design sets headings at 900, so the original 400/500/700 is not enough
 
 ### RTL — done in phase 0
 
@@ -60,23 +47,19 @@ src/app/
 - Verify Tailwind logical properties flip correctly (`ps-*`, `pe-*`, `ms-*`, `me-*`)
 - Set `text-align: start` as the default, never `left`
 - `overflow-x: clip` on `html` — `hidden` would break the sticky header
-- Do not put `backdrop-filter` on the header: it becomes the containing block
-  for `position: fixed` children and traps the mobile drawer inside the header
+- Do not put `backdrop-filter` on the header: it becomes the containing block for `position: fixed` children and traps the mobile drawer inside the header
 
 ### Theme — done in phase 0
 
-In `src/app/globals.css` under `@theme`, ported from the approved design system
-(`RTL Bakery Homepage Demo/_ds/.../tokens/`). See the palette table in
-@context/project-overview.md.
+In `src/app/globals.css` under `@theme`, ported from the approved design system (`RTL Bakery Homepage Demo/_ds/.../tokens/`). See the palette table in @context/project-overview.md.
 
-- Values are kept as the design system's hex, **not** converted to `oklch()` —
-  matching the approved design exactly beats the format preference
+- Values are kept as the design system's hex, **not** converted to `oklch()` — matching the approved design exactly beats the format preference
 - Light mode only — no dark mode for this project
 
 ### Payload CMS
 
-- Install `payload`, `@payloadcms/next`, `@payloadcms/db-postgres`,
-  `@payloadcms/richtext-lexical`
+- read docs first if you need use context7 mcp and here is the link to lookup: `https://payloadcms.com/docs/getting-started/what-is-payload`
+- Install `payload`, `@payloadcms/next`, `@payloadcms/db-postgres`, `@payloadcms/richtext-lexical`
 - `src/payload.config.ts` with:
   - Postgres adapter pointed at Neon
   - `i18n` configured with the **`fa`** locale so the admin UI is Persian
@@ -97,7 +80,8 @@ In `src/app/globals.css` under `@theme`, ported from the approved design system
 
 ```
 DATABASE_URI=
-PAYLOAD_SECRET=
+psql 'postgresql://neondb_owner:npg_QedSp0NXtl2m@ep-proud-breeze-azdpybu1-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+PAYLOAD_SECRET=create_yourself_randomly
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 ```
 
@@ -113,8 +97,7 @@ NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
 - Payload owns its database tables — no separate ORM or migration tool
 - Do not hand-edit anything under `src/app/(payload)/`
-- Keep the first admin user's credentials; the client's real account is created
-  in phase 7
+- Keep the first admin user's credentials; the client's real account is created in phase 7
 
 ## References
 
