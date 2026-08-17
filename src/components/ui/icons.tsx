@@ -1,6 +1,5 @@
 /**
- * Interface icons, drawn to the same rules as the illustrations: 24×24 viewBox,
- * 1.5 stroke, rounded caps, currentColor.
+ * Interface icons: 24×24 viewBox, 1.5 stroke, rounded caps, currentColor.
  */
 interface IconProps {
   className?: string

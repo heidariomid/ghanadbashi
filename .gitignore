@@ -4,6 +4,12 @@ next-env.d.ts
 .DS_Store
 .vercel
 
-# local review screenshots (scripts/shot.sh)
+# secrets — Payload and the database land here in phase 1
+.env
+.env*.local
+!.env.example
+
+# local tooling output
+.playwright-mcp
 .screens
-.vercel
+*.log
