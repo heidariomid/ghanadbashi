@@ -1,0 +1,403 @@
+Build a premium, modern Persian bakery website UI as a frontend-only prototype.
+
+IMPORTANT:
+
+* This is ONLY a visual UI prototype for showing to a client.
+* Do NOT build any backend.
+* Do NOT add Payload CMS.
+* Do NOT add a database.
+* Do NOT add authentication.
+* Do NOT create APIs.
+* Use realistic mock data.
+* Focus heavily on visual quality, layout, typography, spacing, illustration, responsiveness, and overall first impression.
+* The result must look like a professionally designed production website, not an AI-generated generic template.
+
+## Project Setup
+
+Scaffold a NEW Next.js 16 project (App Router, TypeScript strict, Tailwind CSS v4).
+
+* Tailwind v4 uses CSS-based configuration via the `@theme` directive in
+  `src/app/globals.css`. Do NOT create `tailwind.config.ts` or
+  `tailwind.config.js` — those are v3 and will not work.
+* Set the path alias `@/*` to `./src/*` in tsconfig.json.
+* Do not install a component library (no shadcn/ui, MUI, Chakra). Hand-roll the
+  components with Tailwind.
+* Do not install unnecessary dependencies.
+
+## Client / Brand
+
+This is a small Iranian home-based bakery and dessert business.
+
+The brand should feel:
+
+* Premium
+* Warm
+* Elegant
+* Handmade
+* Trustworthy
+* Modern
+* Appetizing
+* Personal rather than corporate
+
+Avoid making it look childish, overly colorful, cheap, or like a generic restaurant template.
+
+## Language, Direction & Typography
+
+The entire website must be Persian (Farsi).
+
+* Set `<html lang="fa" dir="rtl">` in the root layout.
+* Use the **Vazirmatn** font via `next/font` (weights 400, 500, 700), wired to
+  `--font-sans` in the `@theme` block.
+* Render all numbers (prices, phone numbers) in Persian digits using
+  `toLocaleString('fa-IR')`.
+
+### RTL correctness — important
+
+Use Tailwind **logical properties** throughout so the layout flips correctly:
+
+* Use `ps-*` / `pe-*` (padding start/end), `ms-*` / `me-*` (margin start/end),
+  `start-*` / `end-*`, and `text-start` / `text-end`.
+* Do NOT use `pl-*`, `pr-*`, `ml-*`, `mr-*`, `left-*`, `right-*`, `text-left` or
+  `text-right` — these do not flip in RTL and will produce a mirrored, broken
+  layout.
+
+The visual hierarchy should feel natural for Persian users.
+
+## Homepage
+
+Create a visually impressive homepage containing:
+
+1. Header
+
+* Elegant logo/brand name
+* Navigation
+* Products
+* Gallery
+* About
+* Contact
+* Prominent "ثبت سفارش" CTA
+* WhatsApp/contact shortcut
+* On mobile, the nav drawer must slide in from the RIGHT (RTL)
+
+2. Hero section
+
+Create a very minimal hero. Use ONE elegant pastry/cake line illustration as the
+main visual element — not a photograph.
+
+Include:
+
+* Brand name
+* A short emotional tagline such as:
+  "طعم خانگی، با عشق و کیفیت"
+* Short supporting text
+* Primary CTA: "ثبت سفارش"
+* Secondary CTA: "مشاهده محصولات"
+
+The illustration should occupy a generous amount of whitespace without making
+the layout feel crowded. The hero should read as a premium bakery *brand
+identity*, not an e-commerce banner.
+
+Typography and whitespace matter as much as the illustration. No full-bleed
+image, no dark overlay, no text-over-photo.
+
+3. Product categories
+
+Create elegant category cards for:
+
+* 🎂 کیک تولد و مناسبتی
+* 🍰 کیک‌های کافه‌ای و عصرانه
+* 🧁 شیرینی خشک
+* 🍮 دسرها
+* 🌿 محصولات سلامت‌محور و رژیمی
+* 🥜 محصولات ارده، عسل و کره بادام‌زمینی
+* 🎁 پک‌های هدیه
+
+4. Featured products
+
+Do NOT make this look like a conventional e-commerce grid.
+
+Use minimal editorial product presentation. Each product has:
+
+* A small artistic line illustration
+* Product name
+* Very short description
+* Price
+* Minimal CTA ("مشاهده محصول" or "ثبت سفارش") — a text link or thin underline,
+  not a heavy filled button on every card
+
+Use whitespace and typography to separate products instead of heavy cards,
+borders and drop shadows.
+
+Use realistic Persian product names and prices.
+
+5. Gallery
+
+Do NOT create a typical photo gallery.
+
+Create a minimal visual showcase — a brand lookbook rather than a product grid:
+
+* Artistic illustrations
+* Abstract pastry compositions
+* Small editorial visual moments
+* Asymmetric layout — deliberately uneven, not a uniform grid
+* Generous whitespace
+
+It should feel like a design portfolio, not a gallery page.
+
+6. About section
+
+Introduce the baker in a warm, personal way.
+
+Emphasize:
+
+* Home-based bakery
+* Handmade preparation
+* High-quality ingredients
+* Attention to detail
+* Freshness
+* Love and care
+
+7. Ordering CTA
+
+Create a strong section encouraging the visitor to place an order.
+
+8. Contact section
+
+Show:
+
+* Phone
+* WhatsApp
+* Instagram
+* Service area
+
+9. Footer
+
+Elegant, minimal footer with brand information and navigation.
+
+Also add a sticky floating WhatsApp button, fixed to the bottom-left in RTL,
+visible on every screen size.
+
+## Mock Data
+
+Put ALL mock content — products, categories, gallery items, brand name,
+tagline, about text and contact details — in a single file at
+`src/data/content.ts`, typed with TypeScript interfaces.
+
+Components must read from this file and hardcode nothing. This is so copy,
+product names and prices can be edited in one place before the demo is shown to
+the client.
+
+## Visual & Illustration Direction
+
+IMPORTANT:
+Do NOT use busy food photography as the primary visual language.
+
+The website should be extremely minimal, elegant, artistic, and editorial.
+
+Use minimal artistic illustrations instead of large realistic food photographs.
+
+The visual identity should feel like a premium boutique Persian bakery brand.
+
+Think:
+
+* Minimal editorial design
+* Contemporary Persian aesthetics
+* Handcrafted boutique identity
+* Soft artistic illustration
+* Luxury packaging design
+* Scandinavian/Japanese-inspired minimalism
+
+Use:
+
+* Elegant minimal cake and pastry illustrations
+* Fine line illustrations
+* Soft hand-drawn shapes
+* Subtle organic forms
+* Abstract pastry silhouettes
+* Very restrained decorative elements
+
+Avoid:
+
+* Cartoon-style illustrations
+* Childish graphics
+* Generic AI illustrations
+* Busy compositions
+* Stock photography
+* Large realistic food photography
+* Excessive icons
+* Excessive decorative elements
+
+The illustrations should feel sophisticated and artistic, not like clip-art.
+
+Use generous whitespace.
+
+Use large typography.
+
+Use rounded corners carefully and consistently.
+
+Use shadows very sparingly, if at all — this style relies on whitespace and
+type, not elevation.
+
+Use subtle animations only where they improve the experience.
+
+Do NOT overuse gradients, glassmorphism, excessive cards, or flashy animations.
+
+## Color Direction
+
+Use a very restrained palette:
+
+* Warm ivory / off-white background
+* Deep charcoal / espresso typography
+* ONE muted accent color — muted terracotta, dusty rose, sage, or warm caramel
+
+Do not use many colors.
+
+The design should work beautifully even if almost everything is monochromatic.
+
+Define the palette as `oklch()` custom properties in the `@theme` block.
+
+## Images & Illustration Assets
+
+Do not source stock imagery, and do not use Unsplash or any other photography.
+
+### Hand-author the illustrations as inline SVG
+
+Do NOT generate images with an AI image tool, and do NOT download stock assets.
+Write the SVG by hand, as React components.
+
+This is deliberate. These are sparse line drawings — a layered cake is a handful
+of arcs and strokes — and hand-authoring gives three things the alternatives
+cannot:
+
+* The stroke inherits `currentColor`, so illustrations pick up the theme palette
+  automatically and stay consistent with the type color
+* Perfectly uniform stroke weight across the whole set, because you control it
+* No files to load, no 404s, no licensing questions
+
+### Drawing rules — apply to every illustration
+
+* One consistent `stroke-width` across the entire set (start at 1.5 on a 24×24
+  viewBox and scale proportionally for larger art). This single value is what
+  makes the set read as one system — never vary it between illustrations.
+* `fill="none"`, `stroke="currentColor"`
+* `stroke-linecap="round"` and `stroke-linejoin="round"` — the rounded caps are
+  what make it feel handcrafted rather than technical
+* Deliberately sparse: suggest the form with a few clean strokes. No shading, no
+  hatching, no interior detail, no text
+* Generous negative space inside the viewBox — do not fill the frame
+* Consistent viewBox proportions within each group (all category icons the same
+  size, all product illustrations the same size)
+
+### Structure
+
+* One component per illustration in `src/components/illustrations/`, e.g.
+  `LayeredCake.tsx`, `Tart.tsx`, `GiftBox.tsx`
+* Each accepts `className` so size and color are controlled by the consumer
+* Export them through a single index, and map illustration keys in
+  `src/data/content.ts` to components so any one can be swapped in one line
+* No `/public/images/` directory and no `next/image` for these — they are inline
+  SVG, not image files
+
+### What to draw
+
+* **Hero (1)** — one elegant layered cake or tart. The most refined piece of the
+  set; spend the most time here.
+* **Categories (7)** — birthday cake, café cake slice, dry pastry/cookie,
+  dessert cup, a leaf/sprig for the healthy line, a jar for the spreads, a gift
+  box
+* **Products (~6)** — individual pastries and cakes
+* **Gallery (~5–6)** — abstract pastry compositions and organic forms; these can
+  be the loosest and most artistic of the set
+
+Start with the hero and one category icon, get the stroke weight and level of
+detail right, then derive the rest from that established style.
+
+Consistency across the set matters far more than any single illustration being
+perfect.
+
+If a given illustration is not turning out well, REMOVE it and let typography and
+whitespace carry that section — an empty, well-composed space beats a weak
+drawing. This is the guiding rule for the whole design: when in doubt, remove
+rather than add.
+
+## Responsive Design
+
+The design must look excellent on:
+
+* Desktop (1280px)
+* Tablet (768px)
+* Mobile (375px)
+
+Design mobile intentionally rather than simply shrinking the desktop layout.
+Tap targets must be at least 44×44px.
+
+## Technical Requirements
+
+* Keep components clean and reusable.
+* Create a sensible component structure under `src/components/`.
+* Server components by default; only use `'use client'` for genuinely
+  interactive pieces (mobile nav, gallery lightbox).
+* Do not over-engineer.
+* `pnpm build` and `pnpm lint` must pass.
+
+## Verification
+
+Before reporting the work as finished:
+
+* Run `pnpm build` and `pnpm lint` and fix any errors.
+* Confirm every illustration renders — no broken image icons or empty slots.
+* Confirm every image path is driven from `src/data/content.ts`, not inline.
+* Check the layout at 375px, 768px and 1280px.
+* Check RTL: nothing mirrored, text aligned to the right, mobile drawer opening
+  from the right.
+
+If Playwright MCP is available in this session, take screenshots at 375px and
+1280px, look at them, and iterate on spacing, typography and composition until
+the result looks polished. If it is not available, say so plainly rather than
+claiming the visuals were inspected.
+
+## Overall Feeling
+
+The final result should make the client think:
+
+"این یک سایت معمولی قنادی نیست؛ یک برند خاص و شیکه."
+
+The design should feel:
+minimal,
+premium,
+calm,
+artistic,
+warm,
+modern,
+and memorable.
+
+When in doubt, remove elements rather than adding them.
+
+Less is more.
+
+## Most Important Requirement
+
+I am going to take screenshots of this website and show them directly to a
+client.
+
+Therefore, prioritize the visual presentation above everything else.
+
+The homepage should look impressive within the first 3 seconds.
+
+Do not stop at a basic functional implementation. Build the UI, then refine the
+visual details — type scale, whitespace ratios, composition, hierarchy — until
+it looks like a professionally designed production website.
+
+Note that this minimal style is unforgiving: with no photography to carry the
+page, the design succeeds or fails on typography, spacing and restraint. Budget
+most of the effort there rather than on adding more elements.
+
+## Notes for me (not instructions)
+
+To review/replace before showing the client:
+
+* **Illustration set** — check it reads as one consistent system. Any drawing
+  that clashes in stroke weight or detail level should be redrawn or removed.
+* The brand name — currently invented; swap in her real one.
+* Prices — invented and not calibrated to the Iranian market; correct them in
+  `src/data/content.ts`.

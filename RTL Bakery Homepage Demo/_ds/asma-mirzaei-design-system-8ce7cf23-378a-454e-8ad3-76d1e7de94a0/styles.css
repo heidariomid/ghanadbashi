@@ -1,0 +1,9 @@
+/* ─────────────────────────────────────────────
+   Asma Mirzaei Design System — Root Stylesheet
+   @import chain only. No inline rules here.
+───────────────────────────────────────────── */
+
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/animations.css';

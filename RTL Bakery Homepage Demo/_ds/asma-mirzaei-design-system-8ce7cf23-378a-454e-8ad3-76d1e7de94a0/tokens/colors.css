@@ -1,0 +1,60 @@
+/* ─────────────────────────────────────────────
+   Asma Mirzaei Design System — Color Tokens
+   Warm parchment + rosé + espresso palette.
+   No dark mode. No cool grays. RTL-first.
+───────────────────────────────────────────── */
+
+:root {
+  /* ── Surfaces ── */
+  --background:          #fbf6ee;   /* warm parchment — page bg */
+  --foreground:          #5f5041;   /* dark warm brown — body text */
+  --card:                #fffdf8;   /* off-white — card surfaces */
+  --card-foreground:     #2c2620;   /* deep espresso — card text */
+  --popover:             #fffdf8;
+  --popover-foreground:  #2c2620;
+
+  /* ── Primary — Rosé ── */
+  --primary:             #d98e88;   /* rosé — CTAs, highlights, active states */
+  --primary-foreground:  #f7fff6;   /* near-white for text on primary */
+
+  /* ── Secondary — Soft Blush ── */
+  --secondary:           #f6d6cf;   /* blush — secondary buttons, tags, panels */
+  --secondary-foreground:#6b4035;   /* dark terracotta — text on secondary */
+
+  /* ── Muted ── */
+  --muted:               #f1eadd;   /* warm parchment tint — subtle backgrounds */
+  --muted-foreground:    #837868;   /* subdued warm — captions, placeholders */
+
+  /* ── Accent (= secondary) ── */
+  --accent:              #f6d6cf;
+  --accent-foreground:   #6b4035;
+
+  /* ── Destructive ── */
+  --destructive:         oklch(0.577 0.245 27.325);
+
+  /* ── Utility ── */
+  --border:              #e8dfcf;   /* warm beige — dividers, input outlines */
+  --input:               #e8dfcf;
+  --ring:                #d98e88;   /* rosé — focus rings */
+
+  /* ── Decorative blobs ── */
+  --blob-pink:           #f6d2cb;
+  --blob-brown:          #8a6553;
+
+  /* ── Chart / data-vis ── */
+  --chart-1:             #d98e88;
+  --chart-2:             #d9a06b;
+  --chart-3:             #8a6553;
+  --chart-4:             #c8b79a;
+  --chart-5:             #6b4035;
+
+  /* ── Sidebar ── */
+  --sidebar:                    #fffdf8;
+  --sidebar-foreground:         #2c2620;
+  --sidebar-primary:            #d98e88;
+  --sidebar-primary-foreground: #fffaf6;
+  --sidebar-accent:             #f6d6cf;
+  --sidebar-accent-foreground:  #6b4035;
+  --sidebar-border:             #e8dfcf;
+  --sidebar-ring:               #d98e88;
+}

@@ -1,0 +1,65 @@
+/* ─────────────────────────────────────────────
+   Asma Mirzaei Design System — Typography Tokens
+   Font: Vazirmatn (Google Fonts) — full Persian/Arabic support
+   Fallback: system-ui
+───────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap');
+
+/* Geist Mono — code/mono use only.
+   Served from fontsource CDN until the user uploads a local file via the sidebar.
+   To go local: replace src URLs below with e.g. url('../fonts/geist-mono-400.woff2'). */
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-mono@5/files/geist-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-mono@5/files/geist-mono-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ── Font stacks ── */
+  --font-sans:    'Vazirmatn', 'Vazirmatn Fallback', system-ui, sans-serif;
+  --font-heading: 'Vazirmatn', 'Vazirmatn Fallback', system-ui, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, monospace;
+
+  /* ── Type scale ── */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+  --text-4xl:  2.25rem;    /* 36px */
+  --text-5xl:  3rem;       /* 48px */
+  --text-6xl:  3.75rem;    /* 60px */
+
+  /* ── Line heights ── */
+  --leading-tight:   1.15;   /* display headings */
+  --leading-snug:    1.375;  /* subheadings */
+  --leading-normal:  1.5;    /* UI labels */
+  --leading-relaxed: 1.65;   /* body copy */
+
+  /* ── Font weights ── */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-black:    900;    /* hero headings — primary weight */
+}
+
+/* ── Base resets ── */
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

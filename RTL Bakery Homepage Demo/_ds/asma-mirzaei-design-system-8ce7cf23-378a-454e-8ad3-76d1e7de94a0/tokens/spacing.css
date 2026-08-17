@@ -1,0 +1,50 @@
+/* ─────────────────────────────────────────────
+   Asma Mirzaei Design System — Spacing Tokens
+   Highly rounded. Warm shadows. Editorial scale.
+───────────────────────────────────────────── */
+
+:root {
+  /* ── Border radius ── */
+  --radius:     1rem;     /* base */
+  --radius-sm:  0.6rem;   /* badges, chips */
+  --radius-md:  0.8rem;   /* inputs, small cards */
+  --radius-lg:  1rem;     /* cards, buttons */
+  --radius-xl:  1.4rem;   /* large cards, panels */
+  --radius-2xl: 1.8rem;   /* hero portrait container */
+  --radius-3xl: 2.2rem;   /* large decorative */
+  --radius-4xl: 2.6rem;   /* pill shapes, hero blob */
+
+  /* ── Spacing scale ── */
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+
+  /* ── Shadows — warm-tinted, never cold ── */
+  --shadow-sm: 0 1px 3px 0 rgba(95, 80, 65, 0.10),
+               0 1px 2px -1px rgba(95, 80, 65, 0.08);
+  --shadow-md: 0 4px 12px 0 rgba(95, 80, 65, 0.12),
+               0 2px 4px -1px rgba(95, 80, 65, 0.08);
+  --shadow-lg: 0 8px 24px 0 rgba(95, 80, 65, 0.14),
+               0 4px 8px -2px rgba(95, 80, 65, 0.10);
+
+  /* ── Layout ── */
+  --max-w-site:    72rem;   /* 1152px — max-w-6xl */
+  --max-w-content: 56rem;   /*  896px */
+  --max-w-prose:   42rem;   /*  672px */
+  --nav-height:     4rem;   /*   64px */
+
+  /* ── Section rhythm ── */
+  --section-py-sm: 5rem;    /* py-20 mobile */
+  --section-py-lg: 7rem;    /* py-28 desktop */
+  --section-px-sm: 1.25rem; /* px-5 */
+  --section-px-lg: 2rem;    /* px-8 */
+}

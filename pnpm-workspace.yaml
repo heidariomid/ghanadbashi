@@ -1,0 +1,4 @@
+# unrs-resolver ships prebuilt platform binaries as optional deps; its install
+# script is only a fallback, so it is denied rather than run.
+allowBuilds:
+  unrs-resolver: false

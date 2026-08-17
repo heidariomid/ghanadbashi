@@ -1,0 +1,40 @@
+Read the file `prompt` in this directory — it is the complete brief for what I
+want you to build. Follow it closely.
+
+Summary of what it asks for: a frontend-only Persian (RTL) bakery website UI,
+minimal editorial style, illustration-led rather than photography-led. No
+backend, no CMS, no database, no auth, no APIs. It is a visual prototype I will
+screenshot and show to a client.
+
+Before you start writing code, tell me your plan for:
+
+1. The type scale and spacing system — with no photography carrying the page,
+   this is what the design lives or dies on
+2. The palette (ivory background, espresso text, one muted accent — pick one and
+   say which)
+3. The component and file structure
+
+Then build it.
+
+Important notes:
+
+- Hand-author the line illustrations as inline SVG React components in
+  `src/components/illustrations/` — do not use an AI image generator and do not
+  download stock assets. Keep one uniform stroke weight across the whole set;
+  that consistency matters more than any single drawing. Use `currentColor` so
+  they inherit the palette.
+- Build the hero illustration and one category icon FIRST and show me those
+  before drawing the rest, so we lock the style before it gets replicated 19
+  times.
+- The brand name and prices in the brief are invented. Use sensible Persian
+  placeholders; I will replace them before the client sees this.
+- When something is not working visually, remove it rather than adding more.
+  Empty, well-composed whitespace beats a weak illustration.
+
+When you are done, run `pnpm build` and `pnpm lint`, then start the dev server
+and tell me the URL so I can look at it.
+
+If you have Playwright MCP available, take screenshots at 375px and 1280px, look
+at them, and iterate on spacing and typography before telling me it is finished.
+If you do not have it, say so plainly instead of claiming you checked the
+visuals.
