@@ -8,6 +8,11 @@ WhatsApp button) that every later page reuses.
 Corresponds to section ۱ of the client brief. Every piece of content comes from
 the CMS — nothing hardcoded.
 
+**Mostly built already.** Phase 0 shipped the shell and every homepage section
+against the approved design, reading from `src/data/content.ts`. The work left
+in this phase is swapping that data source for the Payload Local API and adding
+empty-state handling — the markup should barely change.
+
 ## Requirements
 
 ### Shared shell (built here, reused everywhere)
@@ -32,32 +37,48 @@ the CMS — nothing hardcoded.
 
 ### Homepage sections
 
-**1. Hero**
-- Full-bleed `heroImage` from site settings, `priority` loading
-- `brandName` as `<h1>`
-- `tagline` beneath it
-- Two CTAs: **ثبت سفارش** → `/order` (primary), **واتساپ** → wa.me (secondary)
-- Dark overlay/gradient so text stays legible over any photo she uploads
-- Full viewport height on desktop, ~70vh on mobile
+Superseded by the approved design — the original full-bleed, dark-overlay hero
+is **not** what the client signed off on. Build what the design shows.
+
+**1. Hero** — two columns, text and portrait side by side
+- `heroImage` as a 4:5 portrait with a large radius and a warm shadow,
+  `priority` loading. No full-bleed, no dark overlay, no text over photo
+- A blush blob tucked behind the portrait, spilling past its start edge
+- A small card overlapping the portrait's bottom corner («پخت روز · تحویل در …»)
+- Eyebrow line, `brandName` as `<h1>` at weight 900, `tagline` beneath
+- Two CTAs: **ثبت سفارش** (primary), **مشاهده محصولات** (outline)
+- Stacks to one column below `lg`
 
 **2. Category grid**
 - All 7 categories as cards, each linking to `/products?category={value}`
-- Emoji + Persian name
-- 2 columns mobile, 3–4 desktop
+- Square photo, Persian name, one-line description
+- **2 columns on mobile** — seven full-width squares is far too much scrolling —
+  then `auto-fit` from `sm` up
 
 **3. Featured products**
 - Products with `isFeatured` true, ordered by `sortOrder`, limit 6
-- Reuse `ProductCard` from phase 4 — build it here if phase 4 hasn't run yet
+- On a `card` background band, 4:5 photos, price and unit, a thin underlined
+  link rather than a heavy button
+- One column on mobile: these are the money shots, keep them big
 - "مشاهده همه محصولات" link → `/products`
 - Hide the whole section if nothing is featured
 
-**4. About teaser**
-- First ~2 lines of `aboutText`
-- "بیشتر بخوانید" → `/about`
+**4. Gallery teaser**
+- Multi-column masonry with varied ratios from `lg`; a uniform square grid below
+  that, or the rows read as ragged on a phone
 
-**5. Contact strip**
+**5. About**
+- `aboutText` beside a 4:5 portrait, plus the four value cards
+- "بیشتر بخوانید" → `/about` if the full page exists
+
+**6. Order CTA**
+- Full-width blush band, centred, two buttons and the three ordering steps
+
+**7. Contact strip**
 - Phone, WhatsApp, Instagram, service area
-- Tappable `tel:` and `wa.me` links
+- Tappable `tel:` and `wa.me` links, `dir="ltr"` on the numbers
+- Persian digits for phone numbers only — never for handles like
+  `@ghanad_bashi_asal5`
 
 ### Data fetching
 
@@ -104,6 +125,10 @@ The client will publish before filling everything in. None of these may crash:
 - Photography is the selling point — let images dominate, keep UI restrained
 - Hero image must be `priority`; it's the largest contentful paint
 - Header/footer/WhatsApp button belong in `(site)/layout.tsx`, not the page
+- Keep the footer to one line: wordmark and credit. A footer nav duplicates the
+  header and only adds height
+- The floating WhatsApp button overlaps a short footer on phones — reserve
+  bottom padding there
 
 ## References
 

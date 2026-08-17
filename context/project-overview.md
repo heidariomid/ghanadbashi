@@ -1,7 +1,20 @@
-# Project Overview — Home Bakery Website (قنادی خانگی)
+# Project Overview — قناد باشی عسل (Home Bakery Website)
 
 🍰 A Persian-language site for a home-based bakery: showcase products, take
 orders, and let the owner manage everything herself.
+
+---
+
+## Brand
+
+| | |
+| --- | --- |
+| Name | قناد باشی عسل |
+| Latin | GHANAD BASHI ASAL |
+| Tagline | طعم خانگی، با عشق و کیفیت |
+| Area | اصفهان، بهارستان و حومه |
+| Phone / WhatsApp | 0936 908 8311 |
+| Instagram | @ghanad_bashi_asal5 |
 
 ---
 
@@ -20,6 +33,40 @@ After launch she must be able to — without any developer involvement:
 
 **This constraint drives every technical decision in the project.** Anything she
 might reasonably want to change lives in the CMS.
+
+---
+
+## Approach — demo first, then build
+
+Design approval comes before any backend work. Phase 0 ships a static,
+frontend-only homepage to a live URL; the client scrolls it on her phone and
+confirms. Only then does phase 1 start.
+
+The reason is cost: changing a layout in a static page is minutes, changing it
+after collections, an order form and revalidation depend on it is not. It also
+qualifies the lead cheaply — a client who won't respond to a demo link won't
+respond to an invoice.
+
+## Why Payload, and not the alternatives
+
+The economics of a small client site are decided by one question: *who edits the
+content after launch?* If the answer is "the developer", the project loses money
+on support calls forever.
+
+- **Payload CMS 3, self-hosted in the same Next.js app.** The Persian admin
+  ships in core (`@payloadcms/translations` includes `fa`), and the RTL admin
+  layout bug is fixed (issue #11162, PR #11282). You write **zero** admin code —
+  no dashboard, no auth, no CRUD forms. Runs free on Vercel + Neon.
+- **Not Sanity** — generous free tier, but `sanity-io/locales` has no Persian at
+  all. The client would get an English-only editor. Disqualified.
+- **Not WordPress** — trades a CMS problem for a maintenance problem: plugin
+  updates, security patches, clients breaking the editor. Still phone calls,
+  just different ones. And it teaches nothing reusable.
+
+That last point is the real unlock. The phase 2 schemas are the asset: the
+second small client site costs a fraction of the first, because only schemas and
+styling change. That is what turns projects currently worth rejecting into ones
+worth accepting.
 
 ---
 
@@ -66,9 +113,18 @@ in the CMS and the filters on the products page.
 
 ## Pages
 
+`/` exists today as a static demo containing every section. The remaining routes
+are planned, not built.
+
+**Open decision, settle before phase 4:** whether products, gallery, about and
+contact stay as sections of the one page (simpler, fewer clicks, good for an
+Instagram audience) or become the separate routes below (better SEO, room for
+category filtering and product detail). The demo currently proves the one-page
+version.
+
 | Route | Purpose |
 | --- | --- |
-| `/` | Hero, category grid, featured products, CTAs |
+| `/` | Hero, category grid, featured products, gallery, about, order CTA, contact — **built** |
 | `/products` | All products, filterable by the 7 categories |
 | `/products/[slug]` | Single product detail + order CTA |
 | `/order` | Order form (accepts `?product=` to pre-fill) |
@@ -83,7 +139,9 @@ in the CMS and the filters on the products page.
 
 - **Persian (Farsi) only**, right-to-left throughout
 - `<html lang="fa" dir="rtl">`
-- **Vazirmatn** font, self-hosted via `next/font/local`
+- **Vazirmatn** font. Currently loaded via `next/font/google`; self-hosting with
+  `next/font/local` is still preferred before launch, to drop the build-time
+  dependency on Google Fonts
 - Persian digits for prices and dates via `toLocaleString('fa-IR')`
 - Delivery dates presented in the Jalali calendar
 - The Payload admin runs with the `fa` locale, and every field is labelled in
@@ -100,7 +158,7 @@ in the CMS and the filters on the products page.
 | UI | React 19 + Tailwind CSS v4 — hand-rolled components, no component library |
 | CMS | Payload CMS 3, self-hosted at `/admin` |
 | Database | Neon PostgreSQL (free tier) |
-| Image storage | Vercel Blob or Cloudflare R2 |
+| Image storage | Vercel Blob or Cloudflare R2 — the demo uses Unsplash URLs as placeholders |
 | Email | Resend — order notifications |
 | Hosting | Vercel (free tier) |
 | Tests | None — manual browser verification |
@@ -125,10 +183,31 @@ Managed entirely through the Payload admin. Full field definitions in
 
 ## Design direction
 
+**Source of truth: the client-approved Claude Design export in
+`RTL Bakery Homepage Demo/`.** Its `_ds/.../tokens/*.css` files define the
+system; `src/app/globals.css` ports them into Tailwind's `@theme`. When the two
+disagree, the export wins — or update the export first, then the code.
+
 - Warm, appetising, homemade — not corporate
 - Photography leads: large images, generous whitespace, restrained UI
-- Palette: warm cream, caramel, soft pink accents
-- **Mobile-first.** Most visitors arrive on a phone from an Instagram link
+- Palette — warm parchment ground, espresso type, rosé accent, blush panels:
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `background` | `#fbf6ee` | page |
+| `foreground` | `#5f5041` | body text |
+| `card` | `#fffdf8` | raised sections |
+| `card-foreground` | `#2c2620` | headings |
+| `primary` | `#d98e88` | CTAs, hover, accents |
+| `secondary` | `#f6d6cf` | the order band |
+| `muted-foreground` | `#837868` | captions |
+| `border` | `#e8dfcf` | hairlines |
+
+- Headings at weight 900; heavily rounded corners (`--radius-sm` 0.6rem →
+  `--radius-4xl` 2.6rem); warm-tinted shadows, never cold
+- **Mobile-first.** Most visitors arrive on a phone from an Instagram link.
+  Design mobile deliberately — the demo needed categories and gallery two-up to
+  stop the page running to 19 screens
 - Persistent WhatsApp button — it's the client's primary sales channel
 
 ---
@@ -163,7 +242,10 @@ Deliberately excluded to keep the project small. Possible later, at cost:
 
 Ordered and independently implementable — see @context/features/:
 
+0. @context/features/phase-0-design-demo-spec.md — static demo, client approval
+   — **done, awaiting her confirmation**
 1. @context/features/phase-1-setup-spec.md — project setup, RTL, fonts, Payload
+   — Next.js, RTL, theme and fonts done; Payload and the database outstanding
 2. @context/features/phase-2-cms-schema-spec.md — collections & globals
 3. @context/features/phase-3-homepage-spec.md — homepage
 4. @context/features/phase-4-products-spec.md — product listing & detail
