@@ -4,16 +4,15 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Photo } from '@/components/ui/Photo'
 import { content } from '@/data/content'
 import { resolveImage } from '@/lib/media'
-import { getPayloadClient } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/site-settings'
 
 export async function Hero() {
   const { brand, primaryCta } = content
 
-  const payload = await getPayloadClient()
-  const settings = await payload.findGlobal({ slug: 'site-settings', depth: 1 })
+  const settings = await getSiteSettings()
 
-  const name = settings.brand?.brandName || brand.name
-  const tagline = settings.brand?.tagline || brand.tagline
+  const name = settings.brand?.brandName?.trim() || brand.name
+  const tagline = settings.brand?.tagline?.trim()
   const heroPhoto = resolveImage(settings.brand?.heroImage)
 
   return (
@@ -26,8 +25,8 @@ export async function Hero() {
             <h1 className="mt-7 text-display font-black text-card-foreground text-balance">
               {name}
             </h1>
-            <p className="mt-5 text-h2 font-medium">{tagline}</p>
-            <p className="mt-7 max-w-[34rem] text-lead text-muted-foreground">
+            {tagline ? <p className="mt-5 text-h2 font-medium">{tagline}</p> : null}
+            <p className="mt-7 max-w-136 text-lead text-muted-foreground">
               {brand.intro}
             </p>
 
@@ -46,23 +45,28 @@ export async function Hero() {
             </p>
           </div>
 
-          {heroPhoto && (
-            <div className="relative animate-rise-slow">
-              {/* blush blob, tucked behind the portrait and spilling past its start edge */}
-              <div className="absolute -bottom-[8%] -start-[6%] end-[12%] h-[62%] rounded-4xl bg-blob-pink/55" />
+          <div className="relative animate-rise-slow">
+            {/* blush blob, tucked behind the portrait and spilling past its start edge */}
+            <div className="absolute inset-be-[-8%] inset-s-[-6%] inset-e-[12%] h-[62%] rounded-4xl bg-blob-pink/55" />
 
+            {heroPhoto ? (
               <Photo
                 photo={heroPhoto}
                 priority
                 sizes="(max-width: 1024px) 100vw, 45vw"
                 className="relative aspect-4/5 w-full rounded-3xl shadow-portrait"
               />
+            ) : (
+              <div
+                aria-hidden="true"
+                className="relative aspect-4/5 w-full rounded-3xl bg-secondary shadow-portrait"
+              />
+            )}
 
-              <div className="relative mt-[-34px] me-auto w-fit rounded-4xl border border-border bg-card px-6.5 py-3 text-tiny text-muted-foreground shadow-warm">
-                {brand.heroBadge}
-              </div>
+            <div className="relative -mt-8.5 me-auto w-fit rounded-4xl border border-border bg-card px-6.5 py-3 text-tiny text-muted-foreground shadow-warm">
+              {brand.heroBadge}
             </div>
-          )}
+          </div>
         </div>
       </Container>
     </section>

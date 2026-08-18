@@ -1,134 +1,135 @@
-# Phase 3 — Homepage Spec
+# Phase 3 — Homepage CMS Wiring
 
 ## Overview
 
-Phase 3 of 7. Build the homepage plus the shared site shell (header, footer,
-WhatsApp button) that every later page reuses.
+Phase 3 of 7. **Narrow scope:** finish wiring the fields the client can already
+edit in `site-settings` but the public site still ignores.
 
-Corresponds to section ۱ of the client brief. Every piece of content comes from
-the CMS — nothing hardcoded.
+Phases 0 and 2 shipped the approved design, the full gallery (filter chips,
+lightbox), category cards from published photos, featured products, and partial
+CMS reads for hero name/tagline/image and about photo. Section headings and
+marketing copy stay in `src/data/content.ts` — that is intentional; the client
+does not edit those.
 
-**Mostly built already.** Phase 0 shipped the shell and every homepage section
-against the approved design, reading from `src/data/content.ts`. The work left
-in this phase is swapping that data source for the Payload Local API and adding
-empty-state handling — the markup should barely change.
+**Do not rebuild what already works.** No gallery teaser, no `/products`
+routes, no layout refactor, no fetch consolidation unless it falls out naturally
+while wiring contact.
+
+## Already done (no Phase 3 work)
+
+- Homepage layout and every section's markup
+- Hero: `brandName`, `tagline`, `heroImage` from CMS
+- Featured products, gallery, category grid from CMS collections
+- About portrait from `site-settings.brand.aboutImage`
+- `revalidate = 60` on the homepage
+- Sticky header, RTL mobile drawer from the right, WhatsApp float position
 
 ## Requirements
 
-### Shared shell (built here, reused everywhere)
+### 1. Contact — wire `site-settings.contact`
 
-**Header**
-- Brand name from `site-settings.brandName`
-- Nav: خانه / محصولات / گالری / درباره من / تماس با ما
-- Mobile: hamburger → slide-in drawer from the **right** (RTL)
-- Sticky on scroll
+These fields exist in the admin today. The site must read them everywhere contact
+info appears:
 
-**Footer**
-- Brand name and tagline
-- Contact links (phone, WhatsApp, Instagram)
-- Service area
-- Copyright with the current Persian year
+| CMS field | Used in |
+| --- | --- |
+| `phone` | Contact strip, Footer (if shown), Header WhatsApp-adjacent links as needed |
+| `whatsapp` | Contact strip, Footer, floating button, Order CTA secondary link |
+| `instagram` | Contact strip, Footer |
+| `serviceArea` | Contact strip, Footer |
 
-**Floating WhatsApp button**
-- Fixed bottom-**left** in RTL (visually opposite the natural reading corner)
-- Visible on every page
-- Links to `https://wa.me/{whatsapp}`
-- Hidden if `whatsapp` is empty
+**Link rules (unchanged from the design):**
 
-### Homepage sections
+- Phone → `tel:+98…` with Persian digits in the label (`faPhone`)
+- WhatsApp → `https://wa.me/{whatsapp}` — number stored without `+` or leading zero
+- Instagram → `https://instagram.com/{instagram}` — stored without `@`
+- Phone and WhatsApp anchors get `dir="ltr"`; Instagram handle does **not** get
+  digit localisation
 
-Superseded by the approved design — the original full-bleed, dark-overlay hero
-is **not** what the client signed off on. Build what the design shows.
+**Hide-if-empty:** if `whatsapp` is blank, hide the floating button and the
+WhatsApp row in Contact; if `instagram` is blank, hide that row only. Same for
+Footer links.
 
-**1. Hero** — two columns, text and portrait side by side
-- `heroImage` as a 4:5 portrait with a large radius and a warm shadow,
-  `priority` loading. No full-bleed, no dark overlay, no text over photo
-- A blush blob tucked behind the portrait, spilling past its start edge
-- A small card overlapping the portrait's bottom corner («پخت روز · تحویل در …»)
-- Eyebrow line, `brandName` as `<h1>` at weight 900, `tagline` beneath
-- Two CTAs: **ثبت سفارش** (primary), **مشاهده محصولات** (outline)
-- Stacks to one column below `lg`
+Remove the hardcoded phone/WhatsApp/Instagram/service-area values from
+`content.ts` once wired. Keep section eyebrow, title and description there.
 
-**2. Category grid**
-- All 7 categories as cards, each linking to `/products?category={value}`
-- Square photo, Persian name, one-line description
-- **2 columns on mobile** — seven full-width squares is far too much scrolling —
-  then `auto-fit` from `sm` up
+### 2. About — wire `site-settings.brand.aboutText`
 
-**3. Featured products**
-- Products with `isFeatured` true, ordered by `sortOrder`, limit 6
-- On a `card` background band, 4:5 photos, price and unit, a thin underlined
-  link rather than a heavy button
-- One column on mobile: these are the money shots, keep them big
-- "مشاهده همه محصولات" link → `/products`
-- Hide the whole section if nothing is featured
+- Render `aboutText` (Lexical richText) in the About section instead of the
+  hardcoded `paragraphs` array in `content.ts`
+- Keep the four value cards, signature line, and section heading in `content.ts`
+  for now — the client did not ask to edit those
+- If `aboutText` is empty **and** `aboutImage` is missing, hide the whole About
+  section
+- If only one of text or image is present, render what exists
 
-**4. Gallery teaser**
-- Multi-column masonry with varied ratios from `lg`; a uniform square grid below
-  that, or the rows read as ragged on a phone
+### 3. Empty states
 
-**5. About**
-- `aboutText` beside a 4:5 portrait, plus the four value cards
-- "بیشتر بخوانید" → `/about` if the full page exists
+The client may publish before every optional field is filled. None of these may
+crash or show broken layout:
 
-**6. Order CTA**
-- Full-width blush band, centred, two buttons and the three ordering steps
+| Field empty | Behaviour |
+| --- | --- |
+| `heroImage` | Text column still renders; photo column shows a solid brand-colour placeholder (parchment/rosé), not a broken gap |
+| `tagline` | Omit the tagline line — do not fall back to hardcoded copy |
+| `aboutText` | Omit text block; keep image if present (see above) |
+| `whatsapp` | Hide float button and WhatsApp links |
+| `instagram` | Hide Instagram link only |
+| `phone` | Hide phone row only |
+| Featured products (none) | Hide section — **already works** |
 
-**7. Contact strip**
-- Phone, WhatsApp, Instagram, service area
-- Tappable `tel:` and `wa.me` links, `dir="ltr"` on the numbers
-- Persian digits for phone numbers only — never for handles like
-  `@ghanad_bashi_asal5`
+Hardcoded fallbacks for `brandName` are OK on first deploy before seed runs;
+optional CMS fields should not silently show stale `content.ts` values.
 
-### Data fetching
+### 4. Footer polish
 
-One server component, Payload Local API, fetch settings and featured products in
-parallel:
+Expand the footer beyond wordmark + credit. Still one compact band — no footer
+nav (duplicates the header):
 
-```ts
-const payload = await getPayload({ config })
-const [settings, featured] = await Promise.all([
-  payload.findGlobal({ slug: 'site-settings' }),
-  payload.find({
-    collection: 'products',
-    where: { isFeatured: { equals: true }, isAvailable: { equals: true } },
-    sort: 'sortOrder',
-    limit: 6,
-  }),
-])
-```
+- `brandName` and `tagline` from CMS
+- Tappable contact links (phone, WhatsApp, Instagram) using the same link rules
+- `serviceArea` as plain text
+- Copyright line with the **current Persian calendar year**
+  (`toLocaleString('fa-IR', { year: 'numeric' })`) — e.g. «۱۴۰۴»
 
-Static render with `revalidate`; on-demand revalidation comes in phase 4.
+Keep the extra bottom padding on phones so the floating WhatsApp button clears
+the footer text.
 
-### Empty states
+### Header (small touch)
 
-The client will publish before filling everything in. None of these may crash:
+- `brandName` in the header should come from CMS (currently hardcoded in
+  `content.ts`) so it stays in sync with hero/footer
 
-- No `heroImage` → solid brand-colour background
-- No `tagline` → omit the line
-- No featured products → hide the section
-- No `aboutText` → hide the teaser
-- No `instagram`/`whatsapp` → hide just that link
+WhatsApp in the header nav can stay as a link built from CMS `whatsapp` once
+wired.
+
+## Out of scope
+
+- Moving Header/Footer/WhatsAppFloat into `(site)/layout.tsx`
+- Single parallel Payload fetch on the page
+- Category cards linking to `/products?category=…` — Phase 4
+- Gallery teaser / masonry — Phase 2 shipped the full gallery instead
+- «مشاهده همه محصولات» → `/products` — Phase 4
+- Wiring Order CTA copy or section intros to CMS
+- Featured product limit or `isAvailable` filter changes
 
 ## Verification
 
-- Renders correctly at 375 / 768 / 1280px
-- RTL: nav reads right-to-left, mobile drawer opens from the right, nothing mirrored
-- Editing `brandName` or `tagline` in `/admin` updates the page
-- Clearing every optional field still renders a valid page
-- Hero image is optimised via `next/image` and doesn't cause layout shift
-- WhatsApp button opens a chat with the right number
+- Change `phone` / `whatsapp` / `instagram` / `serviceArea` in `/admin` →
+  Contact, Footer, and float button update within ~60s
+- Change `aboutText` in `/admin` → About section updates
+- Clear `whatsapp` → float button and WhatsApp links disappear; page still valid
+- Clear `tagline` → hero shows no tagline line
+- Clear `heroImage` → placeholder shows, no layout shift
+- Renders at 375 / 768 / 1280px; RTL unchanged
 - `pnpm build` and `pnpm lint` pass
 
 ## Notes
 
-- Photography is the selling point — let images dominate, keep UI restrained
-- Hero image must be `priority`; it's the largest contentful paint
-- Header/footer/WhatsApp button belong in `(site)/layout.tsx`, not the page
-- Keep the footer to one line: wordmark and credit. A footer nav duplicates the
-  header and only adds height
-- The floating WhatsApp button overlaps a short footer on phones — reserve
-  bottom padding there
+- `content.ts` keeps static UI copy: nav labels, section headings, value cards,
+  order steps. Only client-editable business facts move to CMS.
+- Phase 2's single-page anchor nav (`#products`, `#gallery`, etc.) stays until
+  Phase 4 adds routes.
 
 ## References
 

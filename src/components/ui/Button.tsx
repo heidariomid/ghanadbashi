@@ -9,6 +9,7 @@ interface ButtonProps {
   variant?: Variant
   size?: Size
   className?: string
+  dir?: 'ltr' | 'rtl'
 }
 
 /** Ported from the design system's Button: pill, weight 600, warm hover lift. */
@@ -33,10 +34,12 @@ export function Button({
   variant = 'default',
   size = 'md',
   className,
+  dir,
 }: ButtonProps) {
   return (
     <a
       href={href}
+      dir={dir}
       className={`${base} ${variants[variant]} ${sizes[size]} ${className ?? ''}`}
     >
       {children}

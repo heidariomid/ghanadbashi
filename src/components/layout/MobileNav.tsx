@@ -8,7 +8,7 @@ import type { NavItem } from '@/data/content'
 interface MobileNavProps {
   items: NavItem[]
   primaryCta: NavItem
-  whatsapp: { label: string; href: string }
+  whatsapp?: { label: string; href: string }
   brandName: string
 }
 
@@ -48,7 +48,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
       {/* anchored to the inline start, which is the right edge in RTL */}
       <aside
         aria-hidden={!open}
-        className={`absolute inset-y-0 start-0 flex w-[86%] max-w-sm flex-col bg-card transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute inset-y-0 inset-s-0 flex w-[86%] max-w-sm flex-col bg-card transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -85,12 +85,15 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
           >
             {primaryCta.label}
           </a>
-          <a
-            href={whatsapp.href}
-            className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-border text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary"
-          >
-            {whatsapp.label}
-          </a>
+          {whatsapp ? (
+            <a
+              href={whatsapp.href}
+              dir="ltr"
+              className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-border text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary"
+            >
+              {whatsapp.label}
+            </a>
+          ) : null}
         </div>
       </aside>
     </div>

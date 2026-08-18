@@ -1,16 +1,25 @@
-# Current Feature
+# Current Feature: Phase 3 — Homepage CMS Wiring
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- What success looks like, as bullet points. Filled in by `/feature load`. -->
+- Wire CMS contact fields everywhere they appear, with correct links, Persian phone digits, and hide-if-empty behavior.
+- Render CMS `aboutText` rich text alongside the optional about image, hiding the section only when both are empty.
+- Handle empty hero image and tagline fields without stale fallbacks or broken layouts.
+- Expand the footer with CMS brand/contact details, service area, and the current Persian calendar year.
+- Keep the header brand name and WhatsApp link synchronized with CMS values.
+- Preserve responsive RTL behavior and pass `pnpm build` and `pnpm lint`.
 
 ## Notes
 
-<!-- Constraints, context and details carried over from the spec. -->
+- Scope is limited to wiring existing `site-settings` fields; do not rebuild existing homepage sections.
+- Remove hardcoded contact facts and about paragraphs from `src/data/content.ts`, while retaining static section headings, value cards, signature, and other marketing copy.
+- Phone links use `tel:+98…`; WhatsApp uses `https://wa.me/{whatsapp}`; Instagram uses `https://instagram.com/{instagram}`.
+- Do not add product routes, gallery teasers, layout refactors, fetch consolidation, footer navigation, or CMS wiring for order CTA and section-intro copy.
+- Homepage revalidation remains 60 seconds, and existing single-page anchor navigation remains unchanged.
 
 ## History
 

@@ -17,7 +17,6 @@ export interface Photo {
 export interface Brand {
   name: string
   latinName: string
-  tagline: string
   intro: string
   eyebrow: string
   heroBadge: string
@@ -32,7 +31,6 @@ export interface AboutValue {
 export interface About {
   eyebrow: string
   title: string
-  paragraphs: string[]
   signature: string
   signatureRole: string
   values: AboutValue[]
@@ -48,20 +46,20 @@ export interface OrderCta {
 }
 
 export interface ContactChannel {
-  id: string
   label: string
-  value: string
-  href?: string
-  note?: string
-  /** Phone numbers render in Persian digits; handles like @asal5 must not. */
-  localizeDigits?: boolean
+  note: string
 }
 
 export interface Contact {
   eyebrow: string
   title: string
   description: string
-  channels: ContactChannel[]
+  channels: {
+    phone: ContactChannel
+    whatsapp: ContactChannel
+    instagram: ContactChannel
+    serviceArea: ContactChannel
+  }
 }
 
 export interface SectionIntro {
@@ -74,8 +72,7 @@ export interface SiteContent {
   brand: Brand
   nav: NavItem[]
   primaryCta: NavItem
-  whatsapp: { label: string; href: string; floatingLabel: string }
-  phoneHref: string
+  whatsapp: { label: string; floatingLabel: string }
   categories: SectionIntro
   products: SectionIntro & { footnote: string }
   gallery: SectionIntro
@@ -85,14 +82,10 @@ export interface SiteContent {
   footer: { credit: string }
 }
 
-const WHATSAPP_HREF = 'https://wa.me/989369088311'
-const PHONE_HREF = 'tel:+989369088311'
-
 export const content: SiteContent = {
   brand: {
     name: 'قناد باشی عسل',
     latinName: 'GHANAD BASHI ASAL',
-    tagline: 'طعم خانگی، با عشق و کیفیت',
     intro:
       'کیک و شیرینی دست‌ساز، در آشپزخانه‌ای خانگی و در تعداد محدود پخته می‌شود؛ با مواد اولیه‌ی تازه و بدون هیچ افزودنی. هر سفارش برای یک میز خاص آماده می‌شود.',
     eyebrow: 'قنادی خانگی · اصفهان، بهارستان',
@@ -111,11 +104,8 @@ export const content: SiteContent = {
 
   whatsapp: {
     label: 'واتس‌اپ',
-    href: WHATSAPP_HREF,
     floatingLabel: 'گفت‌وگو در واتس‌اپ',
   },
-
-  phoneHref: PHONE_HREF,
 
   categories: {
     eyebrow: 'دسته‌بندی محصولات',
@@ -142,10 +132,6 @@ export const content: SiteContent = {
   about: {
     eyebrow: 'درباره‌ی ما',
     title: 'یک آشپزخانه‌ی خانگی، نه یک کارخانه',
-    paragraphs: [
-      'کار من از یک فر خانگی و چند سفارش برای دوستان شروع شد. امروز هم همان آشپزخانه است؛ فقط دقت و تجربه‌اش بیشتر شده. هر سفارش را خودم آماده می‌کنم و همان روز تحویل می‌دهم.',
-      'کره‌ی حیوانی، شکلات درجه‌یک، تخم‌مرغ و میوه‌ی تازه؛ هیچ اسانس و رنگ مصنوعی. اگر مواد اولیه‌ای در دسترس نباشد، آن روز آن محصول را نمی‌پزم. همین سادگی، طعم خانگی را نگه می‌دارد.',
-    ],
     signature: 'مریم',
     signatureRole: 'بنیان‌گذار و شیرینی‌پز',
     values: [
@@ -174,40 +160,27 @@ export const content: SiteContent = {
     eyebrow: 'تماس',
     title: 'در دسترس، هر روز هفته',
     description: 'از ۹ صبح تا ۹ شب پاسخ می‌دهیم؛ پیام واتس‌اپ سریع‌تر دیده می‌شود.',
-    channels: [
-      {
-        id: 'phone',
+    channels: {
+      phone: {
         label: 'تلفن',
-        value: '0936 908 8311',
-        href: PHONE_HREF,
         note: 'پاسخگویی ۹ تا ۲۱',
-        localizeDigits: true,
       },
-      {
-        id: 'whatsapp',
+      whatsapp: {
         label: 'واتس‌اپ',
-        value: '0936 908 8311',
-        href: WHATSAPP_HREF,
         note: 'ثبت سفارش و مشاوره',
-        localizeDigits: true,
       },
-      {
-        id: 'instagram',
+      instagram: {
         label: 'اینستاگرام',
-        value: '@ghanad_bashi_asal5',
-        href: 'https://instagram.com/ghanad_bashi_asal5',
         note: 'تصاویر سفارش‌های تازه',
       },
-      {
-        id: 'area',
+      serviceArea: {
         label: 'محدوده‌ی ارسال',
-        value: 'اصفهان، بهارستان و حومه',
         note: 'ارسال با پیک، هماهنگ با شما',
       },
-    ],
+    },
   },
 
   footer: {
-    credit: 'ساخته‌شده با دقت، در بهارستان',
+    credit: 'ساخته‌شده با دقت و عشق',
   },
 }

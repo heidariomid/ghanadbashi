@@ -132,7 +132,7 @@ export function GalleryGrid({ photos, categories }: GalleryGridProps) {
             type="button"
             onClick={close}
             aria-label="بستن"
-            className="absolute end-4 top-4 flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20"
+            className="absolute inset-e-4 top-4 flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20"
           >
             <CloseIcon className="size-5" />
           </button>
@@ -169,6 +169,11 @@ export function GalleryGrid({ photos, categories }: GalleryGridProps) {
   )
 }
 
+const navInsetClass = {
+  start: 'inset-s-4',
+  end: 'inset-e-4',
+} as const
+
 function NavButton({
   side,
   label,
@@ -186,9 +191,7 @@ function NavButton({
         event.stopPropagation()
         onClick()
       }}
-      className={`absolute top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition-colors duration-200 hover:bg-white/20 ${
-        side === 'start' ? 'start-4' : 'end-4'
-      }`}
+      className={`absolute ${navInsetClass[side]} top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition-colors duration-200 hover:bg-white/20`}
     >
       {side === 'start' ? '‹' : '›'}
     </button>

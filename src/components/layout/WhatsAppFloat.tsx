@@ -1,13 +1,20 @@
 import { content } from '@/data/content'
+import { cleanContactValue, whatsappHref } from '@/lib/contact'
+import { getSiteSettings } from '@/lib/site-settings'
 
-export function WhatsAppFloat() {
-  const { whatsapp } = content
+export async function WhatsAppFloat() {
+  const settings = await getSiteSettings()
+  const whatsapp = cleanContactValue(settings.contact?.whatsapp)
+  const href = whatsapp ? whatsappHref(whatsapp) : null
+
+  if (!href) return null
 
   return (
     <a
-      href={whatsapp.href}
-      aria-label={whatsapp.floatingLabel}
-      className="fixed bottom-6.5 end-6.5 z-30 flex size-14.5 items-center justify-center rounded-full bg-card-foreground text-primary-foreground shadow-float transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary"
+      href={href}
+      dir="ltr"
+      aria-label={content.whatsapp.floatingLabel}
+      className="fixed bottom-6.5 inset-e-6.5 z-30 flex size-14.5 items-center justify-center rounded-full bg-card-foreground text-primary-foreground shadow-float transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary"
     >
       <svg
         width="26"
