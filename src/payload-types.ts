@@ -67,8 +67,11 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
+    products: Product;
+    gallery: Gallery;
+    orders: Order;
     media: Media;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,8 +79,11 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    gallery: GallerySelect<false> | GallerySelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -87,8 +93,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -114,6 +124,174 @@ export interface UserAuthOperations {
   unlock: {
     username: string;
   };
+}
+/**
+ * محصولاتی که در سایت نمایش داده می‌شوند.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  title: string;
+  /**
+   * خودکار از روی نام محصول ساخته می‌شود. اگر لازم بود می‌توانید تغییرش دهید.
+   */
+  slug?: string | null;
+  category:
+    | 'birthday-cakes'
+    | 'cafe-cakes'
+    | 'cookies'
+    | 'dry-pastries'
+    | 'desserts'
+    | 'healthy'
+    | 'diet-cookies'
+    | 'spreads'
+    | 'gift-packs'
+    | 'sport-drinks';
+  /**
+   * یک عکس واضح از خود محصول. بدون عکس، محصول در سایت جذاب دیده نمی‌شود.
+   */
+  image: number | Media;
+  /**
+   * یک یا دو جمله درباره طعم و مواد اولیه. حداکثر ۲۰۰ حرف.
+   */
+  description?: string | null;
+  /**
+   * اگر تیک بخورد، به‌جای قیمت عبارت «استعلام قیمت» نمایش داده می‌شود.
+   */
+  priceOnRequest?: boolean | null;
+  /**
+   * فقط عدد، بدون نقطه یا ویرگول.
+   */
+  price?: number | null;
+  /**
+   * اگر تیک را بردارید، در سایت «فعلاً موجود نیست» نمایش داده می‌شود.
+   */
+  isAvailable?: boolean | null;
+  /**
+   * محصولات انتخاب‌شده در بخش «محصولات منتخب» صفحه اصلی نمایش داده می‌شوند.
+   */
+  isFeatured?: boolean | null;
+  /**
+   * عدد کوچک‌تر بالاتر نمایش داده می‌شود.
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * آپلود و مدیریت تصاویر سایت.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * توضیح کوتاه تصویر برای دسترس‌پذیری و سئو.
+   */
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * عکس‌های نمونه کار که در بخش «نمونه کارها» سایت نمایش داده می‌شوند.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery".
+ */
+export interface Gallery {
+  id: number;
+  image: number | Media;
+  /**
+   * دکمه‌های فیلتر بالای گالری از روی همین دسته‌بندی ساخته می‌شوند. دسته‌ای که عکسی نداشته باشد در سایت نمایش داده نمی‌شود.
+   */
+  category:
+    | 'birthday-cakes'
+    | 'cafe-cakes'
+    | 'cookies'
+    | 'dry-pastries'
+    | 'desserts'
+    | 'healthy'
+    | 'diet-cookies'
+    | 'spreads'
+    | 'gift-packs'
+    | 'sport-drinks';
+  /**
+   * اختیاری. زیر عکس نمایش داده می‌شود.
+   */
+  caption?: string | null;
+  /**
+   * عدد کوچک‌تر جلوتر نمایش داده می‌شود.
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * سفارش‌هایی که مشتری‌ها از طریق فرم سایت ثبت کرده‌اند.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  /**
+   * تنها فیلدی که شما تغییر می‌دهید.
+   */
+  status: 'new' | 'confirmed' | 'delivered' | 'cancelled';
+  customerName: string;
+  phone: string;
+  product?: (number | null) | Product;
+  /**
+   * اگر مشتری محصولی خارج از فهرست خواسته باشد، اینجا نوشته می‌شود.
+   */
+  productNote?: string | null;
+  quantity?: number | null;
+  deliveryDate?: string | null;
+  notes?: string | null;
+  /**
+   * عکسی که مشتری به‌عنوان نمونه فرستاده است.
+   */
+  sampleImage?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * کاربران واردشونده به پنل مدیریت سایت.
@@ -148,40 +326,6 @@ export interface User {
   collection: 'users';
 }
 /**
- * آپلود و مدیریت تصاویر سایت.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  /**
-   * توضیح کوتاه تصویر برای دسترس پذیری و سئو.
-   */
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -206,12 +350,24 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'gallery';
+        value: number | Gallery;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
       } | null)
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -257,27 +413,50 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "products_select".
  */
-export interface UsersSelect<T extends boolean = true> {
-  displayName?: T;
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  image?: T;
+  description?: T;
+  priceOnRequest?: T;
+  price?: T;
+  isAvailable?: T;
+  isFeatured?: T;
+  sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  username?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery_select".
+ */
+export interface GallerySelect<T extends boolean = true> {
+  image?: T;
+  category?: T;
+  caption?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  status?: T;
+  customerName?: T;
+  phone?: T;
+  product?: T;
+  productNote?: T;
+  quantity?: T;
+  deliveryDate?: T;
+  notes?: T;
+  sampleImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -309,6 +488,50 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  displayName?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  username?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
       };
 }
 /**
@@ -350,6 +573,88 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * نام برند، عکس صفحه اول و اطلاعات تماس. این‌ها در کل سایت استفاده می‌شوند.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  brand: {
+    brandName: string;
+    /**
+     * یک جمله کوتاه، مثال: طعم خانگی، با عشق و کیفیت
+     */
+    tagline?: string | null;
+    /**
+     * بزرگ‌ترین عکس سایت. بهترین عکس محصولتان را اینجا بگذارید.
+     */
+    heroImage: number | Media;
+    aboutText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * عکسی از آشپزخانه یا خودتان در حال کار.
+     */
+    aboutImage?: (number | null) | Media;
+  };
+  contact?: {
+    phone?: string | null;
+    /**
+     * با کد کشور و بدون صفر و علامت، مثال: 989121234567
+     */
+    whatsapp?: string | null;
+    /**
+     * بدون علامت @، مثال: ghanad_bashi_asal5
+     */
+    instagram?: string | null;
+    /**
+     * مثال: اصفهان، بهارستان و حومه
+     */
+    serviceArea?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  brand?:
+    | T
+    | {
+        brandName?: T;
+        tagline?: T;
+        heroImage?: T;
+        aboutText?: T;
+        aboutImage?: T;
+      };
+  contact?:
+    | T
+    | {
+        phone?: T;
+        whatsapp?: T;
+        instagram?: T;
+        serviceArea?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

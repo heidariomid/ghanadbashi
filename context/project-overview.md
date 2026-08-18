@@ -96,18 +96,28 @@ The client's own proposed structure, translated and preserved:
 
 ## Product categories
 
-The seven categories from the brief. These populate the category `select` field
-in the CMS and the filters on the products page.
+The seven categories from the brief, plus two the client asked for later and one
+(کوکی) added because it turned out to be her highest-volume product. These
+populate the category `select` field in the CMS and the filters on the products
+and gallery sections.
 
 | # | Category | Persian |
 | --- | --- | --- |
 | 1 | Birthday & occasion cakes | 🎂 کیک تولد و مناسبتی |
 | 2 | Café & afternoon cakes | 🍰 کیک‌های کافه‌ای و عصرانه |
-| 3 | Dry pastries | 🧁 شیرینی خشک |
-| 4 | Desserts | 🍮 دسرها |
-| 5 | Health-focused & diet products | 🌿 محصولات سلامت‌محور و رژیمی |
-| 6 | Tahini, honey & peanut butter | 🥜 محصولات ارده، عسل و کره بادام‌زمینی |
-| 7 | Gift packs | 🎁 پک‌های هدیه |
+| 3 | Cookies | 🍪 کوکی |
+| 4 | Dry pastries | 🧁 شیرینی خشک |
+| 5 | Desserts | 🍮 دسرها |
+| 6 | Health-focused & diet products | 🌿 محصولات سلامت‌محور و رژیمی |
+| 7 | Diet pastries, cakes & cookies | 🥗 شیرینی و کیک‌های رژیمی و کوکی |
+| 8 | Tahini, honey & peanut butter | 🥜 محصولات ارده، عسل و کره بادام‌زمینی |
+| 9 | Gift packs | 🎁 پک‌های هدیه |
+| 10 | Diet & sports drinks | 🥤 معجون رژیمی و ورزشکاری |
+
+Categories 1, 7, 8 and 10 have no photos at launch. The site renders only
+categories that have published content, so they stay hidden until the client
+uploads to them herself. Category 7 overlaps 3 and 6 by the client's own
+choosing — she sorts that out in the admin.
 
 ---
 

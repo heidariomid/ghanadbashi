@@ -1,0 +1,62 @@
+import type { CollectionConfig } from 'payload'
+import { isAdmin, isPublic } from '@/lib/access'
+import { categoryOptions } from '@/lib/categories'
+
+export const Gallery: CollectionConfig = {
+  slug: 'gallery',
+  labels: {
+    singular: 'عکس نمونه کار',
+    plural: 'نمونه کارها',
+  },
+  admin: {
+    useAsTitle: 'caption',
+    description: 'عکس‌های نمونه کار که در بخش «نمونه کارها» سایت نمایش داده می‌شوند.',
+    defaultColumns: ['image', 'caption', 'category', 'sortOrder'],
+  },
+  access: {
+    create: isAdmin,
+    read: isPublic,
+    update: isAdmin,
+    delete: isAdmin,
+  },
+  defaultSort: 'sortOrder',
+  fields: [
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'عکس',
+      required: true,
+    },
+    {
+      name: 'category',
+      type: 'select',
+      label: 'دسته‌بندی',
+      required: true,
+      index: true,
+      options: categoryOptions,
+      admin: {
+        description:
+          'دکمه‌های فیلتر بالای گالری از روی همین دسته‌بندی ساخته می‌شوند. دسته‌ای که عکسی نداشته باشد در سایت نمایش داده نمی‌شود.',
+      },
+    },
+    {
+      name: 'caption',
+      type: 'text',
+      label: 'توضیح',
+      admin: {
+        description: 'اختیاری. زیر عکس نمایش داده می‌شود.',
+      },
+    },
+    {
+      name: 'sortOrder',
+      type: 'number',
+      label: 'ترتیب نمایش',
+      defaultValue: 0,
+      admin: {
+        description: 'عدد کوچک‌تر جلوتر نمایش داده می‌شود.',
+        position: 'sidebar',
+      },
+    },
+  ],
+}

@@ -4,9 +4,9 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig: NextConfig = {
   devIndicators: false,
   images: {
-    // Demo photography comes from Unsplash; swap for the client's own shots
-    // (and drop this block) once real images arrive.
-    remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
+    // Uploads are served relative from /api/media locally, but from Blob's own
+    // domain once BLOB_READ_WRITE_TOKEN is set in production.
+    remotePatterns: [{ protocol: 'https', hostname: '*.public.blob.vercel-storage.com' }],
   },
 }
 

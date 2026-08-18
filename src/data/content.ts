@@ -1,7 +1,7 @@
 /**
- * Every word, price, image and link on the site lives here. Components read
- * from this file and hardcode nothing, so the whole demo can be re-branded or
- * re-shot in one place.
+ * Section headings and static UI copy. Everything the client edits — products,
+ * gallery photos, brand name, contact details — comes from the CMS instead;
+ * this file holds only the wording around it.
  */
 
 export interface NavItem {
@@ -20,38 +20,8 @@ export interface Brand {
   tagline: string
   intro: string
   eyebrow: string
-  heroPhoto: Photo
   heroBadge: string
   heroNote: string
-}
-
-export interface Category {
-  id: string
-  title: string
-  description: string
-  photo: Photo
-}
-
-export interface Product {
-  id: string
-  name: string
-  description: string
-  price: number
-  unit: string
-  photo: Photo
-  cta: string
-}
-
-export interface GalleryItem {
-  id: string
-  caption: string
-  photo: Photo
-  /**
-   * Desktop-only ratio. Phones get a uniform square grid — the uneven masonry
-   * reads as ragged at that width — so these apply from `lg` up. Write the full
-   * class, including the `lg:` prefix, or Tailwind will not generate it.
-   */
-  aspectLg: string
 }
 
 export interface AboutValue {
@@ -66,7 +36,6 @@ export interface About {
   signature: string
   signatureRole: string
   values: AboutValue[]
-  photo: Photo
 }
 
 export interface OrderCta {
@@ -107,9 +76,9 @@ export interface SiteContent {
   primaryCta: NavItem
   whatsapp: { label: string; href: string; floatingLabel: string }
   phoneHref: string
-  categories: SectionIntro & { items: Category[] }
-  products: SectionIntro & { items: Product[]; footnote: string }
-  gallery: SectionIntro & { items: GalleryItem[] }
+  categories: SectionIntro
+  products: SectionIntro & { footnote: string }
+  gallery: SectionIntro
   about: About
   orderCta: OrderCta
   contact: Contact
@@ -127,17 +96,13 @@ export const content: SiteContent = {
     intro:
       'کیک و شیرینی دست‌ساز، در آشپزخانه‌ای خانگی و در تعداد محدود پخته می‌شود؛ با مواد اولیه‌ی تازه و بدون هیچ افزودنی. هر سفارش برای یک میز خاص آماده می‌شود.',
     eyebrow: 'قنادی خانگی · اصفهان، بهارستان',
-    heroPhoto: {
-      src: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=1400&q=80',
-      alt: 'تارت مرنگ خانگی',
-    },
     heroBadge: 'پخت روز · تحویل در بهارستان',
     heroNote: 'سفارش‌ها دو روز قبل دریافت می‌شوند',
   },
 
   nav: [
     { label: 'محصولات', href: '#products' },
-    { label: 'گالری', href: '#gallery' },
+    { label: 'نمونه کارها', href: '#gallery' },
     { label: 'درباره ما', href: '#about' },
     { label: 'تماس', href: '#contact' },
   ],
@@ -157,71 +122,6 @@ export const content: SiteContent = {
     title: 'هر مناسبت، یک طعم',
     description:
       'از کیک تولد سفارشی تا شیرینی خشک و دسرهای تک‌نفره؛ همه در تعداد محدود و به‌سفارش شما.',
-    items: [
-      {
-        id: 'birthday',
-        title: 'کیک تولد و مناسبتی',
-        description: 'طراحی اختصاصی، با نام و رنگ دلخواه شما',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=700&q=80',
-          alt: 'کیک تولد',
-        },
-      },
-      {
-        id: 'cafe',
-        title: 'کیک‌های کافه‌ای و عصرانه',
-        description: 'برای دورهمی‌های کوچک و میز عصرانه',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=700&q=80',
-          alt: 'کیک کافه‌ای',
-        },
-      },
-      {
-        id: 'pastry',
-        title: 'شیرینی خشک',
-        description: 'تازه، در جعبه‌های وزنی و کادویی',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=700&q=80',
-          alt: 'شیرینی خشک',
-        },
-      },
-      {
-        id: 'dessert',
-        title: 'دسرها',
-        description: 'در ظرف‌های تک‌نفره، آماده‌ی سرو',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=700&q=80',
-          alt: 'دسر',
-        },
-      },
-      {
-        id: 'healthy',
-        title: 'محصولات سلامت‌محور و رژیمی',
-        description: 'بدون شکر و آرد سفید، با شیرین‌کننده‌ی طبیعی',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?w=700&q=80',
-          alt: 'محصولات رژیمی',
-        },
-      },
-      {
-        id: 'spreads',
-        title: 'ارده، عسل و کره بادام‌زمینی',
-        description: 'صبحانه‌ای خالص، بدون روغن و شکر افزوده',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1493925410384-84f842e616fb?w=700&q=80',
-          alt: 'ارده و عسل',
-        },
-      },
-      {
-        id: 'gift',
-        title: 'پک‌های هدیه',
-        description: 'بسته‌بندی دست‌ساز، همراه با کارت دست‌نویس',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=700&q=80',
-          alt: 'پک هدیه',
-        },
-      },
-    ],
   },
 
   products: {
@@ -229,144 +129,14 @@ export const content: SiteContent = {
     title: 'محصولات منتخب',
     description:
       'فهرست کامل‌تر در واتس‌اپ در اختیار شماست؛ این‌ها پرسفارش‌ترین‌های چند ماه گذشته‌اند.',
-    items: [
-      {
-        id: 'chocolate-cake',
-        name: 'کیک شکلاتی بلژیکی',
-        description: 'مغز نرم شکلات تلخ، با گاناش تازه',
-        price: 980000,
-        unit: 'هر کیلوگرم',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1602351447937-745cb720612f?w=900&q=80',
-          alt: 'کیک شکلاتی بلژیکی',
-        },
-        cta: 'مشاهده محصول',
-      },
-      {
-        id: 'cheesecake',
-        name: 'چیزکیک بلوبری',
-        description: 'پنیر خامه‌ای، روی بیسکویت کره‌ای',
-        price: 760000,
-        unit: 'هر کیلوگرم',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1578775887804-699de7086ff9?w=900&q=80',
-          alt: 'چیزکیک بلوبری',
-        },
-        cta: 'مشاهده محصول',
-      },
-      {
-        id: 'baklava',
-        name: 'باقلوای خانگی',
-        description: 'پسته و گلاب، لایه‌لایه و کم‌شیرین',
-        price: 480000,
-        unit: 'جعبه‌ی ۵۰۰ گرمی',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=900&q=80',
-          alt: 'باقلوای خانگی',
-        },
-        cta: 'مشاهده محصول',
-      },
-      {
-        id: 'cream-puff',
-        name: 'نان خامه‌ای',
-        description: 'خامه‌ی تازه‌ی وانیلی، همان روز پخت',
-        price: 65000,
-        unit: 'هر عدد',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=900&q=80',
-          alt: 'نان خامه‌ای',
-        },
-        cta: 'ثبت سفارش',
-      },
-      {
-        id: 'cinnamon-roll',
-        name: 'رول دارچین',
-        description: 'خمیر ورقه‌ای، با روکش پنیر خامه‌ای',
-        price: 540000,
-        unit: 'جعبه‌ی شش‌عددی',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2?w=900&q=80',
-          alt: 'رول دارچین',
-        },
-        cta: 'مشاهده محصول',
-      },
-      {
-        id: 'fruit-tart',
-        name: 'تارت میوه‌ی فصل',
-        description: 'کاستارد وانیل و میوه‌ی روز',
-        price: 850000,
-        unit: 'هر کیلوگرم',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?w=900&q=80',
-          alt: 'تارت میوه',
-        },
-        cta: 'مشاهده محصول',
-      },
-    ],
     footnote: 'قیمت‌ها بر اساس سفارش و طراحی تغییر می‌کند.',
   },
 
   gallery: {
-    eyebrow: 'لوک‌بوک',
+    eyebrow: 'نمونه کارها',
     title: 'از آشپزخانه‌ی ما',
     description:
-      'چند لحظه‌ی کوچک از روزهای کاری؛ تصویرهایی از چیزی که هر روز با دست ساخته می‌شود.',
-    items: [
-      {
-        id: 'g1',
-        caption: 'میز کار، صبح زود',
-        aspectLg: 'lg:aspect-3/4',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?w=900&q=80',
-          alt: 'میز کار، صبح زود',
-        },
-      },
-      {
-        id: 'g2',
-        caption: 'لایه‌ها',
-        aspectLg: 'lg:aspect-square',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=900&q=80',
-          alt: 'لایه‌ها',
-        },
-      },
-      {
-        id: 'g3',
-        caption: 'پایه‌ی سرو',
-        aspectLg: 'lg:aspect-4/5',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=900&q=80',
-          alt: 'پایه‌ی سرو',
-        },
-      },
-      {
-        id: 'g4',
-        caption: 'ترکیب‌بندی بشقاب',
-        aspectLg: 'lg:aspect-square',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?w=900&q=80',
-          alt: 'ترکیب‌بندی بشقاب',
-        },
-      },
-      {
-        id: 'g5',
-        caption: 'فرم‌ها',
-        aspectLg: 'lg:aspect-3/4',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=900&q=80',
-          alt: 'فرم‌ها',
-        },
-      },
-      {
-        id: 'g6',
-        caption: 'شیرینی تازه',
-        aspectLg: 'lg:aspect-square',
-        photo: {
-          src: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=900&q=80',
-          alt: 'شیرینی تازه',
-        },
-      },
-    ],
+      'سفارش‌هایی که تا امروز آماده کرده‌ایم. برای دیدن هر دسته، از دکمه‌های بالای عکس‌ها استفاده کنید.',
   },
 
   about: {
@@ -384,10 +154,6 @@ export const content: SiteContent = {
       { title: 'تازگی', description: 'پخت در روز تحویل، بدون انبار و فریزر.' },
       { title: 'توجه به جزئیات', description: 'از طرح روی کیک تا گره‌ی روبان جعبه.' },
     ],
-    photo: {
-      src: 'https://images.unsplash.com/photo-1587248720327-8eb72564be1e?w=1100&q=80',
-      alt: 'آماده‌سازی خمیر در آشپزخانه',
-    },
   },
 
   orderCta: {

@@ -30,17 +30,36 @@ names change.
 | `isFeatured` | checkbox | نمایش در صفحه اصلی | controls the homepage featured row |
 | `sortOrder` | number | ترتیب نمایش | lower first |
 
-Category `select` options (value → Persian label):
+Category `select` options (value → Persian label). Shared verbatim by
+`products` and `gallery`, so define them once in `src/lib/categories.ts` and
+import into both:
 
 ```
 birthday-cakes  → 🎂 کیک تولد و مناسبتی
 cafe-cakes      → 🍰 کیک‌های کافه‌ای و عصرانه
+cookies         → 🍪 کوکی
 dry-pastries    → 🧁 شیرینی خشک
 desserts        → 🍮 دسرها
 healthy         → 🌿 محصولات سلامت‌محور و رژیمی
+diet-cookies    → 🥗 شیرینی و کیک‌های رژیمی و کوکی
 spreads         → 🥜 محصولات ارده، عسل و کره بادام‌زمینی
 gift-packs      → 🎁 پک‌های هدیه
+sport-drinks    → 🥤 معجون رژیمی و ورزشکاری
 ```
+
+`cookies` is separate from `healthy` deliberately: cookies are the client's
+highest-volume product and most of them are not diet products, so filing them
+under a رژیمی label would misdescribe them to customers.
+
+`diet-cookies` is the client's own wording, added at her request. It overlaps
+`cookies` and `healthy`, which is hers to resolve from the admin — she can
+re-file any photo in two clicks, and an unused category never reaches the site.
+
+Categories with no published content must not render a filter chip or a card on
+the site. Three of the nine have no photos at launch, and the client adds them
+herself later — the UI derives its category list from what is actually
+published, so a new chip appears on its own the first time she uploads to an
+empty category. Nothing here needs a developer to switch on.
 
 Admin list view: show image thumbnail, title, category, price, availability.
 Default sort by `sortOrder`.
@@ -52,8 +71,14 @@ Use `admin.useAsTitle: 'title'` so records read as product names, not IDs.
 | Field | Type | Persian label | Notes |
 | --- | --- | --- | --- |
 | `image` | upload → media | عکس | required |
+| `category` | select | دسته‌بندی | required, the same nine options as `products` |
 | `caption` | text | توضیح | optional |
 | `sortOrder` | number | ترتیب نمایش | optional |
+
+The gallery is the «نمونه کارها» section: filter chips across the top (first
+chip «همه»), a square grid, and a lightbox on click. `category` is what drives
+the chips, which is why it is required here and not optional — an untagged photo
+would be reachable only from «همه».
 
 ### Global: `site-settings` — تنظیمات سایت
 
@@ -136,6 +161,8 @@ upload. Restrict it to images and cap the file size.
 - Uploading an image generates all three sizes
 - Signed out, a public API read of `products` succeeds and a read of `orders`
   is rejected
+- A category with no published photos renders no filter chip; publishing the
+  first photo in it makes the chip appear
 
 ## Notes
 

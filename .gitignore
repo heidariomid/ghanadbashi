@@ -4,6 +4,7 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 .vercel
+.pnpm-store
 
 # secrets — Payload and the database land here in phase 1
 .env
@@ -18,3 +19,4 @@ next-env.d.ts
 .playwright-mcp
 .screens
 *.log
+.env*

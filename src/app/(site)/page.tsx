@@ -9,6 +9,10 @@ import { Gallery } from '@/components/sections/Gallery'
 import { Hero } from '@/components/sections/Hero'
 import { OrderCta } from '@/components/sections/OrderCta'
 
+// The page is prerendered, so without this the client's admin edits would only
+// appear on the next deploy. Phase 7 can swap this for on-demand revalidation.
+export const revalidate = 60
+
 export default function Home() {
   return (
     <>

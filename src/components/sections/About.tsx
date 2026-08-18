@@ -2,10 +2,15 @@ import { Container } from '@/components/layout/Container'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Photo } from '@/components/ui/Photo'
 import { content } from '@/data/content'
+import { resolveImage } from '@/lib/media'
+import { getPayloadClient } from '@/lib/payload'
 
-export function About() {
-  const { eyebrow, title, paragraphs, signature, signatureRole, values, photo } =
-    content.about
+export async function About() {
+  const { eyebrow, title, paragraphs, signature, signatureRole, values } = content.about
+
+  const payload = await getPayloadClient()
+  const settings = await payload.findGlobal({ slug: 'site-settings', depth: 1 })
+  const photo = resolveImage(settings.brand?.aboutImage)
 
   return (
     <section id="about" className="bg-card py-section">
@@ -50,11 +55,13 @@ export function About() {
             </ul>
           </div>
 
-          <Photo
-            photo={photo}
-            sizes="(max-width: 1024px) 100vw, 45vw"
-            className="aspect-4/5 w-full rounded-3xl shadow-portrait"
-          />
+          {photo && (
+            <Photo
+              photo={photo}
+              sizes="(max-width: 1024px) 100vw, 45vw"
+              className="aspect-4/5 w-full rounded-3xl shadow-portrait"
+            />
+          )}
         </div>
       </Container>
     </section>
