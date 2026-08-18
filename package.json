@@ -10,6 +10,8 @@
     "lint": "eslint .",
     "payload": "payload",
     "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap",
+    "prebuild": "pnpm generate:importmap && pnpm generate:types",
     "seed:images": "payload run scripts/prepare-seed-images.ts",
     "seed": "payload run scripts/seed.ts"
   },
