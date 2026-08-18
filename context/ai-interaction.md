@@ -32,6 +32,11 @@ fix the issues first.
 There is no automated test suite in this project (see @context/coding-standards.md).
 Verification is manual and must actually be performed — not assumed.
 
+**A phase is not done until both checklists below pass.** Skipping admin QA is
+how bugs like “delete gallery photo → something went wrong” reach the client.
+
+### A. Public site (every phase)
+
 Before marking any feature done:
 
 - **Responsive** — 375px, 768px, 1280px
@@ -42,11 +47,87 @@ Before marking any feature done:
 - **Forms** — submit a valid entry (success path) and an invalid one (error path);
   confirm the record lands in the CMS and any notification email arrives
 - **Content round-trip** — change a value in `/admin`, confirm it appears on the
-  public site
-- **Build** — `pnpm build` and `pnpm lint` both pass
+  public site (wait for `revalidate` or hard-refresh)
+- **Build** — `pnpm build` and `pnpm lint` both pass on a machine that can reach
+  the database (VPN if Shecan blocks Neon)
 
 Report honestly. If a step was skipped or something didn't work, say so plainly
 rather than reporting success.
+
+### B. Client admin QA (mandatory after CMS-touching phases)
+
+Walk through `/admin` as the client would — not as a developer skimming code.
+Do this on **production** (or a preview with the same Blob store and database)
+before merge or before telling the client the phase is ready.
+
+#### Products — محصولات
+
+- [ ] Create a product with photo, category, «استعلام قیمت» → appears on homepage
+      if «نمایش در صفحه اصلی» is checked
+- [ ] Uncheck «استعلام قیمت», set a price → site shows formatted price
+- [ ] Uncheck «موجود است» → site shows «فعلاً موجود نیست»
+- [ ] Edit title → slug updates (or stays stable if already set)
+- [ ] Delete the test product → gone from site
+
+#### Gallery — نمونه کارها
+
+- [ ] Create a نمونه کار with photo + category → appears in gallery grid and
+      filter chip for that category within ~60s
+- [ ] Change category → filter chip moves correctly
+- [ ] **Delete from the list** (whole نمونه کار) → photo gone from site; media
+      file may remain in رسانه‌ها (that is OK)
+- [ ] **Do not** use the delete button on the image inside the edit form — that
+      tries to delete the media file and fails if still linked (known Payload
+      behaviour; guard should show a Persian error after fix is deployed)
+- [ ] Replace image by picking a new upload → old file orphaned but site shows
+      new photo
+
+#### Media — رسانه‌ها
+
+- [ ] Upload an image → thumbnail/card/hero sizes generated (check URLs in admin)
+- [ ] Delete an **unused** file → succeeds
+- [ ] Delete a file **still linked** to a product/gallery → clear Persian error,
+      not «something went wrong»
+
+#### Site settings — تنظیمات سایت
+
+- [ ] Change `brandName` / `tagline` → hero updates on `/`
+- [ ] Change `heroImage` / `aboutImage` → hero and about sections update
+- [ ] Change `phone` / `whatsapp` / `instagram` / `serviceArea` → contact
+      section and links update (once wired to CMS — see phase 3 gaps)
+- [ ] Save, reload admin → values persisted
+
+#### Orders — سفارش‌ها (after phase 5)
+
+- [ ] Public form creates a row; admin shows it read-only except وضعیت
+- [ ] Anonymous `GET /api/orders` returns 403
+
+#### Access control (curl, no login)
+
+- [ ] `GET /api/products` → 200
+- [ ] `GET /api/gallery` → 200
+- [ ] `GET /api/orders` → 403
+
+#### When something fails
+
+1. Reproduce in admin (note exact button clicked)
+2. Check Vercel runtime logs: `vercel logs ghanadbashi.vercel.app --since 1h`
+3. Fix, redeploy, **re-run the failing checklist item**
+4. Record the bug in the phase History or current-feature Notes so it is not
+   reintroduced
+
+### C. Phase sign-off template
+
+Copy into current-feature History when closing a phase:
+
+```
+Phase N verification — [date]
+- Public site: PASS / FAIL (notes)
+- Admin QA: PASS / FAIL (notes)
+- Build/lint: PASS / FAIL
+- Known gaps left for later phases: …
+- Bugs found and fixed: …
+```
 
 ## The client owns the content
 

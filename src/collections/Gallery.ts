@@ -10,7 +10,8 @@ export const Gallery: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'caption',
-    description: 'عکس‌های نمونه کار که در بخش «نمونه کارها» سایت نمایش داده می‌شوند.',
+    description:
+      'عکس‌های نمونه کار که در بخش «نمونه کارها» سایت نمایش داده می‌شوند. برای حذف یک عکس از سایت، از همین لیست «حذف» بزنید — نه از دکمه حذف روی خود عکس.',
     defaultColumns: ['image', 'caption', 'category', 'sortOrder'],
   },
   access: {
@@ -27,6 +28,10 @@ export const Gallery: CollectionConfig = {
       relationTo: 'media',
       label: 'عکس',
       required: true,
+      admin: {
+        description:
+          'برای عوض کردن عکس، عکس جدید انتخاب کنید. برای حذف از سایت، کل این «نمونه کار» را از لیست نمونه کارها حذف کنید.',
+      },
     },
     {
       name: 'category',

@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import { APIError } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
+import { formatMediaInUseMessage, getMediaReferences } from '@/lib/media-references'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -33,6 +35,17 @@ export const Media: CollectionConfig = {
       { name: 'thumbnail', width: 400, height: 400, position: 'centre' },
       { name: 'card', width: 768 },
       { name: 'hero', width: 1600 },
+    ],
+  },
+  hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        const references = await getMediaReferences(req.payload, id)
+
+        if (references.length > 0) {
+          throw new APIError(formatMediaInUseMessage(references), 400)
+        }
+      },
     ],
   },
   fields: [
