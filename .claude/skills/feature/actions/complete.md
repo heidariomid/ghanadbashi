@@ -1,5 +1,8 @@
 # Complete Action
 
+**Prerequisite:** `/feature review` must have returned **Ready to complete**.
+If review found blockers, fix them and re-run review before this step.
+
 Produces exactly ONE commit per feature. Do not create a separate
 `chore: reset current-feature.md` commit — the reset is part of the feature
 commit itself.

@@ -1,5 +1,16 @@
+import {
+  BoldFeature,
+  ItalicFeature,
+  lexicalEditor,
+  ParagraphFeature,
+} from '@payloadcms/richtext-lexical'
 import type { GlobalConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
+
+/** Paragraphs only — the full default editor trips Lexical's horizontalrule node. */
+const aboutEditor = lexicalEditor({
+  features: () => [ParagraphFeature(), BoldFeature(), ItalicFeature()],
+})
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -45,6 +56,11 @@ export const SiteSettings: GlobalConfig = {
           name: 'aboutText',
           type: 'richText',
           label: 'درباره من',
+          editor: aboutEditor,
+          admin: {
+            description:
+              'یک یا دو پاراگراف درباره خودتان و آشپزخانه. Enter برای پاراگراف جدید.',
+          },
         },
         {
           name: 'aboutImage',

@@ -18,7 +18,7 @@ function hasRichTextContent(value: AboutText): value is NonNullable<AboutText> {
     if (typeof record.text === 'string' && record.text.trim()) return true
     if (Array.isArray(record.children) && record.children.some(hasContent)) return true
 
-    return record.type === 'upload' || record.type === 'block' || record.type === 'horizontalrule'
+    return record.type === 'upload' || record.type === 'block'
   }
 
   return Boolean(value && hasContent(value.root))

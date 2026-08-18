@@ -1,25 +1,16 @@
-# Current Feature: Phase 3 — Homepage CMS Wiring
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Wire CMS contact fields everywhere they appear, with correct links, Persian phone digits, and hide-if-empty behavior.
-- Render CMS `aboutText` rich text alongside the optional about image, hiding the section only when both are empty.
-- Handle empty hero image and tagline fields without stale fallbacks or broken layouts.
-- Expand the footer with CMS brand/contact details, service area, and the current Persian calendar year.
-- Keep the header brand name and WhatsApp link synchronized with CMS values.
-- Preserve responsive RTL behavior and pass `pnpm build` and `pnpm lint`.
+<!-- What success looks like, as bullet points. Filled in by `/feature load`. -->
 
 ## Notes
 
-- Scope is limited to wiring existing `site-settings` fields; do not rebuild existing homepage sections.
-- Remove hardcoded contact facts and about paragraphs from `src/data/content.ts`, while retaining static section headings, value cards, signature, and other marketing copy.
-- Phone links use `tel:+98…`; WhatsApp uses `https://wa.me/{whatsapp}`; Instagram uses `https://instagram.com/{instagram}`.
-- Do not add product routes, gallery teasers, layout refactors, fetch consolidation, footer navigation, or CMS wiring for order CTA and section-intro copy.
-- Homepage revalidation remains 60 seconds, and existing single-page anchor navigation remains unchanged.
+<!-- Constraints, context and details carried over from the spec. -->
 
 ## History
 
@@ -36,3 +27,8 @@ In Progress
   Postgres. Split the app into `(site)` and `(payload)` route groups, self-hosted
   Vazirmatn, typed the collections, and switched the package to ESM so the
   Payload CLI can load them.
+- Phase 2 — CMS Schema: products, gallery, orders, site-settings, media on
+  Vercel Blob; gallery filters, seed data, admin QA checklist.
+- Phase 3 — Homepage CMS Wiring: wired site-settings contact and aboutText to
+  the public site, footer polish, empty states; simplified about rich-text
+  editor; mandatory `/feature review` gate before complete.

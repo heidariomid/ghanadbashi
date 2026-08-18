@@ -595,6 +595,9 @@ export interface SiteSetting {
      * بزرگ‌ترین عکس سایت. بهترین عکس محصولتان را اینجا بگذارید.
      */
     heroImage: number | Media;
+    /**
+     * یک یا دو پاراگراف درباره خودتان و آشپزخانه. Enter برای پاراگراف جدید.
+     */
     aboutText?: {
       root: {
         type: string;

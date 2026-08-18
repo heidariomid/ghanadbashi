@@ -15,14 +15,14 @@ The common workflow for every feature/fix:
 1. **Document** — document the feature in @context/current-feature.md
 2. **Branch** — create a new branch for the feature/fix
 3. **Implement** — implement what's described in @context/current-feature.md
-4. **Verify** — check it in the browser against the manual checklist below, then
-   run `pnpm build` and `pnpm lint` and fix any errors
-5. **Iterate** — adjust as needed
-6. **Commit** — only after the build passes and the feature works
+4. **Review** — run `/feature review`: code against goals, then browser + admin
+   QA (checklists below), `pnpm lint`, and `pnpm build`. Fix blockers and
+   re-run review before commit
+5. **Iterate** — adjust as needed until review verdict is Ready to complete
+6. **Commit** — only after review passes and the user asks
 7. **Merge** — merge to main
 8. **Delete Branch** — delete the branch after merge
-9. **Review** — review AI-generated code periodically and on demand
-10. Mark as completed in @context/current-feature.md and add to History
+9. Mark as completed in @context/current-feature.md and add to History
 
 Do NOT commit without permission or before the build passes. If the build fails,
 fix the issues first.
@@ -32,8 +32,9 @@ fix the issues first.
 There is no automated test suite in this project (see @context/coding-standards.md).
 Verification is manual and must actually be performed — not assumed.
 
-**A phase is not done until both checklists below pass.** Skipping admin QA is
-how bugs like “delete gallery photo → something went wrong” reach the client.
+**A phase is not done until `/feature review` passes and both checklists below
+are satisfied.** Skipping admin QA is how bugs like “delete gallery photo →
+something went wrong” or Lexical rich-text console errors reach the client.
 
 ### A. Public site (every phase)
 
@@ -94,7 +95,8 @@ before merge or before telling the client the phase is ready.
 - [ ] Change `brandName` / `tagline` → hero updates on `/`
 - [ ] Change `heroImage` / `aboutImage` → hero and about sections update
 - [ ] Change `phone` / `whatsapp` / `instagram` / `serviceArea` → contact
-      section and links update (once wired to CMS — see phase 3 gaps)
+      section and links update
+- [ ] Edit **درباره من** rich text → About section updates; admin console clean
 - [ ] Save, reload admin → values persisted
 
 #### Orders — سفارش‌ها (after phase 5)
