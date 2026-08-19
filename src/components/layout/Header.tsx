@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Container } from '@/components/layout/Container'
 import { MobileNav } from '@/components/layout/MobileNav'
 import { content } from '@/data/content'
@@ -19,8 +20,8 @@ export async function Header() {
       <div className="absolute inset-0 -z-10 bg-background/87 backdrop-blur-md" />
 
       <Container className="flex h-nav items-center justify-between gap-6">
-        <a
-          href="#top"
+        <Link
+          href="/"
           className="group flex min-h-11 flex-col justify-center leading-none"
         >
           <span className="text-brand font-black text-card-foreground transition-colors duration-200 group-hover:text-primary">
@@ -29,7 +30,7 @@ export async function Header() {
           <span className="mt-1.5 text-brand-sub text-muted-foreground">
             {brand.latinName}
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden min-w-0 flex-wrap items-center justify-center gap-x-8 gap-y-2 text-small text-muted-foreground md:flex">
           {nav.map((item) => (

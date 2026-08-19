@@ -34,7 +34,7 @@ export async function Hero() {
               <Button href={primaryCta.href} size="lg">
                 {primaryCta.label}
               </Button>
-              <Button href="#products" variant="outline" size="lg">
+              <Button href="/products" variant="outline" size="lg">
                 مشاهده محصولات
               </Button>
             </div>

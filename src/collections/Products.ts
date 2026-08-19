@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
 import { categoryOptions } from '@/lib/categories'
+import { revalidatePublicSite } from '@/lib/revalidate'
 import { slugify } from '@/lib/slug'
 
 export const Products: CollectionConfig = {
@@ -22,6 +23,10 @@ export const Products: CollectionConfig = {
     delete: isAdmin,
   },
   defaultSort: 'sortOrder',
+  hooks: {
+    afterChange: [() => revalidatePublicSite()],
+    afterDelete: [() => revalidatePublicSite()],
+  },
   fields: [
     {
       name: 'title',

@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import { Footer } from '@/components/layout/Footer'
+import { Header } from '@/components/layout/Header'
+import { WhatsAppFloat } from '@/components/layout/WhatsAppFloat'
 import { fontVariables } from '@/lib/fonts'
 import '../globals.css'
 
@@ -15,7 +18,12 @@ export default function SiteLayout({
 }) {
   return (
     <html lang="fa" dir="rtl" className={fontVariables}>
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+        <WhatsAppFloat />
+      </body>
     </html>
   )
 }

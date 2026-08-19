@@ -123,24 +123,18 @@ choosing — she sorts that out in the admin.
 
 ## Pages
 
-`/` exists today as a static demo containing every section. The remaining routes
-are planned, not built.
-
-**Open decision, settle before phase 4:** whether products, gallery, about and
-contact stay as sections of the one page (simpler, fewer clicks, good for an
-Instagram audience) or become the separate routes below (better SEO, room for
-category filtering and product detail). The demo currently proves the one-page
-version.
+`/` is a one-page scroll (Instagram visitors). Dedicated routes exist for
+browsing, ordering and SEO. There is **no** `/products/[slug]` — the CMS only
+has one photo and a short description, so a detail page would clone the card.
 
 | Route | Purpose |
 | --- | --- |
 | `/` | Hero, category grid, featured products, gallery, about, order CTA, contact — **built** |
-| `/products` | All products, filterable by the 7 categories |
-| `/products/[slug]` | Single product detail + order CTA |
-| `/order` | Order form (accepts `?product=` to pre-fill) |
-| `/gallery` | Photo gallery of previous work |
-| `/about` | About the baker |
-| `/contact` | Phone, WhatsApp, Instagram, service area |
+| `/products` | All products, filterable by categories that have products (Phase 4) |
+| `/order` | Order form (accepts `?product=` to pre-fill) — Phase 5 |
+| `/gallery` | Same gallery as the homepage, dedicated URL — Phase 6 |
+| `/about` | About the baker — Phase 6 |
+| `/contact` | Phone, WhatsApp, Instagram, service area — Phase 6 |
 | `/admin` | Payload CMS — the client's dashboard |
 
 ---
@@ -149,9 +143,7 @@ version.
 
 - **Persian (Farsi) only**, right-to-left throughout
 - `<html lang="fa" dir="rtl">`
-- **Vazirmatn** font. Currently loaded via `next/font/google`; self-hosting with
-  `next/font/local` is still preferred before launch, to drop the build-time
-  dependency on Google Fonts
+- **Vazirmatn** font, self-hosted through `next/font/local`
 - Persian digits for prices and dates via `toLocaleString('fa-IR')`
 - Delivery dates presented in the Jalali calendar
 - The Payload admin runs with the `fa` locale, and every field is labelled in
@@ -258,7 +250,7 @@ Ordered and independently implementable — see @context/features/:
    — Next.js, RTL, theme and fonts done; Payload and the database outstanding
 2. @context/features/phase-2-cms-schema-spec.md — collections & globals
 3. @context/features/phase-3-homepage-spec.md — homepage
-4. @context/features/phase-4-products-spec.md — product listing & detail
+4. @context/features/phase-4-products-spec.md — product listing (no detail page)
 5. @context/features/phase-5-order-form-spec.md — order form
 6. @context/features/phase-6-gallery-about-contact-spec.md — remaining pages
 7. @context/features/phase-7-launch-handoff-spec.md — launch & client handoff

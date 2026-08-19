@@ -6,6 +6,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import type { GlobalConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
+import { revalidatePublicSite } from '@/lib/revalidate'
 
 /** Paragraphs only — the full default editor trips Lexical's horizontalrule node. */
 const aboutEditor = lexicalEditor({
@@ -21,6 +22,9 @@ export const SiteSettings: GlobalConfig = {
   access: {
     read: isPublic,
     update: isAdmin,
+  },
+  hooks: {
+    afterChange: [() => revalidatePublicSite()],
   },
   fields: [
     {

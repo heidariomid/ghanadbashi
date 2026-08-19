@@ -20,9 +20,13 @@ export function phoneHref(phone: string): string | null {
   return `tel:+${international}`
 }
 
-export function whatsappHref(whatsapp: string): string | null {
+export function whatsappHref(whatsapp: string, text?: string): string | null {
   const digits = digitsOnly(whatsapp)
-  return digits ? `https://wa.me/${digits}` : null
+  if (!digits) return null
+
+  const url = new URL(`https://wa.me/${digits}`)
+  if (text) url.searchParams.set('text', text)
+  return url.toString()
 }
 
 export function instagramHref(instagram: string): string | null {

@@ -2,80 +2,127 @@
 
 ## Overview
 
-Phase 6 of 7. The three remaining content pages — sections ۴، ۵ و ۶ of the
-client brief. All content comes from the CMS.
+Phase 6 of 7. Dedicated routes for sections ۴، ۵ و ۶ of the client brief.
+The homepage already has a full gallery (chips + lightbox), an About section
+wired to `aboutText` / `aboutImage`, and a Contact strip. This phase adds
+`/gallery`, `/about` and `/contact` for nav and SEO — it does **not** rebuild
+those sections.
+
+Header, Footer and the WhatsApp float already live in `(site)/layout.tsx`
+(Phase 4). These pages only render `<main>`.
 
 ## Requirements
 
+### Nav
+
+Phase 4 pointed the remaining items at homepage anchors so they worked from
+`/products`. Switch them to the new routes:
+
+| Control | After Phase 4 | Phase 6 |
+| --- | --- | --- |
+| Nav «نمونه کارها» | `/#gallery` | `/gallery` |
+| Nav «درباره ما» | `/#about` | `/about` |
+| Nav «تماس» | `/#contact` | `/contact` |
+
+Homepage sections keep their `id`s. Category cards on `/` stay gallery-backed
+and may keep `#gallery` / `/#gallery` — they are not a product index.
+
 ### `/gallery` — گالری
 
-The client's brief singles this out: *"customers choose with their eyes first."*
-Treat image quality and load performance as the priority.
+Reuse `GalleryGrid`. Do not write a second lightbox or a masonry layout.
 
-- All `gallery` records, sorted by `sortOrder`
-- Masonry-style or fixed-aspect grid: 2 columns mobile, 3 desktop
-- `next/image`, lazy below the fold, blur placeholder
-- Caption below or on hover, when present
-- **Lightbox** on click:
-  - Full-size image, previous/next navigation
-  - Close on Escape, backdrop click, or button
-  - Arrow keys navigate; **in RTL, left arrow means next**
-  - Swipe on touch
-  - Lock body scroll while open
-  - Only this component is `'use client'`
-- Empty state: «به زودی عکس‌های بیشتری اضافه می‌شود»
+- Same query as the homepage section: all `gallery` records, `sortOrder`,
+  `depth: 1`, skip rows with no resolvable image
+- Chips: «همه» plus only categories that have photos, ordered by
+  `sortByCategoryOrder` (10 categories exist; empty ones stay hidden)
+- Keep the existing client-side chip state — do not rebuild it as URL filters
+- `next/image`, lazy below the fold; `priority` on the first image only
+- Caption when present, same as today
+- Lightbox behaviour is already implemented and correct (RTL: left arrow =
+  next). Do not replace it
+- Empty collection: the page shows «به زودی عکس‌های بیشتری اضافه می‌شود».
+  The homepage section can keep hiding itself when empty
+- `generateMetadata` — Persian title and description
 
 ### `/about` — درباره من
 
-- `aboutText` (rich text) from site settings, rendered via the Lexical HTML converter
-- Optional portrait — reuse `heroImage` or add an `aboutImage` field
-- Warm, personal tone; comfortable reading width (~65ch)
-- CTA to `/products` and WhatsApp
-- Hide the page's body gracefully if `aboutText` is empty
+`aboutImage` already exists on `site-settings.brand`. Do not add a field and
+do not fall back to `heroImage`.
+
+- Render `aboutText` with the same Lexical path as the homepage About
+- Portrait from `aboutImage` when present
+- If **both** are empty: hide the body (or `notFound()`) — do not show a
+  blank page with a heading
+- If only one is present, render what exists
+- Comfortable reading width (~65ch)
+- CTA to `/products` and WhatsApp (hide WhatsApp if the number is empty)
+- `generateMetadata`
 
 ### `/contact` — تماس با ما
 
-All from site settings, each hidden when empty:
+All from site settings, each hidden when empty — same link rules as Phase 3:
 
-- **Phone** — `tel:` link, Persian digits
-- **WhatsApp** — `wa.me` link, opens with a greeting pre-filled
+- **Phone** — `tel:` link, Persian digits (`faPhone`)
+- **WhatsApp** — `wa.me` link, optional greeting in `?text=`
 - **Instagram** — `https://instagram.com/{handle}`, displayed as `@handle`
+  (no digit localisation, no `dir="ltr"` on the handle)
 - **Service area** — plain text
-- Large tappable cards with icons, not a dense list
-- CTA to `/order`
+- Large tappable cards, not a dense list
+- CTA to `/order` (the form exists from Phase 5)
 
-No contact form here — the order form is the single conversion point, and a
-second form splits attention.
+No contact form here — the order form is the single conversion point.
 
-### Shared
+`generateMetadata`.
 
-- All three reuse the header/footer/WhatsApp shell from phase 3
-- `generateMetadata` per page
-- Static render, revalidated by the same hooks as phase 4 (extend them to cover
-  `gallery` → `/gallery`)
+### Revalidation
+
+Extend the Phase 4 / 5 hooks. Do not start a second revalidation system.
+
+- `gallery` afterChange / afterDelete: `revalidatePath('/')` and
+  `revalidatePath('/gallery')`
+- `site-settings` afterChange: also `/about` and `/contact` (it already
+  covers `/`, `/products`, `/order`)
+
+`/about` and `/contact` can be static with a `revalidate = 3600` fallback.
+`/gallery` is static too if it does not read `searchParams`.
+
+## Out of scope
+
+- Rebuilding `GalleryGrid` or the lightbox
+- URL-based gallery filters
+- A new `aboutImage` field
+- A contact form
+- Product detail pages
 
 ## Verification
 
-- Gallery renders, lightbox opens/closes/navigates by click, keyboard and swipe
-- RTL arrow direction is correct in the lightbox
-- Rich text from the admin renders with correct RTL formatting
+- `/gallery` renders the same photos and chips as the homepage section
+- Lightbox opens/closes/navigates by click, keyboard and swipe; RTL arrows
+  unchanged
+- Empty gallery shows the empty state on `/gallery`; homepage section stays
+  hidden
+- `/about` uses `aboutText` and `aboutImage`, not the hero photo
+- Clearing both about fields hides the about body
 - Contact links work on a real phone (`tel:`, WhatsApp, Instagram)
-- Every optional field, when blank, hides its element without breaking layout
-- Empty gallery shows the empty state
-- Adding a gallery image in `/admin` appears on the live site
+- Every optional contact field, when blank, hides its element
+- Nav from `/products` reaches `/gallery`, `/about`, `/contact`
+- Adding a gallery image or editing site settings in `/admin` updates the
+  live pages **without a redeploy**
 - 375 / 768 / 1280px; RTL correct
 - `pnpm build` and `pnpm lint` pass
 
 ## Notes
 
-- The gallery is the client's portfolio — allow generously sized images but
-  ensure `media` sizes from phase 2 keep payloads reasonable
-- Keep the lightbox hand-rolled and minimal; a carousel library is more weight
-  than this needs
+- The homepage stays a one-page scroll for Instagram visitors. The new routes
+  exist so the header can leave `/` and so those URLs can be shared.
+- Keep the lightbox hand-rolled; a carousel library is more weight than this
+  needs.
 
 ## References
 
 - @context/project-overview.md
 - @context/features/phase-2-cms-schema-spec.md
 - @context/features/phase-3-homepage-spec.md
+- @context/features/phase-4-products-spec.md
+- @context/features/phase-5-order-form-spec.md
 - @context/coding-standards.md

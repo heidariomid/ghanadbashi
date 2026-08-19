@@ -74,7 +74,19 @@ export interface SiteContent {
   primaryCta: NavItem
   whatsapp: { label: string; floatingLabel: string }
   categories: SectionIntro
-  products: SectionIntro & { footnote: string }
+  products: SectionIntro & {
+    footnote: string
+    listing: {
+      eyebrow: string
+      title: string
+      description: string
+      empty: string
+      all: string
+      viewAll: string
+      unavailable: string
+      orderMessage: string
+    }
+  }
   gallery: SectionIntro
   about: About
   orderCta: OrderCta
@@ -94,13 +106,13 @@ export const content: SiteContent = {
   },
 
   nav: [
-    { label: 'محصولات', href: '#products' },
-    { label: 'نمونه کارها', href: '#gallery' },
-    { label: 'درباره ما', href: '#about' },
-    { label: 'تماس', href: '#contact' },
+    { label: 'محصولات', href: '/products' },
+    { label: 'نمونه کارها', href: '/#gallery' },
+    { label: 'درباره ما', href: '/#about' },
+    { label: 'تماس', href: '/#contact' },
   ],
 
-  primaryCta: { label: 'ثبت سفارش', href: '#order' },
+  primaryCta: { label: 'ثبت سفارش', href: '/#order' },
 
   whatsapp: {
     label: 'واتس‌اپ',
@@ -120,6 +132,17 @@ export const content: SiteContent = {
     description:
       'فهرست کامل‌تر در واتس‌اپ در اختیار شماست؛ این‌ها پرسفارش‌ترین‌های چند ماه گذشته‌اند.',
     footnote: 'قیمت‌ها بر اساس سفارش و طراحی تغییر می‌کند.',
+    listing: {
+      eyebrow: 'فهرست محصولات',
+      title: 'همه محصولات',
+      description:
+        'کیک، شیرینی خشک، دسر و محصولات رژیمی — هر کدام با عکس، قیمت یا استعلام، آماده سفارش.',
+      empty: 'فعلاً محصولی در این دسته نیست',
+      all: 'همه',
+      viewAll: 'مشاهده همه محصولات',
+      unavailable: 'فعلاً موجود نیست',
+      orderMessage: 'سلام، می‌خواهم «{title}» را سفارش بدهم',
+    },
   },
 
   gallery: {

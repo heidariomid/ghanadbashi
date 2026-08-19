@@ -74,7 +74,16 @@ export async function FeaturedProducts() {
           })}
         </ul>
 
-        <p className="mt-9 text-caption text-muted-foreground md:mt-14">{footnote}</p>
+        <a
+          href="/products"
+          className="group/all mt-9 inline-flex min-h-11 w-fit items-center text-small md:mt-14"
+        >
+          <span className="border-b border-border pb-1 transition-all duration-200 group-hover/all:border-primary group-hover/all:text-primary">
+            {content.products.listing.viewAll}
+          </span>
+        </a>
+
+        <p className="mt-4 text-caption text-muted-foreground">{footnote}</p>
       </Container>
     </section>
   )

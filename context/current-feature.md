@@ -32,3 +32,6 @@ Not Started
 - Phase 3 — Homepage CMS Wiring: wired site-settings contact and aboutText to
   the public site, footer polish, empty states; simplified about rich-text
   editor; mandatory `/feature review` gate before complete.
+- Phase 4 — Products: added `/products` with URL category chips, moved site
+  chrome into the layout, and revalidate `/` and `/products` when products or
+  site-settings change.
