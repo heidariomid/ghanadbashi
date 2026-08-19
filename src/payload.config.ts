@@ -81,8 +81,9 @@ export default buildConfig({
     pool: {
       connectionString: databaseURI,
     },
-    // Default ./src/migrations. Dev uses Drizzle push (fast iteration); production
-    // applies committed migrations via `vercel-build` — see package.json.
+    // Dev uses migrations like production does, so a missing migration fails
+    // here instead of on deploy. Run `pnpm migrate:create` after schema changes.
+    push: false,
     migrationDir: path.resolve(dirname, 'migrations'),
   }),
   editor: lexicalEditor(),

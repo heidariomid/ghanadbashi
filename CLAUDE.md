@@ -24,6 +24,10 @@ pnpm lint         # ESLint with Next.js core-web-vitals + TypeScript rules
 pnpm payload      # Payload CLI
 pnpm generate:types  # regenerate payload-types.ts after ANY schema change
 pnpm db:pull      # replace local Postgres `bakery` with a full copy of production Neon
+
+pnpm migrate:create   # write a migration file after a schema change
+pnpm migrate          # apply pending migrations to the current DATABASE_URI
+pnpm migrate:status   # list which migrations have been applied
 ```
 
 `pnpm db:pull` wipes local `bakery` first, then restores schema + data from
@@ -32,9 +36,43 @@ Vercel → Project → Settings → Environment Variables → DATABASE_URI). Pho
 404 locally if they live on Vercel Blob; content/structure still restores.
 Re-run anytime for a fresh production copy. Needs PostgreSQL client tools.
 
-After editing any collection or global in `src/collections/` or `src/globals/`,
-run `pnpm generate:types`. The generated `payload-types.ts` is what gives the
-frontend real types instead of `any`.
+## Database changes
+
+Local dev uses Postgres.app; production uses Neon. They are separate databases
+and never talk to each other. Content only ever flows production → local, via
+`pnpm db:pull`. Nothing local is ever pushed to Neon.
+
+Schema travels the other way, as committed migration files. Vercel runs
+`vercel-build` on deploy, which applies any pending migrations to Neon before
+building.
+
+`push` is off, so dev applies migrations exactly like production does. If you
+change a collection or global without creating a migration, dev breaks
+immediately — that's deliberate, and it's what stops a missing migration from
+reaching production.
+
+After editing anything in `src/collections/` or `src/globals/`:
+
+```bash
+pnpm migrate:create    # writes src/migrations/<timestamp>_<name>.ts
+pnpm generate:types    # regenerates payload-types.ts
+```
+
+Commit both. `payload-types.ts` is what gives the frontend real types instead of
+`any`; the migration is what gives Neon the new column.
+
+> **A database touched by dev push must be baselined once.** Push leaves a
+> `batch: -1` row in `payload_migrations`. When `payload migrate` sees it, it
+> stops to ask an interactive question — which on Vercel means the build hangs
+> until it times out, with no useful error. Plain `migrate` has no flag to skip
+> that prompt, so the row has to go.
+>
+> ```bash
+> DATABASE_URI="<neon-url>" pnpm migrate:baseline
+> ```
+>
+> This drops the marker row and records the initial migration as applied, so
+> migrate skips it instead of re-creating existing tables. Safe to re-run.
 
 ## Context Files
 
