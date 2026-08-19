@@ -12,6 +12,8 @@ const eslintConfig = [
       '.screens/**',
       // reference export from Claude Design, kept for comparison — not our source
       'RTL Bakery Homepage Demo/**',
+      // Payload-generated; do not hand-edit
+      'src/migrations/**',
     ],
   },
 ]

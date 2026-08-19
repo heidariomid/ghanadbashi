@@ -50,8 +50,8 @@ Before marking any feature done:
   confirm the record lands in the CMS and any notification email arrives
 - **Content round-trip** — change a value in `/admin`, confirm it appears on the
   public site (wait for `revalidate` or hard-refresh)
-- **Build** — `pnpm build` and `pnpm lint` both pass on a machine that can reach
-  the database (VPN if Shecan blocks Neon)
+- **Build** — `pnpm build` and `pnpm lint` both pass. Local dev uses Postgres.app
+  (`DATABASE_URI=postgresql://omid@localhost:5432/bakery`); no VPN needed.
 
 Report honestly. If a step was skipped or something didn't work, say so plainly
 rather than reporting success.

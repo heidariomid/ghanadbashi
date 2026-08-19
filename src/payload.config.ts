@@ -81,6 +81,9 @@ export default buildConfig({
     pool: {
       connectionString: databaseURI,
     },
+    // Default ./src/migrations. Dev uses Drizzle push (fast iteration); production
+    // applies committed migrations via `vercel-build` — see package.json.
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   editor: lexicalEditor(),
   globals,

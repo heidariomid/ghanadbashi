@@ -23,6 +23,7 @@ goes under Parent and is linked from Index.
 ## QA
 
 - **Production:** ghanadbashi.vercel.app
-- **Build:** `pnpm build` needs the database. Use a VPN if Shecan blocks Neon
+- **Build:** `pnpm build` uses local Postgres (see `.env.example`). Vercel runs
+  `payload migrate` before build via `vercel-build`.
 - **Known QA story:** Lexical `horizontalrule` in **درباره من** — looked
   fine in code, broke only when someone typed in the admin field
