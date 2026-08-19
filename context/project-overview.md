@@ -114,10 +114,11 @@ and gallery sections.
 | 9 | Gift packs | 🎁 پک‌های هدیه |
 | 10 | Diet & sports drinks | 🥤 معجون رژیمی و ورزشکاری |
 
-Categories 1, 7, 8 and 10 have no photos at launch. The site renders only
-categories that have published content, so they stay hidden until the client
-uploads to them herself. Category 7 overlaps 3 and 6 by the client's own
-choosing — she sorts that out in the admin.
+Categories 1, 7, 8 and 10 may have no photos at launch. The homepage grid and
+`/products` chips still show all ten so visitors can see what she makes. A
+card without a gallery photo uses a placeholder and links to that category on
+`/products`. Gallery filter chips stay published-only. Category 7 overlaps 3
+and 6 by the client's own choosing — she sorts that out in the admin.
 
 ---
 
@@ -220,7 +221,7 @@ Deliberately excluded to keep the project small. Possible later, at cost:
 
 - Online payment / checkout
 - User accounts for customers
-- Order status tracking
+- Customer order-tracking page (Phase 8 notifies by email/SMS only)
 - Multi-language (English)
 - Blog or recipes
 - Inventory management
@@ -254,3 +255,5 @@ Ordered and independently implementable — see @context/features/:
 5. @context/features/phase-5-order-form-spec.md — order form
 6. @context/features/phase-6-gallery-about-contact-spec.md — remaining pages
 7. @context/features/phase-7-launch-handoff-spec.md — launch & client handoff
+8. @context/features/phase-8-order-status-notify-spec.md — new order emails +
+   SMS her; status change emails + SMS the customer (OTP on the form first)

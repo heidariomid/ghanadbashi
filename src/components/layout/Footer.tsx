@@ -7,17 +7,18 @@ import {
   whatsappHref,
 } from '@/lib/contact'
 import { faPhone } from '@/lib/format'
+import { newTabProps } from '@/lib/links'
 import { getSiteSettings } from '@/lib/site-settings'
 
 export async function Footer() {
   const { brand, footer } = content
   const settings = await getSiteSettings()
-  const brandName = settings.brand?.brandName?.trim() || brand.name
-  const tagline = settings.brand?.tagline?.trim()
-  const phone = cleanContactValue(settings.contact?.phone)
-  const whatsapp = cleanContactValue(settings.contact?.whatsapp)
-  const instagram = cleanContactValue(settings.contact?.instagram)
-  const serviceArea = cleanContactValue(settings.contact?.serviceArea)
+  const brandName = settings?.brand?.brandName?.trim() || brand.name
+  const tagline = settings?.brand?.tagline?.trim()
+  const phone = cleanContactValue(settings?.contact?.phone)
+  const whatsapp = cleanContactValue(settings?.contact?.whatsapp)
+  const instagram = cleanContactValue(settings?.contact?.instagram)
+  const serviceArea = cleanContactValue(settings?.contact?.serviceArea)
   const phoneLink = phone ? phoneHref(phone) : null
   const whatsappLink = whatsapp ? whatsappHref(whatsapp) : null
   const instagramLink = instagram ? instagramHref(instagram) : null
@@ -42,6 +43,7 @@ export async function Footer() {
                 <a
                   href={phoneLink}
                   dir="ltr"
+                  {...newTabProps}
                   aria-label={`${content.contact.channels.phone.label}: ${faPhone(phone)}`}
                   className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary"
                 >
@@ -52,6 +54,7 @@ export async function Footer() {
                 <a
                   href={whatsappLink}
                   dir="ltr"
+                  {...newTabProps}
                   aria-label={`${content.contact.channels.whatsapp.label}: ${faPhone(whatsapp)}`}
                   className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary"
                 >
@@ -61,6 +64,7 @@ export async function Footer() {
               {instagram && instagramLink ? (
                 <a
                   href={instagramLink}
+                  {...newTabProps}
                   aria-label={`${content.contact.channels.instagram.label}: @${instagram.replace(/^@+/, '')}`}
                   className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary"
                 >

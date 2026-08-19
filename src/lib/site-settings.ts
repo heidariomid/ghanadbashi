@@ -1,9 +1,9 @@
 import { cache } from 'react'
 
-import { getPayloadClient } from '@/lib/payload'
+import { queryPayload } from '@/lib/payload'
+import type { SiteSetting } from '@/payload-types'
 
 /** Deduplicate site-settings reads across homepage server components. */
-export const getSiteSettings = cache(async () => {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'site-settings', depth: 1 })
+export const getSiteSettings = cache(async (): Promise<SiteSetting | null> => {
+  return queryPayload((payload) => payload.findGlobal({ slug: 'site-settings', depth: 1 }))
 })

@@ -1,22 +1,26 @@
+import { AddToCartButton } from '@/components/cart/AddToCartButton'
 import { Container } from '@/components/layout/Container'
 import { Photo } from '@/components/ui/Photo'
 import { SectionIntro } from '@/components/ui/SectionIntro'
 import { content } from '@/data/content'
+import { cartProductFrom } from '@/lib/cart'
 import { faPrice } from '@/lib/format'
 import { resolveImage } from '@/lib/media'
-import { getPayloadClient } from '@/lib/payload'
+import { queryPayload } from '@/lib/payload'
 
 export async function FeaturedProducts() {
   const { eyebrow, title, description, footnote } = content.products
 
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'products',
-    where: { isFeatured: { equals: true } },
-    limit: 12,
-    sort: 'sortOrder',
-    depth: 1,
-  })
+  const result = await queryPayload((payload) =>
+    payload.find({
+      collection: 'products',
+      where: { isFeatured: { equals: true } },
+      limit: 12,
+      sort: 'sortOrder',
+      depth: 1,
+    }),
+  )
+  const docs = result?.docs ?? []
 
   if (docs.length === 0) return null
 
@@ -59,16 +63,9 @@ export async function FeaturedProducts() {
                   )}
                 </div>
 
-                {/* padding on the anchor keeps a 44px hit area; the rule stays on the
-                    inner span so it hugs the text */}
-                <a
-                  href="#order"
-                  className="group/cta mt-3 inline-flex min-h-11 w-fit items-center text-small"
-                >
-                  <span className="border-b border-border pb-1 transition-all duration-200 group-hover/cta:border-primary group-hover/cta:text-primary">
-                    {content.primaryCta.label}
-                  </span>
-                </a>
+                {product.isAvailable !== false ? (
+                  <AddToCartButton product={cartProductFrom(product, image)} />
+                ) : null}
               </li>
             )
           })}

@@ -44,9 +44,9 @@ on `/`.
 ### `/products` — listing
 
 - Every product, **including unavailable**, sorted by `sortOrder`
-- Category chips: «همه» plus only categories that currently have products,
-  ordered by `sortByCategoryOrder` from `src/lib/categories.ts` (10 categories
-  exist; empty ones stay hidden until the client adds a product)
+- Category chips: «همه» plus all 10 categories from `src/lib/categories.ts`,
+  in list order. Empty categories still appear so visitors can see what she
+  makes; the listing empty state is «فعلاً محصولی در این دسته نیست»
 - Filter state lives in the URL: `/products?category=birthday-cakes`
   - Shareable, back-button friendly, server-rendered
   - Read `searchParams` in the server page (`await` it — Next.js 16) — **not**
@@ -131,7 +131,8 @@ doesn't need.
 
 ## Verification
 
-- Chips show only categories that have products; empty categories stay hidden
+- Chips show all 10 categories, including empty ones; an empty chip shows the
+  listing empty state, not a crash
 - Each chip returns the right products; «همه» returns the full list
 - Unavailable products appear in the list, greyed, with no order link
 - Filter state survives a refresh and the back button
@@ -154,8 +155,8 @@ doesn't need.
 
 - URL chips keep the page a server component — no client JS for filtering,
   better SEO, shareable links
-- Labels and chip order come from `src/lib/categories.ts`. Which chips render
-  comes from published products, not from a hardcoded list of 7
+- Labels and chip order come from `src/lib/categories.ts`. All 10 chips
+  render so visitors can see the full range, even before she adds a product
 - Phase 5 switches available order controls to `/order?product={slug}` and
   keeps unavailable products out of the form select
 

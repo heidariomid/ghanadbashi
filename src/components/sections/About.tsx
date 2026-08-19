@@ -28,8 +28,8 @@ export async function About() {
   const { eyebrow, title, signature, signatureRole, values } = content.about
 
   const settings = await getSiteSettings()
-  const photo = resolveImage(settings.brand?.aboutImage)
-  const aboutText = settings.brand?.aboutText
+  const photo = resolveImage(settings?.brand?.aboutImage)
+  const aboutText = settings?.brand?.aboutText
   const hasAboutText = hasRichTextContent(aboutText)
 
   if (!hasAboutText && !photo) return null

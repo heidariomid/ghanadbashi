@@ -1,9 +1,10 @@
+import { AddToCartButton } from '@/components/cart/AddToCartButton'
 import { Container } from '@/components/layout/Container'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Photo } from '@/components/ui/Photo'
 import { content } from '@/data/content'
 import { categoryLabel } from '@/lib/categories'
-import { whatsappHref } from '@/lib/contact'
+import { cartProductFrom } from '@/lib/cart'
 import { faPrice } from '@/lib/format'
 import { resolveImage } from '@/lib/media'
 import type { Product } from '@/payload-types'
@@ -13,15 +14,9 @@ interface ProductListingProps {
   categories: string[]
   /** Active filter from `?category=`. `undefined` means «همه». */
   category: string | undefined
-  whatsapp: string | null
 }
 
-export function ProductListing({
-  products,
-  categories,
-  category,
-  whatsapp,
-}: ProductListingProps) {
+export function ProductListing({ products, categories, category }: ProductListingProps) {
   const { listing } = content.products
   const showAll = category === undefined
   const ready = products.filter((product) => resolveImage(product.image))
@@ -59,12 +54,7 @@ export function ProductListing({
         ) : (
           <ul className="mt-11 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-9 md:mt-18 md:gap-14">
             {visible.map((product, index) => (
-              <ListingCard
-                key={product.id}
-                product={product}
-                priority={index === 0}
-                whatsapp={whatsapp}
-              />
+              <ListingCard key={product.id} product={product} priority={index === 0} />
             ))}
           </ul>
         )}
@@ -89,26 +79,11 @@ function Chip({ href, label, active }: { href: string; label: string; active: bo
   )
 }
 
-function ListingCard({
-  product,
-  priority,
-  whatsapp,
-}: {
-  product: Product
-  priority: boolean
-  whatsapp: string | null
-}) {
+function ListingCard({ product, priority }: { product: Product; priority: boolean }) {
   const image = resolveImage(product.image)
   if (!image) return null
 
   const available = product.isAvailable !== false
-  const orderHref =
-    available && whatsapp
-      ? whatsappHref(
-          whatsapp,
-          content.products.listing.orderMessage.replace('{title}', product.title),
-        )
-      : null
 
   return (
     <li className="group flex flex-col">
@@ -140,13 +115,7 @@ function ListingCard({
         </span>
       </div>
 
-      {orderHref ? (
-        <a href={orderHref} className="group/cta mt-3 inline-flex min-h-11 w-fit items-center text-small">
-          <span className="border-b border-border pb-1 transition-all duration-200 group-hover/cta:border-primary group-hover/cta:text-primary">
-            {content.primaryCta.label}
-          </span>
-        </a>
-      ) : null}
+      {available ? <AddToCartButton product={cartProductFrom(product, image)} /> : null}
     </li>
   )
 }

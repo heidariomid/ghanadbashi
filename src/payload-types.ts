@@ -281,12 +281,24 @@ export interface Order {
   status: 'new' | 'confirmed' | 'delivered' | 'cancelled';
   customerName: string;
   phone: string;
-  product?: (number | null) | Product;
   /**
-   * اگر مشتری محصولی خارج از فهرست خواسته باشد، اینجا نوشته می‌شود.
+   * محصولاتی که مشتری از سبد ثبت کرده است، با تعداد هر کدام.
+   */
+  items?:
+    | {
+        product: number | Product;
+        quantity: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * اگر مشتری «سایر» را هم نوشته باشد، اینجا می‌آید.
    */
   productNote?: string | null;
-  quantity?: number | null;
+  /**
+   * تعداد محصول متن آزاد.
+   */
+  otherQuantity?: number | null;
   deliveryDate?: string | null;
   notes?: string | null;
   /**
@@ -452,9 +464,15 @@ export interface OrdersSelect<T extends boolean = true> {
   status?: T;
   customerName?: T;
   phone?: T;
-  product?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
   productNote?: T;
-  quantity?: T;
+  otherQuantity?: T;
   deliveryDate?: T;
   notes?: T;
   sampleImage?: T;

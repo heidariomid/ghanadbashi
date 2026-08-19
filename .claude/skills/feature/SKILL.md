@@ -1,7 +1,7 @@
 ---
 name: feature
-description: Manage current feature workflow - start, review, explain or complete
-argument-hint: load|start|review|test|explain|complete
+description: Manage current feature workflow - start, pre-review, after-review, explain or complete
+argument-hint: load|pre-review|start|after-review|test|explain|complete
 ---
 
 # Feature Workflow
@@ -11,6 +11,10 @@ Manages the full lifecycle of a feature from spec to merge.
 ## Working File
 
 @context/current-feature.md
+
+Project overlay (this repo only): [project.md](project.md). Read it before
+pre-review or after-review. Copy the skill to another repo → replace that
+file; do not put client names or Notion URLs in the action files.
 
 ### File Structure
 
@@ -24,43 +28,47 @@ current-feature.md has these sections:
 
 ## Pipeline
 
-Every phase follows this order. Do not skip steps.
+Usual order. `pre-review` and `after-review` are **optional** — useful, not
+a gate. `start` and `complete` must not wait for them.
 
 ```
-load → start → implement → review → complete
-                              ↑
-                    mandatory gate — run before commit/push
+load → start → complete
+         ↑         ↑
+    optional   optional
+   pre-review  after-review
 ```
 
 | Step | Action | When |
 | ---- | ------ | ---- |
 | 1 | `load` | Spec chosen; fill Goals and Notes |
-| 2 | `start` | Create branch; set Status In Progress |
-| 3 | *(implement)* | Build what Goals describe |
-| 4 | **`review`** | **After implementation — browser + admin QA, lint, build** |
-| 5 | `complete` | Only if review verdict is Ready; commit, merge, push |
-| optional | `test` | Unit tests — this project rarely uses; prefer `review` |
+| 2 | `start` | Create branch; implement; list leftover setup |
+| 3 | `complete` | Commit, merge, push — when the user asks |
+| optional | `pre-review` | Before start — spec vs repo; team votes on Notion |
+| optional | `after-review` | After implementation — lint, build, browser, admin QA on Notion |
+| optional | `test` | Unit tests — this project rarely uses |
 | optional | `explain` | Document changes for handoff |
 
-**`/feature review` is not optional.** Bugs like admin rich-text crashes, CMS
-fields that save but never render, and delete guards that fail only from one
-screen are found here — not by reading diffs.
-
 Verification details: @context/ai-interaction.md sections A–C.
-Review procedure: [actions/review.md](actions/review.md).
+Pre-review procedure: [actions/pre-review.md](actions/pre-review.md).
+After-review procedure: [actions/after-review.md](actions/after-review.md).
+
+**`/feature pre-review` is not `/feature after-review`.** Pre-review does
+not lint, build, or open the browser. Both save the write-up to Notion;
+chat is the verdict + URL only.
 
 ## Task
 
 Execute the requested action: $ARGUMENTS
 
-| Action     | Description                                               |
-| ---------- | --------------------------------------------------------- |
-| `load`     | Load a feature spec or inline description                 |
-| `start`    | Begin implementation, create branch                       |
-| `review`   | Verify goals, code, lint, build, browser, admin QA        |
-| `test`     | Unit tests for server actions/utilities (rare here)       |
-| `explain`  | Document what changed and why                             |
-| `complete` | Commit, push, merge, reset — **only after review passes** |
+| Action         | Description                                               |
+| -------------- | --------------------------------------------------------- |
+| `load`         | Load a feature spec or inline description                 |
+| `pre-review`   | Optional. Spec vs repo; save the briefing to Notion       |
+| `start`        | Create branch, implement, then list leftover setup steps  |
+| `after-review` | Optional. Lint, build, browser, admin QA; save to Notion  |
+| `test`         | Unit tests for server actions/utilities (rare here)       |
+| `explain`      | Document what changed and why                             |
+| `complete`     | Commit, push, merge, reset                                |
 
 See [actions/](actions/) for detailed instructions.
 

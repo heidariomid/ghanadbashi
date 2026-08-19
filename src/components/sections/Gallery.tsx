@@ -4,18 +4,20 @@ import { SectionIntro } from '@/components/ui/SectionIntro'
 import { content } from '@/data/content'
 import { sortByCategoryOrder } from '@/lib/categories'
 import { resolveImage } from '@/lib/media'
-import { getPayloadClient } from '@/lib/payload'
+import { queryPayload } from '@/lib/payload'
 
 export async function Gallery() {
   const { eyebrow, title, description } = content.gallery
 
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'gallery',
-    limit: 200,
-    sort: 'sortOrder',
-    depth: 1,
-  })
+  const result = await queryPayload((payload) =>
+    payload.find({
+      collection: 'gallery',
+      limit: 200,
+      sort: 'sortOrder',
+      depth: 1,
+    }),
+  )
+  const docs = result?.docs ?? []
 
   const photos = docs.reduce<GalleryPhoto[]>((all, doc) => {
     const image = resolveImage(doc.image)

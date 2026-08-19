@@ -11,9 +11,9 @@ export async function Hero() {
 
   const settings = await getSiteSettings()
 
-  const name = settings.brand?.brandName?.trim() || brand.name
-  const tagline = settings.brand?.tagline?.trim()
-  const heroPhoto = resolveImage(settings.brand?.heroImage)
+  const name = settings?.brand?.brandName?.trim() || brand.name
+  const tagline = settings?.brand?.tagline?.trim()
+  const heroPhoto = resolveImage(settings?.brand?.heroImage)
 
   return (
     <section className="pt-12 pb-section md:pt-24">

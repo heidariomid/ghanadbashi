@@ -35,3 +35,4 @@ Not Started
 - Phase 4 — Products: added `/products` with URL category chips, moved site
   chrome into the layout, and revalidate `/` and `/products` when products or
   site-settings change.
+- Phase 5 — Order Form: add the order basket and checkout form

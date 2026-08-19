@@ -8,6 +8,7 @@ import {
   whatsappHref,
 } from '@/lib/contact'
 import { faPhone } from '@/lib/format'
+import { isExternalHref, newTabProps } from '@/lib/links'
 import { getSiteSettings } from '@/lib/site-settings'
 
 interface ContactChannel {
@@ -22,10 +23,10 @@ interface ContactChannel {
 export async function Contact() {
   const { eyebrow, title, description, channels: copy } = content.contact
   const settings = await getSiteSettings()
-  const phone = cleanContactValue(settings.contact?.phone)
-  const whatsapp = cleanContactValue(settings.contact?.whatsapp)
-  const instagram = cleanContactValue(settings.contact?.instagram)
-  const serviceArea = cleanContactValue(settings.contact?.serviceArea)
+  const phone = cleanContactValue(settings?.contact?.phone)
+  const whatsapp = cleanContactValue(settings?.contact?.whatsapp)
+  const instagram = cleanContactValue(settings?.contact?.instagram)
+  const serviceArea = cleanContactValue(settings?.contact?.serviceArea)
   const channels: ContactChannel[] = []
 
   const phoneLink = phone ? phoneHref(phone) : null
@@ -83,6 +84,7 @@ export async function Contact() {
                     <a
                       href={channel.href}
                       dir={channel.dir}
+                      {...(isExternalHref(channel.href) ? newTabProps : {})}
                       className="inline-flex min-h-11 items-center text-h3 font-semibold text-card-foreground transition-colors duration-200 hover:text-primary"
                     >
                       {channel.value}

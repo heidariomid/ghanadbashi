@@ -1,7 +1,8 @@
 # Complete Action
 
-**Prerequisite:** `/feature review` must have returned **Ready to complete**.
-If review found blockers, fix them and re-run review before this step.
+`/feature after-review` is optional. Do not refuse complete if it is
+missing. If Notes have After-review **Needs changes**, mention it, then
+still complete if the user asked.
 
 Produces exactly ONE commit per feature. Do not create a separate
 `chore: reset current-feature.md` commit — the reset is part of the feature
@@ -18,3 +19,6 @@ commit itself.
 4. Delete the local feature branch
 5. Push main to origin ONCE
 6. If the feature branch was previously pushed, delete it from origin
+7. Cleanup leftovers from after-review/complete: stop terminals you started
+   (`pnpm dev`), close Playwright/browser tabs, delete session-only
+   screenshots and temp helpers. Do not leave a server running.

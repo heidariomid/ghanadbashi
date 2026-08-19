@@ -1,10 +1,11 @@
 import { content } from '@/data/content'
 import { cleanContactValue, whatsappHref } from '@/lib/contact'
+import { newTabProps } from '@/lib/links'
 import { getSiteSettings } from '@/lib/site-settings'
 
 export async function WhatsAppFloat() {
   const settings = await getSiteSettings()
-  const whatsapp = cleanContactValue(settings.contact?.whatsapp)
+  const whatsapp = cleanContactValue(settings?.contact?.whatsapp)
   const href = whatsapp ? whatsappHref(whatsapp) : null
 
   if (!href) return null
@@ -13,6 +14,7 @@ export async function WhatsAppFloat() {
     <a
       href={href}
       dir="ltr"
+      {...newTabProps}
       aria-label={content.whatsapp.floatingLabel}
       className="fixed bottom-6.5 inset-e-6.5 z-30 flex size-14.5 items-center justify-center rounded-full bg-card-foreground text-primary-foreground shadow-float transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary"
     >

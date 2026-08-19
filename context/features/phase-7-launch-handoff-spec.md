@@ -2,7 +2,7 @@
 
 ## Overview
 
-Phase 7 of 7. Ship the site, hand it to the client, and make sure she never
+Phase 7 of 8. Ship the site, hand it to the client, and make sure she never
 needs to call you.
 
 **This is the phase that determines whether the project was profitable.** It
@@ -73,8 +73,8 @@ Sit with the client (or do it for her) to seed:
 
 - Site settings fully populated
 - Real products in the categories she actually sells, with photos. Empty
-  categories stay hidden — do **not** invent filler so that all 10 chips
-  appear
+  categories still appear as capability — do **not** invent filler products
+  just to fill the chips
 - 6+ gallery images
 - About text in her own voice
 

@@ -45,6 +45,48 @@ export interface OrderCta {
   steps: string[]
 }
 
+export interface OrderFormCopy {
+  eyebrow: string
+  title: string
+  description: string
+  metaTitle: string
+  metaDescription: string
+  submit: string
+  submitting: string
+  success: string
+  error: string
+  otherProduct: string
+  otherProductLabel: string
+  otherProductPlaceholder: string
+  photoHint: string
+  photoClear: string
+  emptyCart: string
+  emptyCartHint: string
+  reviewTitle: string
+  fields: {
+    customerName: string
+    phone: string
+    quantity: string
+    deliveryDate: string
+    notes: string
+    sampleImage: string
+  }
+}
+
+export interface CartCopy {
+  title: string
+  empty: string
+  emptyHint: string
+  browse: string
+  checkout: string
+  add: string
+  remove: string
+  countLabel: string
+  close: string
+  increment: string
+  decrement: string
+}
+
 export interface ContactChannel {
   label: string
   note: string
@@ -73,7 +115,7 @@ export interface SiteContent {
   nav: NavItem[]
   primaryCta: NavItem
   whatsapp: { label: string; floatingLabel: string }
-  categories: SectionIntro
+  categories: SectionIntro & { empty: string }
   products: SectionIntro & {
     footnote: string
     listing: {
@@ -84,14 +126,16 @@ export interface SiteContent {
       all: string
       viewAll: string
       unavailable: string
-      orderMessage: string
     }
   }
   gallery: SectionIntro
   about: About
   orderCta: OrderCta
+  orderForm: OrderFormCopy
+  cart: CartCopy
   contact: Contact
   footer: { credit: string }
+  unavailable: { title: string; description: string; retry: string }
 }
 
 export const content: SiteContent = {
@@ -112,7 +156,7 @@ export const content: SiteContent = {
     { label: 'تماس', href: '/#contact' },
   ],
 
-  primaryCta: { label: 'ثبت سفارش', href: '/#order' },
+  primaryCta: { label: 'ثبت سفارش', href: '/order' },
 
   whatsapp: {
     label: 'واتس‌اپ',
@@ -124,6 +168,7 @@ export const content: SiteContent = {
     title: 'هر مناسبت، یک طعم',
     description:
       'از کیک تولد سفارشی تا شیرینی خشک و دسرهای تک‌نفره؛ همه در تعداد محدود و به‌سفارش شما.',
+    empty: 'قابل سفارش — از فهرست به سبد اضافه کنید',
   },
 
   products: {
@@ -141,7 +186,6 @@ export const content: SiteContent = {
       all: 'همه',
       viewAll: 'مشاهده همه محصولات',
       unavailable: 'فعلاً موجود نیست',
-      orderMessage: 'سلام، می‌خواهم «{title}» را سفارش بدهم',
     },
   },
 
@@ -169,14 +213,58 @@ export const content: SiteContent = {
     eyebrow: 'ثبت سفارش',
     title: 'برای میز شما، همین هفته',
     description:
-      'طرح، طعم و تاریخ تحویل را در واتس‌اپ با هم نهایی می‌کنیم. ظرفیت هر روز محدود است، پس کمی زودتر خبر بدهید.',
-    primary: 'ثبت سفارش در واتس‌اپ',
+      'محصول را به سبد اضافه کنید، سبد را بازبینی کنید، بعد نام و تاریخ تحویل را بنویسید. ظرفیت هر روز محدود است.',
+    primary: 'ثبت سفارش',
     secondary: 'تماس تلفنی',
     steps: [
-      'طعم و اندازه را انتخاب می‌کنید',
-      'طرح و تاریخ تحویل را نهایی می‌کنیم',
+      'محصول را به سبد اضافه می‌کنید',
+      'سبد را بازبینی و ثبت می‌کنید',
       'روز تحویل، تازه پخته می‌شود',
     ],
+  },
+
+  orderForm: {
+    eyebrow: 'ثبت سفارش',
+    title: 'سبد را نهایی کنید',
+    description:
+      'اقلام سبد را بازبینی کنید، بعد نام، شماره تماس و تاریخ تحویل را بنویسید. اگر عکسی از نمونه دارید، همان‌جا پیوست کنید.',
+    metaTitle: 'ثبت سفارش',
+    metaDescription:
+      'سفارش کیک و شیرینی خانگی — سبد را بازبینی کنید و نام، تاریخ تحویل و توضیحات را بنویسید.',
+    submit: 'ثبت سفارش',
+    submitting: 'در حال ارسال...',
+    success: 'سفارش شما ثبت شد. به زودی با شما تماس می‌گیریم.',
+    error: 'ثبت سفارش ممکن نشد. لطفاً دوباره تلاش کنید.',
+    otherProduct: 'سایر / مورد دیگر',
+    otherProductLabel: 'نام محصول',
+    otherProductPlaceholder: 'محصول مورد نظر را بنویسید',
+    photoHint: 'فقط تصویر، حداکثر ۴ مگابایت',
+    photoClear: 'حذف عکس',
+    emptyCart: 'سبد شما خالی است',
+    emptyCartHint: 'از صفحه محصولات به سبد اضافه کنید، یا اگر در فهرست نیست در «سایر» بنویسید.',
+    reviewTitle: 'اقلام سبد',
+    fields: {
+      customerName: 'نام و نام خانوادگی',
+      phone: 'شماره تماس',
+      quantity: 'تعداد',
+      deliveryDate: 'تاریخ تحویل',
+      notes: 'توضیحات',
+      sampleImage: 'عکس نمونه',
+    },
+  },
+
+  cart: {
+    title: 'سبد سفارش',
+    empty: 'سبد شما خالی است',
+    emptyHint: 'از صفحه محصولات به سبد اضافه کنید.',
+    browse: 'مشاهده محصولات',
+    checkout: 'ادامه سفارش',
+    add: 'افزودن به سبد',
+    remove: 'حذف',
+    countLabel: 'سبد سفارش',
+    close: 'بستن سبد',
+    increment: 'افزایش تعداد',
+    decrement: 'کاهش تعداد',
   },
 
   contact: {
@@ -205,5 +293,11 @@ export const content: SiteContent = {
 
   footer: {
     credit: 'ساخته‌شده با دقت و عشق',
+  },
+
+  unavailable: {
+    title: 'سایت موقتاً در دسترس نیست',
+    description: 'اتصال برقرار نشد. کمی بعد دوباره تلاش کنید.',
+    retry: 'تلاش دوباره',
   },
 }

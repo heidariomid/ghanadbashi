@@ -11,4 +11,5 @@
    - Write any additional notes/context under ## Notes
    - Set Status to "Not Started"
 
-3. Confirm spec loaded and show the feature summary
+3. Confirm spec loaded and show the feature summary. Next is usually
+   `/feature start`. `/feature pre-review` is optional.

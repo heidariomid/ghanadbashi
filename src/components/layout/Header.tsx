@@ -1,15 +1,19 @@
 import Link from 'next/link'
+
+import { CartButton } from '@/components/cart/CartButton'
 import { Container } from '@/components/layout/Container'
 import { MobileNav } from '@/components/layout/MobileNav'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { content } from '@/data/content'
 import { cleanContactValue, whatsappHref } from '@/lib/contact'
+import { newTabProps } from '@/lib/links'
 import { getSiteSettings } from '@/lib/site-settings'
 
 export async function Header() {
   const { brand, nav, primaryCta, whatsapp: whatsappCopy } = content
   const settings = await getSiteSettings()
-  const brandName = settings.brand?.brandName?.trim() || brand.name
-  const whatsappValue = cleanContactValue(settings.contact?.whatsapp)
+  const brandName = settings?.brand?.brandName?.trim() || brand.name
+  const whatsappValue = cleanContactValue(settings?.contact?.whatsapp)
   const href = whatsappValue ? whatsappHref(whatsappValue) : null
   const whatsapp = href ? { label: whatsappCopy.label, href } : undefined
 
@@ -45,10 +49,13 @@ export async function Header() {
         </nav>
 
         <div className="flex items-center gap-4.5">
+          <CartButton />
+          <ThemeToggle />
           {whatsapp ? (
             <a
               href={whatsapp.href}
               dir="ltr"
+              {...newTabProps}
               className="hidden text-small text-muted-foreground transition-colors duration-200 hover:text-primary lg:inline"
             >
               {whatsapp.label}

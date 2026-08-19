@@ -1,0 +1,18 @@
+---
+description: After finishing a task, stop leftover terminals and delete review artifacts
+alwaysApply: true
+---
+
+# Cleanup After Finish
+
+When a task is done — especially `/feature after-review` or `/feature complete` — clean up before ending the turn. Do not leave processes or junk files running.
+
+- **Terminals** — stop every process you started (`pnpm dev`, builds, watchers). Check the terminals folder and kill leftover PIDs.
+- **Browsers** — close Playwright / IDE browser tabs you opened for QA.
+- **Artifacts** — delete files you created for the session only: Playwright screenshots (`phase*-*.png`, `.playwright-mcp/`), `/tmp` helpers (e.g. DNS overrides), and unused downloads. Do not delete client content, CMS media, or files the user asked to keep.
+- Do this even if the verdict is Ready, and even if you already reported the result.
+
+```text
+❌ BAD: finish /feature complete with pnpm dev still on :3000
+✅ GOOD: kill the dev server, close the browser, delete QA screenshots, then reply
+```

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { CloseIcon, MenuIcon } from '@/components/ui/icons'
 import type { NavItem } from '@/data/content'
+import { newTabProps } from '@/lib/links'
 
 interface MobileNavProps {
   items: NavItem[]
@@ -89,6 +90,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
             <a
               href={whatsapp.href}
               dir="ltr"
+              {...newTabProps}
               className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-border text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary"
             >
               {whatsapp.label}

@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isPublic } from '@/lib/access'
+import { isAdmin } from '@/lib/access'
 
 /**
  * An order is a record of what a customer sent, not a document to edit. Every
@@ -15,11 +15,11 @@ export const Orders: CollectionConfig = {
   admin: {
     useAsTitle: 'customerName',
     description: 'سفارش‌هایی که مشتری‌ها از طریق فرم سایت ثبت کرده‌اند.',
-    defaultColumns: ['customerName', 'phone', 'product', 'deliveryDate', 'status'],
+    defaultColumns: ['customerName', 'phone', 'deliveryDate', 'status'],
   },
   access: {
-    // The public order form must be able to write, and nothing else.
-    create: isPublic,
+    // REST create is admin-only. The public form writes through the Local API.
+    create: isAdmin,
     read: isAdmin,
     update: isAdmin,
     delete: isAdmin,
@@ -59,27 +59,49 @@ export const Orders: CollectionConfig = {
       admin: { readOnly: true },
     },
     {
-      name: 'product',
-      type: 'relationship',
-      relationTo: 'products',
-      label: 'محصول',
-      admin: { readOnly: true },
+      name: 'items',
+      type: 'array',
+      label: 'اقلام سفارش',
+      admin: {
+        description: 'محصولاتی که مشتری از سبد ثبت کرده است، با تعداد هر کدام.',
+        readOnly: true,
+      },
+      fields: [
+        {
+          name: 'product',
+          type: 'relationship',
+          relationTo: 'products',
+          label: 'محصول',
+          required: true,
+        },
+        {
+          name: 'quantity',
+          type: 'number',
+          label: 'تعداد',
+          required: true,
+          min: 1,
+        },
+      ],
     },
     {
       name: 'productNote',
       type: 'text',
       label: 'محصول (متن آزاد)',
       admin: {
-        description: 'اگر مشتری محصولی خارج از فهرست خواسته باشد، اینجا نوشته می‌شود.',
+        description: 'اگر مشتری «سایر» را هم نوشته باشد، اینجا می‌آید.',
         readOnly: true,
       },
     },
     {
-      name: 'quantity',
+      name: 'otherQuantity',
       type: 'number',
-      label: 'تعداد',
+      label: 'تعداد (سایر)',
       min: 1,
-      admin: { readOnly: true },
+      admin: {
+        description: 'تعداد محصول متن آزاد.',
+        readOnly: true,
+        condition: (data) => Boolean(data.productNote),
+      },
     },
     {
       name: 'deliveryDate',

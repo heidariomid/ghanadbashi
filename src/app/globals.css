@@ -2,6 +2,7 @@
    outside src/ is ever crawled. */
 @import 'tailwindcss' source(none);
 @source "../**/*.{ts,tsx}";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Tokens below are ported verbatim from the approved design system
    (asma-mirzaei-design-system): warm parchment + rosé + espresso, RTL-first. */
@@ -110,8 +111,29 @@
   }
 }
 
+html.dark {
+  color-scheme: dark;
+  --color-background: #161310;
+  --color-foreground: #e4d8c8;
+  --color-card: #211c18;
+  --color-card-foreground: #f4ebe0;
+  --color-primary: #e4a39d;
+  --color-primary-foreground: #2c1816;
+  --color-secondary: #3d2c28;
+  --color-secondary-foreground: #f3d4cc;
+  --color-muted: #2a241f;
+  --color-muted-foreground: #b5a894;
+  --color-border: #3c342c;
+  --color-blob-pink: #4a3530;
+  --shadow-warm: 0 10px 30px -18px rgba(0, 0, 0, 0.55);
+  --shadow-portrait: 0 24px 60px -28px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 14px 34px -14px rgba(0, 0, 0, 0.7);
+  --shadow-primary: 0 4px 16px rgba(228, 163, 157, 0.28);
+}
+
 @layer base {
   html {
+    color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     /* the closed nav drawer parks off-canvas; clip (not hidden) keeps the
@@ -145,6 +167,33 @@
     outline: 2px solid var(--color-primary);
     outline-offset: 3px;
   }
+}
+
+/* Jalali date picker — brand colors, inherit Vazirmatn */
+.rmdp-wrapper,
+.rmdp-calendar,
+.rmdp-day,
+.rmdp-header-values {
+  font-family: var(--font-sans);
+}
+
+.rmdp-week-day {
+  color: var(--color-muted-foreground);
+}
+
+.rmdp-day.rmdp-selected span:not(.highlight) {
+  background-color: var(--color-primary);
+  box-shadow: none;
+}
+
+.rmdp-day:not(.rmdp-disabled, .rmdp-day-hidden) span:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+}
+
+.rmdp-day.rmdp-today span {
+  background-color: transparent;
+  color: var(--color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

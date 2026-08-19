@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 
+import { isExternalHref, newTabProps } from '@/lib/links'
+
 type Variant = 'default' | 'outline'
 type Size = 'md' | 'lg'
 
@@ -40,6 +42,7 @@ export function Button({
     <a
       href={href}
       dir={dir}
+      {...(isExternalHref(href) ? newTabProps : {})}
       className={`${base} ${variants[variant]} ${sizes[size]} ${className ?? ''}`}
     >
       {children}

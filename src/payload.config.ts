@@ -68,6 +68,10 @@ export default buildConfig({
     meta: {
       title: 'قناد باشی عسل',
     },
+    theme: 'all',
+    components: {
+      afterNavLinks: ['/src/components/admin/AdminNavExtras#AdminNavExtras'],
+    },
     // Payload renders dir="RTL" while the browser normalises it to lowercase,
     // which trips React's hydration check on every admin page load.
     suppressHydrationWarning: true,
@@ -88,6 +92,13 @@ export default buildConfig({
     },
   },
   secret,
+  upload: {
+    limits: {
+      fileSize: 4 * 1024 * 1024,
+    },
+    abortOnLimit: true,
+    responseOnLimit: 'حجم فایل نباید بیشتر از ۴ مگابایت باشد.',
+  },
   // `serverURL` is deliberately unset. Payload prefixes upload URLs with it,
   // and an absolute URL to our own origin is one `next/image` refuses to load
   // unless the exact host is whitelisted — which breaks on every preview

@@ -2,20 +2,14 @@ import { Container } from '@/components/layout/Container'
 import { Button } from '@/components/ui/Button'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { content } from '@/data/content'
-import {
-  cleanContactValue,
-  phoneHref,
-  whatsappHref,
-} from '@/lib/contact'
+import { cleanContactValue, phoneHref } from '@/lib/contact'
 import { faNumber } from '@/lib/format'
 import { getSiteSettings } from '@/lib/site-settings'
 
 export async function OrderCta() {
   const { eyebrow, title, description, primary, secondary, steps } = content.orderCta
   const settings = await getSiteSettings()
-  const whatsapp = cleanContactValue(settings.contact?.whatsapp)
-  const phone = cleanContactValue(settings.contact?.phone)
-  const whatsappLink = whatsapp ? whatsappHref(whatsapp) : null
+  const phone = cleanContactValue(settings?.contact?.phone)
   const phoneLink = phone ? phoneHref(phone) : null
 
   return (
@@ -32,20 +26,16 @@ export async function OrderCta() {
             {description}
           </p>
 
-          {whatsappLink || phoneLink ? (
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4.5">
-              {whatsappLink ? (
-                <Button href={whatsappLink} dir="ltr" size="lg">
-                  {primary}
-                </Button>
-              ) : null}
-              {phoneLink ? (
-                <Button href={phoneLink} dir="ltr" variant="outline" size="lg">
-                  {secondary}
-                </Button>
-              ) : null}
-            </div>
-          ) : null}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4.5">
+            <Button href="/order" size="lg">
+              {primary}
+            </Button>
+            {phoneLink ? (
+              <Button href={phoneLink} dir="ltr" variant="outline" size="lg">
+                {secondary}
+              </Button>
+            ) : null}
+          </div>
         </div>
 
         <ol className="mx-auto mt-13 grid max-w-232 grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6 md:mt-22 md:gap-10">

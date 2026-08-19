@@ -2,7 +2,7 @@
 
 ## Overview
 
-Phase 5 of 7. The order form at `/order`. Corresponds to section ۳ of the client
+Phase 5 of 8. The order form at `/order`. Corresponds to section ۳ of the client
 brief — and it is the site's single conversion point, so it must be simple and
 must never silently fail.
 
@@ -28,31 +28,29 @@ Exactly the client's list — نام، شماره تماس، محصول، تعد
 | --- | --- | --- | --- |
 | `customerName` | نام و نام خانوادگی | text | ✅ |
 | `phone` | شماره تماس | tel | ✅ |
-| `product` | محصول | select | ✅ |
-| `quantity` | تعداد | number | ✅ |
+| `items` | اقلام سبد | array of product + quantity | ✅ (or «سایر») |
 | `deliveryDate` | تاریخ تحویل | date | ✅ |
 | `notes` | توضیحات | textarea | ❌ |
 | `sampleImage` | عکس نمونه | file | ❌ |
 
-**محصول select**
-- Options from **available** products only (`isAvailable` is true), grouped by
-  category, groups ordered via `sortByCategoryOrder`
-- Unavailable products stay on `/products` (greyed) but do **not** appear here
-- Plus a final «سایر / مورد دیگر» option that reveals a free-text input
-- Pre-selected from `?product={slug}` when that slug is an **available**
-  product. Unknown or unavailable slug → no preselect; the form still works
-- `await searchParams` (Next.js 16). The page is dynamically server-rendered
-
-**تعداد** — min 1, default 1
+**سبد سفارش (not a checkbox list on `/order`)**
+- Available products on `/` featured cards and `/products` have «افزودن به سبد». Quantity is per product. Unavailable products stay greyed with no add control
+- Header bag icon opens a drawer to review, change qty, remove. «ادامه سفارش» goes to `/order`
+- `/order` is checkout: review the basket, then name / phone / date / notes / photo. «سایر / مورد دیگر» stays here for items not in the catalog
+- `?product={slug}` adds that **available** product to the basket if missing. Unknown slug → checkout still works
+- CMS `items` is an array of `{ product, quantity }`. `productNote` + `otherQuantity` hold the free-text line. No site-wide quantity field
+- Cart lives in `localStorage` (`ghanadbashi-cart`). Server re-validates IDs and availability on submit
 
 **تاریخ تحویل** — Jalali. Use `react-multi-date-picker` with the
 `persian`/`persian_fa` locale. Store the submitted Jalali string as-is in
 `deliveryDate` (a text field) — no Gregorian conversion, since the client reads
 these dates herself and round-tripping is a needless failure mode.
 
-**عکس نمونه** — images only, max 5MB, client-side preview, clearable. The brief
-calls for this explicitly: customers often want a cake copied from a photo.
-Public `media` create is already allowed for this (Phase 2).
+**عکس نمونه** — images only, **4MB** server cap, browser compress before
+submit, client-side preview, clearable. The brief calls for this explicitly:
+customers often want a cake copied from a photo. Set `alt` in the action (the
+customer does not type it). `media` create is admin-only; the action uploads
+via the Local API.
 
 ### Validation
 
@@ -63,11 +61,11 @@ only.
 - `phone` — Iranian mobile: `/^09\d{9}$/` after stripping spaces and dashes, and
   normalising Persian/Arabic digits to Latin. **Accept the Persian digits users
   actually type** — this is the most common submission failure.
-- `product` — a valid **available** product ID, or free text when «سایر»
-- `quantity` — integer ≥ 1, ≤ 1000
+- `items` — one or more valid **available** product IDs with per-line quantity, and/or free text when «سایر»
+- Line quantity — integer ≥ 1, ≤ 1000
 - `deliveryDate` — non-empty
 - `notes` — max 1000 chars
-- `sampleImage` — image mime type, ≤ 5MB
+- `sampleImage` — image mime type, ≤ 4MB
 
 All messages in Persian, e.g. «شماره تماس معتبر نیست».
 
@@ -78,13 +76,17 @@ new file for one function.
 
 `submitOrder` in `src/actions/orders.ts`, returning `{ success, data, error }`:
 
-1. Validate with Zod → return field errors on failure
-2. Honeypot check — a hidden `website` field; if filled, return success without
+1. Honeypot — a hidden `website` field; if filled, return success without
    saving (silently drop the bot)
-3. Upload `sampleImage` to `media` if present
-4. Create the `orders` record via the Local API
-5. Email the client via Resend
-6. Return success
+2. Per-IP rate limit → Persian error if exceeded
+3. Validate with Zod → return field errors on failure
+4. Upload `sampleImage` to `media` if present (Local API; set `alt` in code)
+5. Create the `orders` record via the Local API
+6. Email the client via Resend
+7. Return success
+
+`orders` and `media` collection `create` is **admin-only**. The action writes
+with the Local API. Anonymous `POST /api/orders` must 403.
 
 **Email failure must not fail the submission.** Wrap the send in its own
 try/catch: if the order is saved but the email bounces, the customer still sees
@@ -106,8 +108,7 @@ not a hardcoded inbox and not a new CMS field.
 - Single column, generous tap targets (≥44px), `inputMode="tel"` on phone
 - Submit disabled while pending, with a spinner and «در حال ارسال...»
 - Success: replace the form with a confirmation — «سفارش شما ثبت شد. به زودی با
-  شما تماس می‌گیریم.» plus a WhatsApp button for follow-up (hide if
-  `whatsapp` is empty)
+  شما تماس می‌گیریم.» No WhatsApp (or SMS) to the customer — she contacts them.
 - Error: a Persian message at the top of the form, **with the entered values
   preserved**. Never make someone retype an order.
 - Field errors inline beneath each field
@@ -117,12 +118,13 @@ not a hardcoded inbox and not a new CMS field.
 
 | Control | After Phase 4 | Phase 5 |
 | --- | --- | --- |
-| Listing card, available | WhatsApp with product name | `/order?product={slug}` |
+| Listing card, available | WhatsApp with product name | «افزودن به سبد» on the card |
 | Listing card, unavailable | no link | unchanged |
-| Featured card, available | `/#order` | `/order?product={slug}` |
+| Featured card, available | `/#order` | «افزودن به سبد» on the card |
+| Featured card, unavailable | `#order` | no add control |
 | Header / hero «ثبت سفارش» | `/#order` | `/order` |
-| Homepage order band primary | WhatsApp | `/order` — update the `content.ts` label off «ثبت سفارش در واتس‌اپ» |
-| Homepage order band secondary | Phone | unchanged; WhatsApp can stay as an extra |
+| Homepage order band primary | WhatsApp | `/order` always — update the `content.ts` label off «ثبت سفارش در واتس‌اپ». Keep `id="order"`. No extra WhatsApp button on the band |
+| Homepage order band secondary | Phone | unchanged |
 
 Do not leave listing cards pointing at WhatsApp once the form exists — that
 splits the conversion path.
@@ -131,10 +133,10 @@ splits the conversion path.
 
 Extend the Phase 4 hooks:
 
-- `products` afterChange / afterDelete also `revalidatePath('/order')` — the
-  select options change
-- `site-settings` afterChange also `revalidatePath('/order')` — success
-  WhatsApp reads those settings
+- `products` afterChange / afterDelete also `revalidatePath('/order')` — checkout
+  metadata and `?product=` lookup change
+- `site-settings` afterChange also `revalidatePath('/order')` — metadata
+  reads the brand name
 
 ### Anti-spam
 
@@ -147,16 +149,17 @@ Extend the Phase 4 hooks:
 - Valid submission → record in `/admin` + email received
 - Invalid phone → inline Persian error, nothing saved
 - **Persian digits in the phone field are accepted**
-- `?product=` of an available slug pre-selects that product
-- `?product=` of an unknown or unavailable slug does not preselect
-- Unavailable products are absent from the select
-- «سایر» reveals the free-text field
-- Image upload previews, rejects >5MB and non-images
+- `?product=` of an available slug adds that product to the basket
+- `?product=` of an unknown or unavailable slug does not add anything
+- Unavailable products cannot be added to the basket
+- «سایر» on checkout reveals the free-text field
+- Image upload previews, rejects >4MB and non-images
+- Anonymous `POST /api/orders` → 403; form submit still creates a row
 - Jalali date picker works on mobile and stores the shown date
 - Simulated email failure → order still saved, user still sees success
 - Honeypot submission is silently dropped
 - Form values survive a server error
-- Listing and featured available buttons land on `/order?product={slug}`
+- Listing and featured available buttons add to the basket
 - Header «ثبت سفارش» lands on `/order`
 - `/order` has Header, Footer and the WhatsApp float
 - 375 / 768 / 1280px; RTL correct
@@ -164,10 +167,12 @@ Extend the Phase 4 hooks:
 
 ## Notes
 
-- Only the form island is `'use client'`; the page stays a server component and
-  fetches the available product list
+- Cart provider wraps the site layout. Listing/featured add buttons are client
+  islands. `/order` stays a server page around the checkout form.
 - Digit normalisation is Persian/Arabic → Latin for input. Display still uses
   `toLocaleString('fa-IR')` / `faNumber`
+- Admin SMS on submit, and customer email/SMS on وضعیت change, are Phase 8.
+  See @context/features/phase-8-order-status-notify-spec.md
 
 ## References
 

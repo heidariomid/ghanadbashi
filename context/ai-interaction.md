@@ -15,11 +15,11 @@ The common workflow for every feature/fix:
 1. **Document** — document the feature in @context/current-feature.md
 2. **Branch** — create a new branch for the feature/fix
 3. **Implement** — implement what's described in @context/current-feature.md
-4. **Review** — run `/feature review`: code against goals, then browser + admin
-   QA (checklists below), `pnpm lint`, and `pnpm build`. Fix blockers and
-   re-run review before commit
-5. **Iterate** — adjust as needed until review verdict is Ready to complete
-6. **Commit** — only after review passes and the user asks
+4. **After-review** (optional) — `/feature after-review` if the user wants
+   a Notion QA write-up: code against goals, browser + admin, `pnpm lint`,
+   `pnpm build`
+5. **Iterate** — fix what the user or after-review flagged
+6. **Commit** — only when the user asks
 7. **Merge** — merge to main
 8. **Delete Branch** — delete the branch after merge
 9. Mark as completed in @context/current-feature.md and add to History
@@ -32,9 +32,10 @@ fix the issues first.
 There is no automated test suite in this project (see @context/coding-standards.md).
 Verification is manual and must actually be performed — not assumed.
 
-**A phase is not done until `/feature review` passes and both checklists below
-are satisfied.** Skipping admin QA is how bugs like “delete gallery photo →
-something went wrong” or Lexical rich-text console errors reach the client.
+**When you do run `/feature after-review`**, actually perform both checklists
+below. Skipping admin QA is how bugs like “delete gallery photo → something
+went wrong” or Lexical rich-text console errors reach the client. The step
+itself is optional.
 
 ### A. Public site (every phase)
 
