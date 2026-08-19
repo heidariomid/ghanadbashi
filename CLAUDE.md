@@ -23,7 +23,14 @@ pnpm lint         # ESLint with Next.js core-web-vitals + TypeScript rules
 
 pnpm payload      # Payload CLI
 pnpm generate:types  # regenerate payload-types.ts after ANY schema change
+pnpm db:pull      # replace local Postgres `bakery` with a full copy of production Neon
 ```
+
+`pnpm db:pull` wipes local `bakery` first, then restores schema + data from
+production. Requires `NEON_DATABASE_URI` (Neon dashboard Connection details, or
+Vercel → Project → Settings → Environment Variables → DATABASE_URI). Photos may
+404 locally if they live on Vercel Blob; content/structure still restores.
+Re-run anytime for a fresh production copy. Needs PostgreSQL client tools.
 
 After editing any collection or global in `src/collections/` or `src/globals/`,
 run `pnpm generate:types`. The generated `payload-types.ts` is what gives the

@@ -13,7 +13,8 @@
     "generate:importmap": "payload generate:importmap",
     "prebuild": "pnpm generate:importmap && pnpm generate:types",
     "seed:images": "payload run scripts/prepare-seed-images.ts",
-    "seed": "payload run scripts/seed.ts"
+    "seed": "payload run scripts/seed.ts",
+    "db:pull": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/db-pull.ts"
   },
   "packageManager": "pnpm@11.5.2",
   "dependencies": {
