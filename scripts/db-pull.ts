@@ -15,13 +15,15 @@
  */
 
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process'
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const LOCAL_DB = 'bakery'
-const TOOLS = ['pg_dump', 'pg_restore', 'dropdb', 'createdb', 'psql'] as const
+const TOOLS = ['pg_dump', 'dropdb', 'createdb', 'psql'] as const
+/** GUCs emitted by newer Postgres dumps that older local servers reject on restore. */
+const UNSUPPORTED_GUC = /transaction_timeout/
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 process.chdir(root)
@@ -94,8 +96,16 @@ function withSslRequire(uri: string): string {
   return uri.includes('?') ? `${uri}&sslmode=require` : `${uri}?sslmode=require`
 }
 
+function withPgClientPath(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
+  const brewPg18 = '/opt/homebrew/opt/postgresql@18/bin'
+  if (existsSync(`${brewPg18}/pg_dump`)) {
+    return { ...env, PATH: `${brewPg18}:${env.PATH ?? ''}` }
+  }
+  return env
+}
+
 function localEnv(): NodeJS.ProcessEnv {
-  const env: NodeJS.ProcessEnv = { ...process.env }
+  const env: NodeJS.ProcessEnv = withPgClientPath({ ...process.env })
   delete env.PGDATABASE
   delete env.PGSSLMODE
 
@@ -159,7 +169,8 @@ function main(): void {
 
   const env = localEnv()
   const dumpDir = mkdtempSync(join(tmpdir(), 'bakery-db-pull-'))
-  const dumpFile = join(dumpDir, 'bakery.dump')
+  const dumpFile = join(dumpDir, 'bakery.sql')
+  const restoreFile = join(dumpDir, 'bakery-restore.sql')
   const cleanup = (): void => rmSync(dumpDir, { recursive: true, force: true })
   process.on('exit', cleanup)
   process.on('SIGINT', () => process.exit(130))
@@ -167,7 +178,7 @@ function main(): void {
 
   console.log(`Dumping production Neon, then replacing local database "${LOCAL_DB}" (local data will be wiped).`)
 
-  const dumpEnv: NodeJS.ProcessEnv = { ...process.env }
+  const dumpEnv = withPgClientPath({ ...process.env })
   delete dumpEnv.PGHOST
   delete dumpEnv.PGPORT
   delete dumpEnv.PGUSER
@@ -177,9 +188,15 @@ function main(): void {
 
   runOrFail(
     'pg_dump',
-    ['--no-owner', '--no-acl', '--format=custom', '--file', dumpFile, `--dbname=${neonUri}`],
+    ['--no-owner', '--no-acl', '--format=plain', '--file', dumpFile, `--dbname=${neonUri}`],
     dumpEnv,
   )
+
+  const sql = readFileSync(dumpFile, 'utf8')
+    .split('\n')
+    .filter((line) => !UNSUPPORTED_GUC.test(line))
+    .join('\n')
+  writeFileSync(restoreFile, sql)
 
   // Prefer --force (Postgres 13+) so leftover connections do not block dropdb.
   const drop = run('dropdb', ['--if-exists', '--force', LOCAL_DB], env)
@@ -200,11 +217,7 @@ function main(): void {
   }
 
   runOrFail('createdb', [LOCAL_DB], env)
-  runOrFail(
-    'pg_restore',
-    ['--no-owner', '--no-acl', `--dbname=${LOCAL_DB}`, dumpFile],
-    env,
-  )
+  runOrFail('psql', ['-v', 'ON_ERROR_STOP=1', '-d', LOCAL_DB, '-f', restoreFile], env)
 
   console.log(`Done. Local "${LOCAL_DB}" now matches production. Photos may 404 locally if they live on Vercel Blob.`)
 }
