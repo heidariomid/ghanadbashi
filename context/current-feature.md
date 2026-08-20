@@ -14,6 +14,7 @@ Not Started
 
 ## History
 
+
 - Init
 - Built an illustration-led prototype (hand-authored SVG line art, no
   photography) against the original `prompt` brief.
@@ -39,3 +40,10 @@ Not Started
 - Local db:pull: `pnpm db:pull` copies production Neon into local `bakery`;
   PG18 client tools, plain SQL restore, strips unsupported GUCs for older local
   Postgres.
+- Phase 6 — Gallery: add the gallery page. Scope cut from the spec's three
+  routes to `/gallery` alone — the homepage and footer already carry the about
+  and contact details, so `/about` and `/contact` would have been a third copy.
+  Nav «نمونه کارها» now points at the route; the `gallery` collection reuses the
+  existing revalidation hook. After-review caught `priority` sitting in the
+  shared `GalleryGrid`, which made `/` preload a below-the-fold photo alongside
+  the hero; it is now behind a `priorityFirst` prop that only `/gallery` sets.

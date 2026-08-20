@@ -17,11 +17,17 @@ interface GalleryGridProps {
   photos: GalleryPhoto[]
   /** Only categories that actually have photos, already in display order. */
   categories: string[]
+  /**
+   * Preload the first photo. Only true where the grid starts near the top of
+   * the page; on the homepage it sits far below the hero, which owns the
+   * preload slot.
+   */
+  priorityFirst?: boolean
 }
 
 const ALL = 'all'
 
-export function GalleryGrid({ photos, categories }: GalleryGridProps) {
+export function GalleryGrid({ photos, categories, priorityFirst = false }: GalleryGridProps) {
   const [active, setActive] = useState<string>(ALL)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
@@ -106,6 +112,7 @@ export function GalleryGrid({ photos, categories }: GalleryGridProps) {
                   src={photo.src}
                   alt={photo.alt}
                   fill
+                  priority={priorityFirst && index === 0}
                   sizes="(max-width: 640px) 45vw, (max-width: 1024px) 45vw, 30vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />

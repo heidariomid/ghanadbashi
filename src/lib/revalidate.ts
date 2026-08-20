@@ -9,6 +9,7 @@ export function revalidatePublicSite() {
     revalidatePath('/')
     revalidatePath('/products')
     revalidatePath('/order')
+    revalidatePath('/gallery')
   } catch {
     // Non-request contexts (seed, `pnpm payload`) have no cache store.
   }

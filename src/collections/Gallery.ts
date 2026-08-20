@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
 import { categoryOptions } from '@/lib/categories'
+import { revalidatePublicSite } from '@/lib/revalidate'
 
 export const Gallery: CollectionConfig = {
   slug: 'gallery',
@@ -21,6 +22,10 @@ export const Gallery: CollectionConfig = {
     delete: isAdmin,
   },
   defaultSort: 'sortOrder',
+  hooks: {
+    afterChange: [() => revalidatePublicSite()],
+    afterDelete: [() => revalidatePublicSite()],
+  },
   fields: [
     {
       name: 'image',

@@ -151,7 +151,7 @@ export const content: SiteContent = {
 
   nav: [
     { label: 'محصولات', href: '/products' },
-    { label: 'نمونه کارها', href: '/#gallery' },
+    { label: 'نمونه کارها', href: '/gallery' },
     { label: 'درباره ما', href: '/#about' },
     { label: 'تماس', href: '/#contact' },
   ],
