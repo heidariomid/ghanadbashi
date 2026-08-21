@@ -1,20 +1,148 @@
+// Admin theme: parchment + rosé + espresso, matching the public site.
+// Payload 3.88 still consumes --theme-* / --style-radius-* (not the v4 --color-* tokens).
+
 :root {
   --admin-font-sans:
     var(--font-vazirmatn-arabic), var(--font-vazirmatn-latin), 'Vazirmatn', system-ui,
     sans-serif;
   --font-body: var(--admin-font-sans);
   --font-heading: var(--admin-font-sans);
+
+  --bakery-parchment: #fbf6ee;
+  --bakery-card: #fffdf8;
+  --bakery-rose: #d98e88;
+  --bakery-rose-hover: #c47d77;
+  --bakery-rose-strong: #a85852;
+  --bakery-espresso: #2c2620;
+  --bakery-muted: #f1eadd;
+  --bakery-muted-text: #726758;
+  --bakery-border: #e8dfcf;
+  --bakery-blush: #f6d6cf;
+
+  --button-radius: 13px;
+  --field-border-radius: 13px;
+  --field-min-height: 44px;
+  --button-height: 44px;
+
+  --style-radius-s: 13px;
+  --style-radius-m: 16px;
+  --style-radius-l: 22px;
 }
 
 html[data-theme] {
   --font-body: var(--admin-font-sans);
   --font-heading: var(--admin-font-sans);
+  --accessibility-outline: 2px solid var(--bakery-rose);
+  --accessibility-outline-offset: 2px;
+  --theme-border-color: var(--theme-elevation-150);
 }
 
-html[data-theme] body,
-html[data-theme] input,
-html[data-theme] textarea,
-html[data-theme] select,
+html[data-theme='light'] {
+  --theme-bg: var(--bakery-parchment);
+  --theme-input-bg: var(--bakery-card);
+  --theme-text: var(--bakery-espresso);
+  --theme-overlay: rgba(44, 38, 32, 0.42);
+
+  --theme-elevation-0: var(--bakery-card);
+  --theme-elevation-50: var(--bakery-parchment);
+  --theme-elevation-100: var(--bakery-muted);
+  --theme-elevation-150: var(--bakery-border);
+  --theme-elevation-200: #ddd2bf;
+  --theme-elevation-250: #d0c3ad;
+  --theme-elevation-300: #c2b39a;
+  --theme-elevation-350: #b3a287;
+  --theme-elevation-400: #9e8d75;
+  --theme-elevation-450: #8a7a64;
+  --theme-elevation-500: var(--bakery-muted-text);
+  --theme-elevation-550: #665c50;
+  --theme-elevation-600: #5a5146;
+  --theme-elevation-650: #4e463d;
+  --theme-elevation-700: #423b34;
+  --theme-elevation-750: #38322c;
+  --theme-elevation-800: var(--bakery-espresso);
+  --theme-elevation-850: #241f1a;
+  --theme-elevation-900: #1c1814;
+  --theme-elevation-950: #14110e;
+  --theme-elevation-1000: #0c0a08;
+
+  --theme-success-50: #fbf0ee;
+  --theme-success-100: #f6e2df;
+  --theme-success-150: #f0d3cf;
+  --theme-success-200: #e8c4bf;
+  --theme-success-250: var(--bakery-blush);
+  --theme-success-300: #d9a6a0;
+  --theme-success-350: #d19892;
+  --theme-success-400: var(--bakery-rose);
+  --theme-success-450: #c97f7a;
+  --theme-success-500: var(--bakery-rose-hover);
+  --theme-success-550: #b66d68;
+  --theme-success-600: var(--bakery-rose-strong);
+  --theme-success-650: #975049;
+  --theme-success-700: #864740;
+  --theme-success-750: #753e38;
+  --theme-success-800: #643530;
+  --theme-success-850: #532c28;
+  --theme-success-900: #422320;
+  --theme-success-950: #311a18;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --accessibility-outline: 2px solid #ff8a80;
+  --theme-bg: #000000;
+  --theme-input-bg: #1c1c1e;
+  --theme-text: #f5f5f7;
+  --theme-overlay: rgba(0, 0, 0, 0.62);
+
+  --theme-elevation-0: #1c1c1e;
+  --theme-elevation-50: #242426;
+  --theme-elevation-100: #2c2c2e;
+  --theme-elevation-150: #3a3a3c;
+  --theme-elevation-200: #48484a;
+  --theme-elevation-250: #545456;
+  --theme-elevation-300: #636366;
+  --theme-elevation-350: #6e6e73;
+  --theme-elevation-400: #8e8e93;
+  --theme-elevation-450: #98989d;
+  --theme-elevation-500: #aeaeb2;
+  --theme-elevation-550: #c7c7cc;
+  --theme-elevation-600: #d1d1d6;
+  --theme-elevation-650: #e5e5ea;
+  --theme-elevation-700: #ebebf0;
+  --theme-elevation-750: #f2f2f7;
+  --theme-elevation-800: #f5f5f7;
+  --theme-elevation-850: #fafafa;
+  --theme-elevation-900: #fcfcfd;
+  --theme-elevation-950: #fefefe;
+  --theme-elevation-1000: #ffffff;
+
+  --theme-success-50: #2a1f20;
+  --theme-success-100: #3b2829;
+  --theme-success-150: #4c3233;
+  --theme-success-200: #5d3c3d;
+  --theme-success-250: #6e4748;
+  --theme-success-300: #86585a;
+  --theme-success-350: #9e6b6d;
+  --theme-success-400: #b87f81;
+  --theme-success-450: #d08f91;
+  --theme-success-500: #ff8a80;
+  --theme-success-550: #ff9b93;
+  --theme-success-600: #ffaca5;
+  --theme-success-650: #ffbdb8;
+  --theme-success-700: #ffcdc9;
+  --theme-success-750: #ffdcd9;
+  --theme-success-800: #ffe8e6;
+  --theme-success-850: #fff1f0;
+  --theme-success-900: #fff7f6;
+  --theme-success-950: #fffcfb;
+}
+
+html[data-theme] button,
+html[data-theme] label,
+html[data-theme] legend {
+  font-family: var(--admin-font-sans) !important;
+}
+
 button.nav__link {
   width: 100%;
   background: none;
@@ -24,8 +152,237 @@ button.nav__link {
   text-align: inherit;
 }
 
-html[data-theme] button,
-html[data-theme] label,
-html[data-theme] legend {
-  font-family: var(--admin-font-sans) !important;
+::selection {
+  background: var(--bakery-blush);
+  color: var(--bakery-espresso);
+}
+
+html[data-theme='dark'] ::selection {
+  background: color-mix(in srgb, #ff8a80 38%, #000);
+  color: #f5f5f7;
+}
+
+// ── Sidebar ──────────────────────────────────────────────
+
+.nav {
+  background: var(--theme-elevation-0);
+  border-color: var(--theme-elevation-150) !important;
+}
+
+.nav-group {
+  margin-bottom: 1.15rem;
+}
+
+.nav-group__toggle {
+  color: var(--theme-elevation-500);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.45rem;
+}
+
+.nav-group__toggle:hover,
+.nav-group__toggle:focus-visible {
+  color: var(--theme-text);
+}
+
+.nav__link {
+  border-radius: var(--style-radius-s);
+  padding-block: 0.45rem;
+  padding-inline: 0.7rem 1.6rem;
+  min-height: 2.5rem;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.nav a.nav__link:hover,
+.nav a.nav__link:focus-visible,
+.nav button.nav__link:hover,
+.nav button.nav__link:focus-visible {
+  background: var(--theme-elevation-100);
+  text-decoration: none;
+  color: var(--theme-text);
+}
+
+.nav__link:has(.nav__link-indicator) {
+  background: color-mix(in srgb, var(--bakery-rose) 18%, transparent);
+  font-weight: 700;
+}
+
+.nav__link-indicator {
+  inset-inline-start: 0.2rem;
+  width: 3px;
+  height: 1.1rem;
+  border-radius: 99px;
+  background: var(--bakery-rose);
+}
+
+.nav__label {
+  color: var(--theme-elevation-500);
+}
+
+.admin-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  margin-block: 0.15rem 1.15rem;
+  padding-block-end: 1.1rem;
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+.admin-wordmark__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.admin-wordmark__name {
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--theme-text);
+}
+
+.admin-wordmark__latin {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--theme-elevation-500);
+}
+
+.admin-icon {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--bakery-espresso) 6%, transparent);
+}
+
+.login__brand .admin-wordmark {
+  justify-content: center;
+  width: auto;
+  margin: 0;
+  padding: 0.85rem 1.15rem;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-l);
+  background: var(--theme-elevation-0);
+}
+
+.login__brand .admin-wordmark__name {
+  font-size: 1.45rem;
+}
+
+// ── Forms + buttons ──────────────────────────────────────
+
+.render-fields {
+  --spacing-field: calc(var(--base) * 1.35);
+}
+
+.btn:not(.btn--icon-only):not(.btn--size-small):not(.btn--size-xsmall) {
+  min-height: var(--button-height);
+  border-radius: var(--button-radius);
+  padding-inline: 1rem;
+}
+
+html[data-theme='light'] .btn--style-primary {
+  --color: var(--bakery-espresso);
+  --bg-color: var(--bakery-rose);
+  --hover-bg: var(--bakery-rose-hover);
+  --hover-color: var(--bakery-espresso);
+}
+
+html[data-theme='dark'] .btn--style-primary {
+  --color: #000000;
+  --bg-color: #f5f5f7;
+  --hover-bg: #ffffff;
+  --hover-color: #000000;
+}
+
+html[data-theme='dark'] .nav {
+  background: #1c1c1e;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme='dark'] .nav__link:has(.nav__link-indicator) {
+  background: rgba(255, 138, 128, 0.14);
+}
+
+html[data-theme='dark'] .nav a.nav__link:hover,
+html[data-theme='dark'] .nav a.nav__link:focus-visible,
+html[data-theme='dark'] .nav button.nav__link:hover,
+html[data-theme='dark'] .nav button.nav__link:focus-visible {
+  background: #2c2c2e;
+}
+
+html[data-theme='dark'] .admin-wordmark {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme='dark'] .login__brand .admin-wordmark {
+  background: #1c1c1e;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme='dark'] input:not([type='checkbox']):not([type='radio']):not([type='file']):focus,
+html[data-theme='dark'] input:not([type='checkbox']):not([type='radio']):not([type='file']):focus-visible,
+html[data-theme='dark'] textarea:focus,
+html[data-theme='dark'] textarea:focus-visible,
+html[data-theme='dark'] select:focus,
+html[data-theme='dark'] select:focus-visible,
+html[data-theme='dark'] .rs__control--is-focused,
+html[data-theme='dark'] .react-select__control--is-focused {
+  border-color: #ff8a80;
+  box-shadow: 0 0 0 3px rgba(255, 138, 128, 0.22);
+}
+
+html[data-theme] input:not([type='checkbox']):not([type='radio']):not([type='file']),
+html[data-theme] textarea,
+html[data-theme] select,
+html[data-theme] .rs__control,
+html[data-theme] .react-select__control {
+  min-height: var(--field-min-height);
+  height: auto;
+  border-radius: var(--field-border-radius);
+  border-color: var(--theme-elevation-150);
+  background: var(--theme-input-bg);
+}
+
+html[data-theme] input:not([type='checkbox']):not([type='radio']):not([type='file']):hover,
+html[data-theme] textarea:hover,
+html[data-theme] select:hover,
+html[data-theme] .rs__control:hover {
+  border-color: var(--theme-elevation-250);
+}
+
+html[data-theme] input:not([type='checkbox']):not([type='radio']):not([type='file']):focus,
+html[data-theme] input:not([type='checkbox']):not([type='radio']):not([type='file']):focus-visible,
+html[data-theme] textarea:focus,
+html[data-theme] textarea:focus-visible,
+html[data-theme] select:focus,
+html[data-theme] select:focus-visible,
+html[data-theme] .rs__control--is-focused,
+html[data-theme] .react-select__control--is-focused {
+  border-color: var(--bakery-rose);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bakery-rose) 28%, transparent);
+  outline: none;
+}
+
+html[data-theme] .field-type label,
+html[data-theme] .field-label {
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 768px) {
+  .nav__link {
+    min-height: 2.75rem;
+    font-size: 1.05rem;
+  }
+
+  .admin-wordmark {
+    padding-inline-end: 3rem;
+  }
 }

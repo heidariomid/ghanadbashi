@@ -70,6 +70,11 @@ export default buildConfig({
     },
     theme: 'all',
     components: {
+      graphics: {
+        Icon: '/src/components/admin/AdminIcon#AdminIcon',
+        Logo: '/src/components/admin/AdminWordmark#AdminWordmark',
+      },
+      beforeNav: ['/src/components/admin/AdminWordmark#AdminWordmark'],
       afterNavLinks: ['/src/components/admin/AdminNavExtras#AdminNavExtras'],
     },
     // Payload renders dir="RTL" while the browser normalises it to lowercase,
