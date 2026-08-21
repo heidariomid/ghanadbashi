@@ -41,7 +41,7 @@ export function CartDrawer() {
         // with its buttons still in the DOM, and aria-hidden alone would leave
         // them tabbable — invisible stops on the way down the page.
         inert={!open}
-        className={`absolute inset-y-0 inset-e-0 flex w-[86%] max-w-md flex-col bg-card shadow-warm transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute inset-y-0 inset-e-0 flex w-[86%] max-w-md flex-col bg-card shadow-warm transition-transform duration-500 ease-rise ${
           open ? 'translate-x-0' : 'translate-x-full rtl:-translate-x-full'
         }`}
       >

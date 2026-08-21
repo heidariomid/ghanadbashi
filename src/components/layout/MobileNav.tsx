@@ -50,7 +50,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
       <aside
         // See CartDrawer: off-canvas links stay tabbable under aria-hidden.
         inert={!open}
-        className={`absolute inset-y-0 inset-s-0 flex w-[86%] max-w-sm flex-col bg-card transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute inset-y-0 inset-s-0 flex w-[86%] max-w-sm flex-col bg-card transition-transform duration-500 ease-rise ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
