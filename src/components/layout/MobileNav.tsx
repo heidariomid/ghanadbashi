@@ -83,7 +83,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
           <a
             href={primaryCta.href}
             onClick={() => setOpen(false)}
-            className="flex min-h-13 items-center justify-center rounded-full bg-primary text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary"
+            className="flex min-h-13 items-center justify-center rounded-full bg-primary text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95"
           >
             {primaryCta.label}
           </a>
@@ -92,7 +92,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
               href={whatsapp.href}
               dir="ltr"
               {...newTabProps}
-              className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-border text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary-strong"
+              className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-input text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary-strong active:brightness-95"
             >
               {whatsapp.label}
             </a>

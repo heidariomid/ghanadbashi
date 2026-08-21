@@ -18,11 +18,15 @@ interface ButtonProps {
 const base =
   'inline-flex items-center justify-center gap-2 rounded-full font-semibold leading-normal whitespace-nowrap transition-all duration-200'
 
+/* Press settles the button back down and dims the fill, the way a UIButton
+   does — without it the hover lift has no release and the tap feels dead. */
+const press = 'active:translate-y-0 active:brightness-95 active:shadow-none'
+
 const variants: Record<Variant, string> = {
-  default:
-    'border-[1.5px] border-transparent bg-primary text-primary-foreground hover:-translate-y-0.5 hover:shadow-primary',
-  outline:
-    'border-[1.5px] border-border bg-card text-foreground hover:border-primary hover:bg-muted hover:text-primary-strong',
+  default: `border-[1.5px] border-transparent bg-primary text-primary-foreground hover:-translate-y-0.5 hover:shadow-primary ${press}`,
+  /* `input`, not `border`: a card-on-parchment fill differs by 1.06:1, so the
+     outline is the only thing telling a visitor this is a button at all. */
+  outline: `border-[1.5px] border-input bg-card text-foreground hover:border-primary hover:bg-muted hover:text-primary-strong ${press}`,
 }
 
 const sizes: Record<Size, string> = {

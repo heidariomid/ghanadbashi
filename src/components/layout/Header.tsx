@@ -63,7 +63,7 @@ export async function Header() {
           ) : null}
           <a
             href={primaryCta.href}
-            className="hidden min-h-11 items-center rounded-full bg-primary px-7 text-small font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary md:inline-flex"
+            className="hidden min-h-11 items-center rounded-full bg-primary px-7 text-small font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95 md:inline-flex"
           >
             {primaryCta.label}
           </a>

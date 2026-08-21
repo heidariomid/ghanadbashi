@@ -16,7 +16,7 @@ export async function WhatsAppFloat() {
       dir="ltr"
       {...newTabProps}
       aria-label={content.whatsapp.floatingLabel}
-      className="fixed bottom-6.5 inset-e-6.5 z-30 flex size-14.5 items-center justify-center rounded-full bg-card-foreground text-card shadow-float transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground"
+      className="fixed bottom-6.5 inset-e-6.5 z-30 flex size-14.5 items-center justify-center rounded-full bg-card-foreground text-card shadow-float transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground active:translate-y-0 active:brightness-95"
     >
       <svg
         width="26"

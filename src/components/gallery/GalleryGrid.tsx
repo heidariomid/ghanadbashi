@@ -99,10 +99,10 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActive(category)}
-                className={`min-h-11 rounded-full px-4 text-small transition-colors duration-200 sm:px-5 ${
+                className={`min-h-11 rounded-full border px-4 text-small transition-colors duration-200 sm:px-5 ${
                   isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-card text-muted-foreground hover:text-card-foreground'
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-border text-muted-foreground hover:border-input hover:text-card-foreground'
                 }`}
               >
                 {category === ALL ? 'همه' : categoryLabel(category)}

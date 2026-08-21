@@ -68,10 +68,12 @@ function Chip({ href, label, active }: { href: string; label: string; active: bo
     <a
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`inline-flex min-h-11 items-center rounded-full px-4 text-small transition-colors duration-200 sm:px-5 ${
+      // Both states carry a border so the row does not reflow by 2px as the
+      // selection moves.
+      className={`inline-flex min-h-11 items-center rounded-full border px-4 text-small transition-colors duration-200 sm:px-5 ${
         active
-          ? 'bg-primary text-primary-foreground'
-          : 'bg-background text-muted-foreground hover:text-card-foreground'
+          ? 'border-primary bg-primary text-primary-foreground'
+          : 'border-border text-muted-foreground hover:border-input hover:text-card-foreground'
       }`}
     >
       {label}

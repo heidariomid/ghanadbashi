@@ -22,7 +22,7 @@ const MAX_SAMPLE_IMAGE_BYTES = 4 * 1024 * 1024
 const TARGET_SAMPLE_IMAGE_BYTES = 1.5 * 1024 * 1024
 
 const inputClass =
-  'min-h-11 w-full rounded-lg border border-border bg-background px-4 text-body text-card-foreground transition-colors duration-200 focus:border-primary'
+  'min-h-11 w-full rounded-lg border border-input bg-background px-4 text-body text-card-foreground transition-colors duration-200 focus:border-primary'
 
 export function OrderForm({ preselected }: OrderFormProps) {
   const copy = content.orderForm
@@ -215,7 +215,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
             value={OTHER_PRODUCT_VALUE}
             checked={otherSelected}
             onChange={(event) => setOtherSelected(event.target.checked)}
-            className="size-5 shrink-0 rounded border-border accent-primary"
+            className="size-5 shrink-0 rounded border-input accent-primary"
           />
           {copy.otherProduct}
         </label>
@@ -326,7 +326,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-primary px-8 text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary disabled:translate-y-0 disabled:opacity-70 disabled:shadow-none"
+          className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-primary px-8 text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95 disabled:translate-y-0 disabled:opacity-70 disabled:shadow-none"
         >
           {pending ? (
             <span className="inline-flex items-center gap-2">
