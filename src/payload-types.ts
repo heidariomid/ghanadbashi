@@ -610,6 +610,19 @@ export interface SiteSetting {
      */
     tagline?: string | null;
     /**
+     * مثال: این هفته می‌پزیم
+     */
+    rotatingPrefix?: string | null;
+    /**
+     * زیر شعار برند، این کلمه‌ها یکی‌یکی تایپ و پاک می‌شوند. مثال: کیک تولد، شیرینی خشک، دسر. دست‌کم دو کلمه بگذارید تا بچرخند.
+     */
+    rotatingWords?:
+      | {
+          word: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
      * بزرگ‌ترین عکس سایت. بهترین عکس محصولتان را اینجا بگذارید.
      */
     heroImage: number | Media;
@@ -664,6 +677,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         brandName?: T;
         tagline?: T;
+        rotatingPrefix?: T;
+        rotatingWords?:
+          | T
+          | {
+              word?: T;
+              id?: T;
+            };
         heroImage?: T;
         aboutText?: T;
         aboutImage?: T;

@@ -8,6 +8,7 @@ import { FeaturedProducts } from '@/components/sections/FeaturedProducts'
 import { Gallery } from '@/components/sections/Gallery'
 import { Hero } from '@/components/sections/Hero'
 import { OrderCta } from '@/components/sections/OrderCta'
+import { Reveal } from '@/components/ui/Reveal'
 import { content } from '@/data/content'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -26,13 +27,26 @@ export default function Home() {
   return (
     <main>
       <LocalBusinessJsonLd />
+      {/* The hero is already on screen, so it rises on load rather than on scroll. */}
       <Hero />
-      <Categories />
-      <FeaturedProducts />
-      <Gallery />
-      <About />
-      <OrderCta />
-      <Contact />
+      <Reveal>
+        <Categories />
+      </Reveal>
+      <Reveal>
+        <FeaturedProducts />
+      </Reveal>
+      <Reveal>
+        <Gallery />
+      </Reveal>
+      <Reveal>
+        <About />
+      </Reveal>
+      <Reveal>
+        <OrderCta />
+      </Reveal>
+      <Reveal>
+        <Contact />
+      </Reveal>
     </main>
   )
 }

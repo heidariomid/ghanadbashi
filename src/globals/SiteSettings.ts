@@ -47,6 +47,32 @@ export const SiteSettings: GlobalConfig = {
           },
         },
         {
+          name: 'rotatingPrefix',
+          type: 'text',
+          label: 'متن ثابت قبل از کلمات متغیر',
+          admin: {
+            description: 'مثال: این هفته می‌پزیم',
+          },
+        },
+        {
+          name: 'rotatingWords',
+          type: 'array',
+          label: 'کلمات متغیر',
+          labels: { singular: 'کلمه', plural: 'کلمات' },
+          admin: {
+            description:
+              'زیر شعار برند، این کلمه‌ها یکی‌یکی تایپ و پاک می‌شوند. مثال: کیک تولد، شیرینی خشک، دسر. دست‌کم دو کلمه بگذارید تا بچرخند.',
+          },
+          fields: [
+            {
+              name: 'word',
+              type: 'text',
+              label: 'کلمه',
+              required: true,
+            },
+          ],
+        },
+        {
           name: 'heroImage',
           type: 'upload',
           relationTo: 'media',
