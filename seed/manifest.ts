@@ -77,11 +77,14 @@ export const SEED_PHOTOS: SeedPhoto[] = [
     category: 'cookies',
     authentic: true,
   },
+  // Filed under diet cookies rather than cookies: dates instead of refined
+  // sugar is exactly what that category is for, and it was the only photo in
+  // the set that belonged there.
   {
     file: 'cookie-date-filled',
     source: 'IMG_20260815_130540_034.jpg',
     title: 'کوکی مغزدار خرما',
-    category: 'cookies',
+    category: 'diet-cookies',
     authentic: true,
   },
   {
@@ -175,11 +178,13 @@ export const SEED_PHOTOS: SeedPhoto[] = [
     category: 'cafe-cakes',
     authentic: false,
   },
+  // A whole layered cake presented sliced reads as an occasion cake, and the
+  // birthday category had nothing at all; café cakes still has sixteen others.
   {
     file: 'cake-red-velvet',
     source: 'file_00000000273c820aafa6d6c02a506e07.png',
     title: 'کیک رد ولوت',
-    category: 'cafe-cakes',
+    category: 'birthday-cakes',
     authentic: false,
   },
   {
@@ -389,6 +394,62 @@ export const SEED_PHOTOS: SeedPhoto[] = [
     title: 'توپک انرژی',
     category: 'healthy',
     authentic: false,
+  },
+]
+
+export interface SeedProduct {
+  title: string
+  category: CategoryValue
+  /** `file` of the `SEED_PHOTOS` entry whose media this product reuses. */
+  photo: string
+  description: string
+  /**
+   * Set when the photo is a stand-in rather than a picture of this product.
+   * The client has no photos for these categories yet; until she sends some,
+   * this is the one-line query that finds every product still using a
+   * borrowed image.
+   */
+  borrowedPhoto?: string
+}
+
+/**
+ * Five of the ten categories had no products, so the homepage card and the
+ * `/products` filter both rendered empty. These give each one something real
+ * to show — all products she actually sells, priced on request like the rest,
+ * and all editable or deletable from the admin.
+ */
+export const SEED_PRODUCTS: SeedProduct[] = [
+  {
+    title: 'کیک تولد سفارشی',
+    category: 'birthday-cakes',
+    photo: 'cake-red-velvet',
+    description: 'کیک تولد و مناسبتی، با طعم و تزیین دلخواه شما. برای سفارش تماس بگیرید.',
+  },
+  {
+    title: 'کوکی خرمایی بدون شکر',
+    category: 'diet-cookies',
+    photo: 'cookie-date-filled',
+    description: 'شیرین‌شده فقط با خرما، بدون شکر افزوده. مناسب رژیم و میان‌وعده کودکان.',
+  },
+  {
+    title: 'توپک انرژی خرما و مغزها',
+    category: 'healthy',
+    photo: 'healthy-energy-balls',
+    description: 'خرما، مغزها و پودر کاکائو؛ بدون شکر و بدون آرد. یک میان‌وعده پرانرژی.',
+  },
+  {
+    title: 'کره بادام‌زمینی خانگی',
+    category: 'spreads',
+    photo: 'cookie-chocolate-jar',
+    description: 'صددرصد بادام‌زمینی، بدون روغن پالم و شکر افزوده. در شیشه‌های درب‌دار.',
+    borrowedPhoto: 'عکس محصول ندارد — از مشتری عکس شیشه ارده/عسل/کره بادام‌زمینی گرفته شود',
+  },
+  {
+    title: 'معجون انرژی‌زا',
+    category: 'sport-drinks',
+    photo: 'cookie-coffee',
+    description: 'معجون رژیمی و ورزشکاری با شیر، عسل و مغزها. تازه و به‌سفارش آماده می‌شود.',
+    borrowedPhoto: 'عکس محصول ندارد — از مشتری عکس معجون در لیوان گرفته شود',
   },
 ]
 

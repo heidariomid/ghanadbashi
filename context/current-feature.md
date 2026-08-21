@@ -2,20 +2,19 @@
 
 ## Status
 
+<!-- Not Started | In Progress | Complete -->
+
 Not Started
 
 ## Goals
 
-<!-- What success looks like, as bullet points. Filled in by `/feature load`. -->
+<!-- What success looks like, as bullets -->
 
 ## Notes
 
-<!-- Constraints, context and details carried over from the spec. -->
+<!-- Context, constraints or details from the spec -->
 
 ## History
-
-
-
 
 - Init
 - Built an illustration-led prototype (hand-authored SVG line art, no
@@ -69,3 +68,34 @@ Not Started
   locally, short of the ≥90 goal, with the whole gap in a simulated LCP that
   needs re-measuring against production. Teaching the client the required
   «متن جایگزین» field moved to Phase 9.
+- Admin panel theme: dressed `/admin` in the public site's parchment and rosé
+  instead of Payload's grey default, entirely through `custom.scss` variable
+  overrides plus a bakery wordmark and icon. A `proxy.ts` seeds the
+  `payload-theme` cookie so a first visit lands in light mode rather than
+  following the OS into dark. No collection, field or logic changes.
+- Contrast and control affordances: the approved blush `#d98e88` could not
+  carry a label — white on it was 2.5:1, which had forced near-black button
+  text, and the button itself sat at 2.4:1 against parchment. Primary is now
+  `#a8443e` (5.9:1 with white, 5.5:1 on the page) and the blush lives on as
+  `secondary`, where large calm surfaces suit it. Added `--color-input` for
+  anything outlining a control a visitor must find, since `border` is
+  deliberately too faint to clear the 3:1 WCAG ask; filter chips now carry a
+  border in both states so the row no longer reflows by 2px as the selection
+  moves. Buttons gained a press state, and dark mode was reworked onto a black
+  ground with brand blush kept for the order band and hero blobs.
+- Hero rotating words and scroll reveal: the hero headline now cycles
+  client-editable words through a typewriter, with the prefix and word list
+  added to site-settings so she controls both. Reveal-on-scroll is CSS gated on
+  `scripting: enabled`, so a visitor without JS sees the page rather than a
+  blank one, and `prefers-reduced-motion` restores opacity instead of leaving
+  content stuck hidden.
+- Fill the empty product categories: five of the ten categories rendered as a
+  bare emoji card and an empty `/products` filter. Re-filed the two photos that
+  genuinely belonged elsewhere (red velvet to birthday cakes, date-filled
+  cookies to diet cookies) and added one price-on-request product per empty
+  category, left off the homepage «محصولات منتخب» row on purpose. A category
+  with no gallery photo now falls back to its product image, which keeps the
+  borrowed stand-ins for «ارده، عسل و کره بادام‌زمینی» and «معجون رژیمی و
+  ورزشکاری» out of her public portfolio; both carry a `borrowedPhoto` note in
+  the seed manifest so `rg borrowedPhoto` finds every product still waiting on
+  a real photo.

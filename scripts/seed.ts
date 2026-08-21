@@ -11,9 +11,15 @@
 
 import path from 'node:path'
 import { getPayload } from 'payload'
-import type { Payload } from 'payload'
+import type { Payload, RequiredDataFromCollectionSlug } from 'payload'
 import config from '@payload-config'
-import { ABOUT_PHOTO, HERO_PHOTO, SEED_PHOTOS, type SeedPhoto } from '../seed/manifest'
+import {
+  ABOUT_PHOTO,
+  HERO_PHOTO,
+  SEED_PHOTOS,
+  SEED_PRODUCTS,
+  type SeedPhoto,
+} from '../seed/manifest'
 
 const IMAGES_DIR = path.resolve(process.cwd(), 'seed/images')
 
@@ -38,6 +44,21 @@ async function upsertMedia(payload: Payload, photo: SeedPhoto): Promise<number> 
     : await payload.create({ collection: 'media', data, filePath })
 
   return doc.id as number
+}
+
+/** Matched on `title`, so re-running edits the same row instead of adding one. */
+async function upsertProduct(payload: Payload, data: RequiredDataFromCollectionSlug<'products'>) {
+  const existing = await payload.find({
+    collection: 'products',
+    where: { title: { equals: data.title } },
+    limit: 1,
+  })
+
+  if (existing.docs[0]) {
+    await payload.update({ collection: 'products', id: existing.docs[0].id, data })
+  } else {
+    await payload.create({ collection: 'products', data })
+  }
 }
 
 async function main() {
@@ -85,9 +106,9 @@ async function main() {
 
   // Products start as price-on-request across the board — the client asked for
   // no prices on the site for now, and she can switch any of them over later.
-  const products = SEED_PHOTOS.filter((photo) => photo.featured)
-  for (const [index, photo] of products.entries()) {
-    const data = {
+  const featured = SEED_PHOTOS.filter((photo) => photo.featured)
+  for (const [index, photo] of featured.entries()) {
+    await upsertProduct(payload, {
       title: photo.title,
       category: photo.category,
       image: mediaIds.get(photo.file)!,
@@ -95,21 +116,25 @@ async function main() {
       isAvailable: true,
       isFeatured: true,
       sortOrder: index,
-    }
-
-    const existing = await payload.find({
-      collection: 'products',
-      where: { title: { equals: photo.title } },
-      limit: 1,
     })
-
-    if (existing.docs[0]) {
-      await payload.update({ collection: 'products', id: existing.docs[0].id, data })
-    } else {
-      await payload.create({ collection: 'products', data })
-    }
   }
-  payload.logger.info(`products: ${products.length} entries`)
+  payload.logger.info(`products: ${featured.length} featured`)
+
+  // Left off the homepage on purpose: these exist so no category reads as
+  // empty, not because they are her best work.
+  for (const [index, product] of SEED_PRODUCTS.entries()) {
+    await upsertProduct(payload, {
+      title: product.title,
+      category: product.category,
+      image: mediaIds.get(product.photo)!,
+      description: product.description,
+      priceOnRequest: true,
+      isAvailable: true,
+      isFeatured: false,
+      sortOrder: featured.length + index,
+    })
+  }
+  payload.logger.info(`products: ${SEED_PRODUCTS.length} category fillers`)
 
   await payload.updateGlobal({
     slug: 'site-settings',
