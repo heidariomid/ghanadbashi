@@ -15,6 +15,8 @@ Not Started
 ## History
 
 
+
+
 - Init
 - Built an illustration-led prototype (hand-authored SVG line art, no
   photography) against the original `prompt` brief.
@@ -47,3 +49,23 @@ Not Started
   existing revalidation hook. After-review caught `priority` sitting in the
   shared `GalleryGrid`, which made `/` preload a below-the-fold photo alongside
   the hero; it is now behind a `priorityFirst` prop that only `/gallery` sets.
+- Phase 7 — Launch: SEO, sharing previews and the accessibility pass. The site
+  served zero `og:`, `twitter:` and canonical tags, so every Instagram or
+  WhatsApp link rendered as a bare box; a shared `buildPageMetadata` now feeds
+  all four routes, plus `metadataBase`, a brand title template, `sitemap.ts`,
+  `robots.ts` and `LocalBusiness` JSON-LD. `og:image` points at a new `/og`
+  sharp route rather than the hero URL — uploads are portrait WebP, which
+  WhatsApp handles unreliably and which crops to nonsense in a 1.91:1 card, so
+  the route re-cuts the hero to a 1200×630 JPEG. The accessibility pass found
+  three real defects, not just token drift: both off-canvas drawers were
+  `aria-hidden` with tabbable buttons inside, the lightbox trapped no focus at
+  all, and the light palette failed AA on CTA labels (2.52:1), form errors
+  (2.53:1) and captions (4.02:1). The approved rosé fill was kept and only what
+  sits on it changed — espresso labels, a new `--color-primary-strong` for
+  rosé-as-text — updated in the design export first, then ported. Also dropped
+  the deprecated Next 16 `priority` prop for `preload`/`eager`/`fetchPriority`,
+  and stopped preloading the latin font subset. Lighthouse mobile: accessibility,
+  best practices and SEO all 100 on every route, CLS 0; performance 84–92
+  locally, short of the ≥90 goal, with the whole gap in a simulated LCP that
+  needs re-measuring against production. Teaching the client the required
+  «متن جایگزین» field moved to Phase 9.

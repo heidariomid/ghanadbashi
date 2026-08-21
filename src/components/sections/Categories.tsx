@@ -74,7 +74,7 @@ export async function Categories() {
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-4 text-small font-semibold text-card-foreground transition-colors duration-200 group-hover:text-primary sm:mt-5 sm:text-[1.0625rem]">
+                  <h3 className="mt-4 text-small font-semibold text-card-foreground transition-colors duration-200 group-hover:text-primary-strong sm:mt-5 sm:text-[1.0625rem]">
                     {category.label}
                   </h3>
                   <p className="mt-1.5 text-tiny text-muted-foreground sm:mt-2 sm:text-small">

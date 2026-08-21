@@ -7,6 +7,7 @@ interface PhotoProps {
   /** Aspect ratio, radius and any extra layout classes for the frame. */
   className?: string
   sizes: string
+  /** The LCP image on the page — preloaded, eager, and priority-hinted. */
   priority?: boolean
   imageClassName?: string
 }
@@ -25,7 +26,10 @@ export function Photo({
         alt={photo.alt}
         fill
         sizes={sizes}
-        priority={priority}
+        // `priority` is deprecated in Next 16; these are what it stood for.
+        preload={priority}
+        loading={priority ? 'eager' : undefined}
+        fetchPriority={priority ? 'high' : undefined}
         className={`object-cover ${imageClassName ?? ''}`}
       />
     </div>

@@ -140,7 +140,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
           <div className="mt-4 rounded-xl border border-border bg-background px-4 py-6 text-center">
             <p className="text-body text-card-foreground">{copy.emptyCart}</p>
             <p className="mt-2 text-small text-muted-foreground">{copy.emptyCartHint}</p>
-            <a href="/products" className="mt-4 inline-flex min-h-11 items-center text-small text-primary">
+            <a href="/products" className="mt-4 inline-flex min-h-11 items-center text-small text-primary-strong">
               {content.cart.browse}
             </a>
           </div>
@@ -148,7 +148,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
           <CartItems />
         )}
         {fieldErrors.items ? (
-          <p className="mt-2 text-small text-primary" role="alert">
+          <p className="mt-2 text-small text-primary-strong" role="alert">
             {fieldErrors.items}
           </p>
         ) : null}
@@ -303,7 +303,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
           />
           <p className="text-caption text-muted-foreground">{copy.photoHint}</p>
           {fieldErrors.sampleImage ? (
-            <p className="text-small text-primary" role="alert">
+            <p className="text-small text-primary-strong" role="alert">
               {fieldErrors.sampleImage}
             </p>
           ) : null}
@@ -315,7 +315,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
               <button
                 type="button"
                 onClick={clearPhoto}
-                className="min-h-11 text-small text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+                className="min-h-11 text-small text-muted-foreground underline-offset-4 hover:text-primary-strong hover:underline"
               >
                 {copy.photoClear}
               </button>
@@ -359,11 +359,11 @@ function Field({
     <div className="space-y-2">
       <label htmlFor={id} className="block text-small text-card-foreground">
         {label}
-        {required ? <span className="text-primary"> *</span> : null}
+        {required ? <span className="text-primary-strong"> *</span> : null}
       </label>
       {children}
       {error ? (
-        <p id={`${id}-error`} className="text-small text-primary" role="alert">
+        <p id={`${id}-error`} className="text-small text-primary-strong" role="alert">
           {error}
         </p>
       ) : null}

@@ -27,7 +27,7 @@ export function AddToCartButton({ product }: { product: CartProductInput }) {
           onClick={() => addItem(product)}
           className="group/cta inline-flex min-h-11 w-fit items-center text-small"
         >
-          <span className="border-b border-border pb-1 transition-all duration-200 group-hover/cta:border-primary group-hover/cta:text-primary">
+          <span className="border-b border-border pb-1 transition-all duration-200 group-hover/cta:border-primary group-hover/cta:text-primary-strong">
             {copy.add}
           </span>
         </button>

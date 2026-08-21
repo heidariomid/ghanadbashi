@@ -28,7 +28,7 @@ export async function Header() {
           href="/"
           className="group flex min-h-11 flex-col justify-center leading-none"
         >
-          <span className="text-brand font-black text-card-foreground transition-colors duration-200 group-hover:text-primary">
+          <span className="text-brand font-black text-card-foreground transition-colors duration-200 group-hover:text-primary-strong">
             {brandName}
           </span>
           <span className="mt-1.5 text-brand-sub text-muted-foreground">
@@ -41,7 +41,7 @@ export async function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="transition-colors duration-200 hover:text-primary"
+              className="transition-colors duration-200 hover:text-primary-strong"
             >
               {item.label}
             </a>
@@ -56,7 +56,7 @@ export async function Header() {
               href={whatsapp.href}
               dir="ltr"
               {...newTabProps}
-              className="hidden text-small text-muted-foreground transition-colors duration-200 hover:text-primary lg:inline"
+              className="hidden text-small text-muted-foreground transition-colors duration-200 hover:text-primary-strong lg:inline"
             >
               {whatsapp.label}
             </a>

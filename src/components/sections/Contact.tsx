@@ -85,7 +85,7 @@ export async function Contact() {
                       href={channel.href}
                       dir={channel.dir}
                       {...(isExternalHref(channel.href) ? newTabProps : {})}
-                      className="inline-flex min-h-11 items-center text-h3 font-semibold text-card-foreground transition-colors duration-200 hover:text-primary"
+                      className="inline-flex min-h-11 items-center text-h3 font-semibold text-card-foreground transition-colors duration-200 hover:text-primary-strong"
                     >
                       {channel.value}
                     </a>

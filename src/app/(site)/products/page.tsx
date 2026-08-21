@@ -3,21 +3,16 @@ import { ProductListing } from '@/components/products/ProductListing'
 import { content } from '@/data/content'
 import { CATEGORIES } from '@/lib/categories'
 import { queryPayload } from '@/lib/payload'
-import { getSiteSettings } from '@/lib/site-settings'
+import { buildPageMetadata } from '@/lib/seo'
 
 interface ProductsPageProps {
   searchParams: Promise<{ category?: string | string[] }>
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings()
-  const brandName = settings?.brand?.brandName?.trim() || content.brand.name
   const { title, description } = content.products.listing
 
-  return {
-    title: `${title} | ${brandName}`,
-    description,
-  }
+  return buildPageMetadata({ title, description, path: '/products' })
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {

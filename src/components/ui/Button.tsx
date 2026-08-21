@@ -22,7 +22,7 @@ const variants: Record<Variant, string> = {
   default:
     'border-[1.5px] border-transparent bg-primary text-primary-foreground hover:-translate-y-0.5 hover:shadow-primary',
   outline:
-    'border-[1.5px] border-border bg-card text-foreground hover:border-primary hover:bg-muted hover:text-primary',
+    'border-[1.5px] border-border bg-card text-foreground hover:border-primary hover:bg-muted hover:text-primary-strong',
 }
 
 const sizes: Record<Size, string> = {

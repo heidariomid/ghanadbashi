@@ -41,7 +41,7 @@ export async function OrderCta() {
         <ol className="mx-auto mt-13 grid max-w-232 grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6 md:mt-22 md:gap-10">
           {steps.map((step, index) => (
             <li key={step} className="border-t border-secondary-foreground/20 pt-5.5">
-              <span className="text-caption text-primary">{faNumber(index + 1)}</span>
+              <span className="text-caption text-primary-strong">{faNumber(index + 1)}</span>
               <p className="mt-3 text-[0.9375rem] leading-[1.75] text-secondary-foreground">
                 {step}
               </p>

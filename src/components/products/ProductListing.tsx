@@ -70,7 +70,7 @@ function Chip({ href, label, active }: { href: string; label: string; active: bo
       aria-current={active ? 'page' : undefined}
       className={`inline-flex min-h-11 items-center rounded-full px-4 text-small transition-colors duration-200 sm:px-5 ${
         active
-          ? 'bg-primary text-white'
+          ? 'bg-primary text-primary-foreground'
           : 'bg-background text-muted-foreground hover:text-card-foreground'
       }`}
     >

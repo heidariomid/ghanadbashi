@@ -8,6 +8,7 @@ import { phoneHref } from '@/lib/contact'
 import { CART_MAX_LINES, CART_MAX_QUANTITY } from '@/lib/cart'
 import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
 import { getPayloadClient } from '@/lib/payload'
+import { resolveOrigin } from '@/lib/site-url'
 
 const OTHER_PRODUCT_VALUE = '__other__'
 const MAX_SAMPLE_IMAGE_BYTES = 4 * 1024 * 1024
@@ -361,9 +362,7 @@ async function notifyBaker(
 }
 
 function orderAdminUrl(orderId: number): string | null {
-  const explicit = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, '')
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  const origin = explicit || (vercel ? `https://${vercel}` : null)
+  const origin = resolveOrigin()
   if (!origin) return null
   return `${origin}/admin/collections/orders/${orderId}`
 }

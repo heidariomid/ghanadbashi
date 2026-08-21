@@ -37,7 +37,10 @@ export function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-title"
-        aria-hidden={!open}
+        // `inert`, not `aria-hidden`: the closed drawer is parked off-canvas
+        // with its buttons still in the DOM, and aria-hidden alone would leave
+        // them tabbable — invisible stops on the way down the page.
+        inert={!open}
         className={`absolute inset-y-0 inset-e-0 flex w-[86%] max-w-md flex-col bg-card shadow-warm transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           open ? 'translate-x-0' : 'translate-x-full rtl:-translate-x-full'
         }`}
@@ -55,7 +58,7 @@ export function CartDrawer() {
             type="button"
             onClick={() => setOpen(false)}
             aria-label={copy.close}
-            className="flex size-11 items-center justify-center text-card-foreground transition-colors duration-200 hover:text-primary"
+            className="flex size-11 items-center justify-center text-card-foreground transition-colors duration-200 hover:text-primary-strong"
           >
             <CloseIcon className="size-6" />
           </button>
@@ -69,7 +72,7 @@ export function CartDrawer() {
               <a
                 href="/products"
                 onClick={() => setOpen(false)}
-                className="mt-6 inline-flex min-h-11 items-center text-small text-primary"
+                className="mt-6 inline-flex min-h-11 items-center text-small text-primary-strong"
               >
                 {copy.browse}
               </a>

@@ -6,19 +6,14 @@ import { content } from '@/data/content'
 import { sortByCategoryOrder } from '@/lib/categories'
 import { resolveImage } from '@/lib/media'
 import { queryPayload } from '@/lib/payload'
-import { getSiteSettings } from '@/lib/site-settings'
+import { buildPageMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings()
-  const brandName = settings?.brand?.brandName?.trim() || content.brand.name
   const { eyebrow, description } = content.gallery
 
-  return {
-    title: `${eyebrow} | ${brandName}`,
-    description,
-  }
+  return buildPageMetadata({ title: eyebrow, description, path: '/gallery' })
 }
 
 export default async function GalleryPage() {

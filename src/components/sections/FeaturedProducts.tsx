@@ -75,7 +75,7 @@ export async function FeaturedProducts() {
           href="/products"
           className="group/all mt-9 inline-flex min-h-11 w-fit items-center text-small md:mt-14"
         >
-          <span className="border-b border-border pb-1 transition-all duration-200 group-hover/all:border-primary group-hover/all:text-primary">
+          <span className="border-b border-border pb-1 transition-all duration-200 group-hover/all:border-primary group-hover/all:text-primary-strong">
             {content.products.listing.viewAll}
           </span>
         </a>

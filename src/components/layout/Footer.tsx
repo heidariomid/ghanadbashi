@@ -45,7 +45,7 @@ export async function Footer() {
                   dir="ltr"
                   {...newTabProps}
                   aria-label={`${content.contact.channels.phone.label}: ${faPhone(phone)}`}
-                  className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary"
+                  className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary-strong"
                 >
                   {faPhone(phone)}
                 </a>
@@ -56,7 +56,7 @@ export async function Footer() {
                   dir="ltr"
                   {...newTabProps}
                   aria-label={`${content.contact.channels.whatsapp.label}: ${faPhone(whatsapp)}`}
-                  className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary"
+                  className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary-strong"
                 >
                   {faPhone(whatsapp)}
                 </a>
@@ -66,7 +66,7 @@ export async function Footer() {
                   href={instagramLink}
                   {...newTabProps}
                   aria-label={`${content.contact.channels.instagram.label}: @${instagram.replace(/^@+/, '')}`}
-                  className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary"
+                  className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-primary-strong"
                 >
                   @{instagram.replace(/^@+/, '')}
                 </a>

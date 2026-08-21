@@ -7,14 +7,30 @@ import { Header } from '@/components/layout/Header'
 import { UnavailableNotice } from '@/components/layout/UnavailableNotice'
 import { themeBootScript } from '@/components/layout/theme-boot'
 import { WhatsAppFloat } from '@/components/layout/WhatsAppFloat'
+import { content } from '@/data/content'
 import { fontVariables } from '@/lib/fonts'
+import { homeTitle } from '@/lib/seo'
 import { getSiteSettings } from '@/lib/site-settings'
+import { siteOrigin } from '@/lib/site-url'
 import '../globals.css'
 
-export const metadata: Metadata = {
-  title: 'قناد باشی عسل | شیرینی و کیک خانگی در اصفهان',
-  description:
-    'کیک و شیرینی خانگی، دست‌ساز و تازه — با مواد اولیه درجه‌یک، در اصفهان، بهارستان.',
+/**
+ * Defaults every page inherits. `metadataBase` is what lets the pages below
+ * hand Next relative paths for the canonical and the Open Graph image.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const brandName = settings?.brand?.brandName?.trim() || content.brand.name
+
+  return {
+    metadataBase: new URL(siteOrigin()),
+    title: {
+      default: homeTitle(brandName),
+      template: `%s | ${brandName}`,
+    },
+    description: content.brand.metaDescription,
+    robots: { index: true, follow: true },
+  }
 }
 
 export default async function SiteLayout({

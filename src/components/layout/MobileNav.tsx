@@ -48,7 +48,8 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
 
       {/* anchored to the inline start, which is the right edge in RTL */}
       <aside
-        aria-hidden={!open}
+        // See CartDrawer: off-canvas links stay tabbable under aria-hidden.
+        inert={!open}
         className={`absolute inset-y-0 inset-s-0 flex w-[86%] max-w-sm flex-col bg-card transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -59,7 +60,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
             type="button"
             onClick={() => setOpen(false)}
             aria-label="بستن منو"
-            className="flex size-11 items-center justify-center text-card-foreground transition-colors duration-200 hover:text-primary"
+            className="flex size-11 items-center justify-center text-card-foreground transition-colors duration-200 hover:text-primary-strong"
           >
             <CloseIcon className="size-6" />
           </button>
@@ -71,7 +72,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="border-b border-border py-5 text-h2 text-card-foreground transition-colors duration-200 hover:text-primary"
+              className="border-b border-border py-5 text-h2 text-card-foreground transition-colors duration-200 hover:text-primary-strong"
             >
               {item.label}
             </a>
@@ -91,7 +92,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
               href={whatsapp.href}
               dir="ltr"
               {...newTabProps}
-              className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-border text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary"
+              className="flex min-h-13 items-center justify-center rounded-full border-[1.5px] border-border text-body font-semibold text-foreground transition-all duration-200 hover:border-primary hover:bg-muted hover:text-primary-strong"
             >
               {whatsapp.label}
             </a>
@@ -108,7 +109,7 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
         onClick={() => setOpen(true)}
         aria-label="باز کردن منو"
         aria-expanded={open}
-        className="flex size-11 items-center justify-center text-card-foreground transition-colors duration-200 hover:text-primary md:hidden"
+        className="flex size-11 items-center justify-center text-card-foreground transition-colors duration-200 hover:text-primary-strong md:hidden"
       >
         <MenuIcon className="size-6" />
       </button>

@@ -25,6 +25,9 @@ const vazirmatnLatin = localFont({
   ],
   variable: '--font-vazirmatn-latin',
   display: 'swap',
+  // Not preloaded: the page is Persian, and this subset only covers the Latin
+  // wordmark and digits. Preloading it put ~95KB in front of the hero image.
+  preload: false,
 })
 
 /** Applied to <html> by both the site and the admin layout. */

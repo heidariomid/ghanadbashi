@@ -6,7 +6,7 @@ interface EyebrowProps {
 }
 
 const tones = {
-  primary: { text: 'text-primary', rule: 'bg-primary/50' },
+  primary: { text: 'text-primary-strong', rule: 'bg-primary/50' },
   onSecondary: { text: 'text-secondary-foreground', rule: 'bg-secondary-foreground/40' },
 } as const
 

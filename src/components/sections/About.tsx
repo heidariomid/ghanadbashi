@@ -51,7 +51,7 @@ export async function About() {
             {hasAboutText ? (
               <RichText
                 data={aboutText}
-                className="mt-7 max-w-[60ch] text-body leading-[1.9] text-muted-foreground [&_a]:text-primary [&_a]:underline [&_li]:ms-5 [&_li]:list-disc [&_p:not(:first-child)]:mt-5"
+                className="mt-7 max-w-[60ch] text-body leading-[1.9] text-muted-foreground [&_a]:text-primary-strong [&_a]:underline [&_li]:ms-5 [&_li]:list-disc [&_p:not(:first-child)]:mt-5"
               />
             ) : null}
 

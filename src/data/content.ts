@@ -21,6 +21,10 @@ export interface Brand {
   eyebrow: string
   heroBadge: string
   heroNote: string
+  /** Appended to the brand name in the homepage title. */
+  metaTagline: string
+  /** Search result and sharing-preview summary for the homepage. */
+  metaDescription: string
 }
 
 export interface AboutValue {
@@ -147,6 +151,9 @@ export const content: SiteContent = {
     eyebrow: 'قنادی خانگی · اصفهان، بهارستان',
     heroBadge: 'پخت روز · تحویل در بهارستان',
     heroNote: 'سفارش‌ها دو روز قبل دریافت می‌شوند',
+    metaTagline: 'شیرینی و کیک خانگی در اصفهان',
+    metaDescription:
+      'کیک تولد، شیرینی خشک، کوکی و دسر خانگی — دست‌ساز، با مواد اولیه‌ی درجه‌یک و پخت روز. تحویل در اصفهان، بهارستان و حومه.',
   },
 
   nav: [

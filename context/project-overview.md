@@ -253,7 +253,14 @@ Ordered and independently implementable — see @context/features/:
 3. @context/features/phase-3-homepage-spec.md — homepage
 4. @context/features/phase-4-products-spec.md — product listing (no detail page)
 5. @context/features/phase-5-order-form-spec.md — order form
-6. @context/features/phase-6-gallery-about-contact-spec.md — remaining pages
-7. @context/features/phase-7-launch-handoff-spec.md — launch & client handoff
+6. @context/features/phase-6-gallery-about-contact-spec.md — `/gallery` only.
+   `/about` and `/contact` were deliberately dropped: the homepage and footer
+   already carry both — **done**
+7. @context/features/phase-7-launch-spec.md — launch: SEO, sharing previews,
+   sitemap, performance, production checks
 8. @context/features/phase-8-order-status-notify-spec.md — new order emails +
-   SMS her; status change emails + SMS the customer (OTP on the form first)
+   SMS her; status change emails + SMS the customer (OTP on the form first).
+   **Deprioritised** — the team agreed there is no Phase 8 before launch
+9. @context/features/phase-9-client-guide-spec.md — the Persian client guide,
+   screenshots, PDF and handoff. Split out of Phase 7 so it runs **last**,
+   after the admin UI work, and the screenshots match what she sees

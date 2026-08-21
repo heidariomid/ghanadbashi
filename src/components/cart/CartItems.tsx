@@ -37,7 +37,7 @@ export function CartItems() {
             <button
               type="button"
               onClick={() => removeItem(item.id)}
-              className="min-h-11 text-caption text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+              className="min-h-11 text-caption text-muted-foreground underline-offset-4 hover:text-primary-strong hover:underline"
             >
               {copy.remove}
             </button>

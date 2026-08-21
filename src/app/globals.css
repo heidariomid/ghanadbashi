@@ -15,7 +15,11 @@
 
   /* ── primary: rosé ── */
   --color-primary: #d98e88;
-  --color-primary-foreground: #f7fff6;
+  /* Espresso, not the design system's near-white: white on this rosé is
+     2.5:1. The fill is untouched, only what sits on it. */
+  --color-primary-foreground: #2c2620;
+  /* Rosé deep enough to be read as text on parchment. Fills keep `primary`. */
+  --color-primary-strong: #a85852;
 
   /* ── secondary: soft blush ── */
   --color-secondary: #f6d6cf;
@@ -23,7 +27,7 @@
 
   /* ── muted ── */
   --color-muted: #f1eadd;
-  --color-muted-foreground: #837868;
+  --color-muted-foreground: #726758;
 
   /* ── utility ── */
   --color-border: #e8dfcf;
@@ -119,6 +123,8 @@ html.dark {
   --color-card-foreground: #f4ebe0;
   --color-primary: #e4a39d;
   --color-primary-foreground: #2c1816;
+  /* Dark ground already clears AA at the accent itself. */
+  --color-primary-strong: #e4a39d;
   --color-secondary: #3d2c28;
   --color-secondary-foreground: #f3d4cc;
   --color-muted: #2a241f;

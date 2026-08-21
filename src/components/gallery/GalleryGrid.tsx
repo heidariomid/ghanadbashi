@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { categoryLabel } from '@/lib/categories'
 import { CloseIcon } from '@/components/ui/icons'
 
@@ -36,6 +36,9 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
     [active, photos],
   )
 
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const isOpen = openIndex !== null
+
   const close = useCallback(() => setOpenIndex(null), [])
 
   const step = useCallback(
@@ -46,25 +49,36 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
     [visible.length],
   )
 
+  // Keyed on `isOpen`, not `openIndex`: stepping to the next photo keeps the
+  // same dialog open, and re-running this would hand focus back to the grid.
   useEffect(() => {
-    if (openIndex === null) return
+    if (!isOpen) return
+
+    const opener = document.activeElement as HTMLElement | null
+    const { overflow } = document.body.style
+    document.body.style.overflow = 'hidden'
+    focusableButtons(dialogRef.current)[0]?.focus()
+
+    return () => {
+      document.body.style.overflow = overflow
+      opener?.focus()
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) return
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close()
       // The grid reads right-to-left, so the next photo sits to the left.
       if (event.key === 'ArrowLeft') step(1)
       if (event.key === 'ArrowRight') step(-1)
+      if (event.key === 'Tab') trapTab(event, dialogRef.current)
     }
 
     document.addEventListener('keydown', onKeyDown)
-    const { overflow } = document.body.style
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = overflow
-    }
-  }, [openIndex, close, step])
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, close, step])
 
   const openPhoto = openIndex === null ? null : visible[openIndex]
 
@@ -87,7 +101,7 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
                 onClick={() => setActive(category)}
                 className={`min-h-11 rounded-full px-4 text-small transition-colors duration-200 sm:px-5 ${
                   isActive
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary text-primary-foreground'
                     : 'bg-card text-muted-foreground hover:text-card-foreground'
                 }`}
               >
@@ -112,7 +126,8 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
                   src={photo.src}
                   alt={photo.alt}
                   fill
-                  priority={priorityFirst && index === 0}
+                  preload={priorityFirst && index === 0}
+                  fetchPriority={priorityFirst && index === 0 ? 'high' : undefined}
                   sizes="(max-width: 640px) 45vw, (max-width: 1024px) 45vw, 30vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -127,6 +142,7 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
 
       {openPhoto && (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={openPhoto.caption || openPhoto.alt}
@@ -174,6 +190,30 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
       )}
     </>
   )
+}
+
+/** Close plus the two arrows — every control the lightbox renders. */
+function focusableButtons(dialog: HTMLElement | null): HTMLElement[] {
+  return Array.from(dialog?.querySelectorAll<HTMLElement>('button') ?? [])
+}
+
+/** Keep Tab inside the open lightbox instead of walking the page behind it. */
+function trapTab(event: KeyboardEvent, dialog: HTMLElement | null) {
+  const buttons = focusableButtons(dialog)
+  if (buttons.length === 0) return
+
+  const first = buttons[0]
+  const last = buttons[buttons.length - 1]
+  const current = document.activeElement
+  const outside = !dialog?.contains(current)
+
+  if (event.shiftKey && (outside || current === first)) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && (outside || current === last)) {
+    event.preventDefault()
+    first.focus()
+  }
 }
 
 const navInsetClass = {

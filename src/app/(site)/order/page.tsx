@@ -6,21 +6,20 @@ import { content } from '@/data/content'
 import { cartProductFrom } from '@/lib/cart'
 import { resolveImage } from '@/lib/media'
 import { queryPayload } from '@/lib/payload'
-import { getSiteSettings } from '@/lib/site-settings'
+import { buildPageMetadata } from '@/lib/seo'
 
 interface OrderPageProps {
   searchParams: Promise<{ product?: string | string[] }>
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings()
-  const brandName = settings?.brand?.brandName?.trim() || content.brand.name
   const { metaTitle, metaDescription } = content.orderForm
 
-  return {
-    title: `${metaTitle} | ${brandName}`,
+  return buildPageMetadata({
+    title: metaTitle,
     description: metaDescription,
-  }
+    path: '/order',
+  })
 }
 
 export default async function OrderPage({ searchParams }: OrderPageProps) {
