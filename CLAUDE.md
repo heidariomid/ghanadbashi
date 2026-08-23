@@ -24,6 +24,7 @@ pnpm lint         # ESLint with Next.js core-web-vitals + TypeScript rules
 pnpm payload      # Payload CLI
 pnpm generate:types  # regenerate payload-types.ts after ANY schema change
 pnpm db:pull      # replace local Postgres `bakery` with a full copy of production Neon
+pnpm seed         # load seed photos into the current DATABASE_URI (needs Blob token)
 
 pnpm migrate:create   # write a migration file after a schema change
 pnpm migrate          # apply pending migrations to the current DATABASE_URI
@@ -35,6 +36,12 @@ production. Requires `NEON_DATABASE_URI` (Neon dashboard Connection details, or
 Vercel → Project → Settings → Environment Variables → DATABASE_URI). Photos may
 404 locally if they live on Vercel Blob; content/structure still restores.
 Re-run anytime for a fresh production copy. Needs PostgreSQL client tools.
+
+Do not run `pnpm seed` against the production database from your laptop unless
+`BLOB_READ_WRITE_TOKEN` is set. That is what broke the live photos last time:
+seed re-uploads every image, writes new filenames into Neon, and without the
+token those files stay on the laptop. Vercel then 404s. Client uploads on the
+live `/admin` already go to Blob.
 
 ## Database changes
 
