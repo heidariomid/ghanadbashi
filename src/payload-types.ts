@@ -189,7 +189,7 @@ export interface Product {
 export interface Media {
   id: number;
   /**
-   * توضیح کوتاه تصویر برای دسترس‌پذیری و سئو.
+   * همان چیزی که در عکس است را بنویسید. مثال: کیک شکلاتی با توت‌فرنگی
    */
   alt: string;
   updatedAt: string;

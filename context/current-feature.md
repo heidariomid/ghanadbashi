@@ -99,3 +99,9 @@ Not Started
   ورزشکاری» out of her public portfolio; both carry a `borrowedPhoto` note in
   the seed manifest so `rg borrowedPhoto` finds every product still waiting on
   a real photo.
+- Phase 9 — Client Guide: feat: add the Persian client handoff guide.
+  Finished the screenshot-driven Persian guide (markdown + phone-readable
+  PDF), pointed login at ghanadbashi.vercel.app/admin, and rewrote the Media
+  «متن جایگزین» hint to the same plain sentence she is taught. Her own
+  account, the live password, and watching her add a product unaided stay
+  leftovers — Phase 8 (order email/SMS) is still deprioritised.

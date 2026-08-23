@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>راهنمای مدیریت سایت قناد باشی عسل</title>
+  <style>
+    @font-face {
+      font-family: Vazirmatn;
+      src: url("../../src/fonts/vazirmatn-arabic-400-normal.woff2") format("woff2");
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: Vazirmatn;
+      src: url("../../src/fonts/vazirmatn-arabic-700-normal.woff2") format("woff2");
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: Vazirmatn;
+      src: url("../../src/fonts/vazirmatn-arabic-900-normal.woff2") format("woff2");
+      font-weight: 900;
+    }
+    @page {
+      size: A4;
+      margin: 16mm 14mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Vazirmatn, sans-serif;
+      background: #fbf6ee;
+      color: #5f5041;
+      font-size: 13.5px;
+      line-height: 1.85;
+    }
+    h1 {
+      font-weight: 900;
+      color: #2c2620;
+      font-size: 26px;
+      margin: 0 0 8px;
+    }
+    h2 {
+      font-weight: 900;
+      color: #2c2620;
+      font-size: 18px;
+      margin: 28px 0 10px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-weight: 700;
+      color: #2c2620;
+      font-size: 15px;
+      margin: 18px 0 8px;
+    }
+    p, li { margin: 0 0 8px; }
+    ol { padding-inline-start: 1.4em; }
+    img {
+      display: block;
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+      margin: 12px 0 16px;
+      border: 1px solid #e8dfcf;
+      border-radius: 12px;
+      page-break-inside: avoid;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 16px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #e8dfcf;
+      padding: 8px 10px;
+      text-align: start;
+      background: #fffdf8;
+    }
+    th { background: #f6d6cf; color: #2c2620; }
+    .lead { font-size: 15px; }
+    .url {
+      display: inline-block;
+      background: #fffdf8;
+      border: 1px solid #e8dfcf;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-weight: 700;
+      color: #8c3833;
+    }
+    .note {
+      background: #f6d6cf;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      page-break-inside: avoid;
+    }
+    footer {
+      margin-top: 32px;
+      color: #837868;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>راهنمای مدیریت سایت قناد باشی عسل</h1>
+  <p class="lead">با این راهنما خودتان محصولات، قیمت‌ها، عکس‌ها، سفارش‌ها و شماره تماس را عوض می‌کنید. لازم نیست برای این کارها به کسی پیام بدهید.</p>
+  <p>آدرس ورود: <span class="url">ghanadbashi.vercel.app/admin</span></p>
+  <p>نام کاربری و رمز عبور برایتان جداگانه فرستاده می‌شود. آن‌ها را به کسی نگویید.</p>
+  <p>بعد از هر ذخیره، حدود یک دقیقه صبر کنید و سایت را از نو باز کنید تا تغییر را ببینید.</p>
+
+  <h2>۱. ورود به پنل</h2>
+  <img src="screenshots/01-login.png" alt="صفحه ورود به پنل" />
+  <ol>
+    <li>در گوشی یا رایانه این آدرس را باز کنید: ghanadbashi.vercel.app/admin</li>
+    <li><strong>نام کاربری</strong> را بنویسید (نه شماره تلفن)</li>
+    <li><strong>رمز عبور</strong> را بنویسید</li>
+    <li>روی <strong>ورود</strong> بزنید</li>
+  </ol>
+  <p>اگر صفحه بالا نیامد، اینترنت را چک کنید و دوباره همان آدرس را باز کنید.</p>
+  <p>بعد از ورود این صفحه را می‌بینید:</p>
+  <img src="screenshots/02-dashboard.png" alt="داشبورد بعد از ورود" />
+  <table>
+    <thead><tr><th>کجا بروید</th><th>برای چه کاری</th></tr></thead>
+    <tbody>
+      <tr><td>محصولات</td><td>اضافه کردن، قیمت، تمام‌شدن کالا</td></tr>
+      <tr><td>نمونه کارها</td><td>عکس‌های گالری سایت</td></tr>
+      <tr><td>سفارش‌ها</td><td>دیدن سفارش مشتری و عوض کردن وضعیت</td></tr>
+      <tr><td>تنظیمات سایت</td><td>شماره تماس، واتساپ، اینستاگرام</td></tr>
+    </tbody>
+  </table>
+  <p>به <strong>کاربران</strong> و <strong>رسانه‌ها</strong> دست نزنید. برای خروج، پایین منو روی <strong>خروج</strong> بزنید.</p>
+
+  <h2>۲. اضافه کردن محصول جدید</h2>
+  <img src="screenshots/03-products-list.png" alt="فهرست محصولات" />
+  <ol>
+    <li>از منوی راست روی <strong>محصولات</strong> بزنید</li>
+    <li>بالا سمت چپ روی <strong>ایجاد محصول جدید</strong> بزنید</li>
+  </ol>
+  <img src="screenshots/04-product-create.png" alt="فرم محصول جدید" />
+  <ol start="3">
+    <li><strong>نام محصول</strong> را بنویسید</li>
+    <li><strong>دسته‌بندی</strong> را انتخاب کنید</li>
+    <li>برای عکس روی <strong>ایجاد مورد جدید</strong> بزنید</li>
+    <li>روی <strong>انتخاب فایل</strong> بزنید و عکس را از گوشی انتخاب کنید</li>
+    <li><strong>متن جایگزین</strong> را پر کنید</li>
+    <li>روی <strong>ذخیره</strong> داخل پنجره عکس بزنید</li>
+    <li><strong>توضیح کوتاه</strong> را بنویسید</li>
+    <li>اگر قیمت مشخص است، تیک <strong>استعلام قیمت</strong> را بردارید و عدد را بنویسید</li>
+    <li>تیک <strong>موجود است</strong> را بگذارید بماند</li>
+    <li>اگر می‌خواهید در صفحه اول بیاید، <strong>نمایش در صفحه اصلی</strong> را تیک بزنید</li>
+    <li><strong>آدرس صفحه</strong> را دست نزنید</li>
+    <li>روی <strong>ذخیره</strong> بزنید</li>
+  </ol>
+
+  <h3>متن جایگزین — این یکی را خالی نگذارید</h3>
+  <p>بدون این نوشته، عکس ذخیره نمی‌شود.</p>
+  <img src="screenshots/05-alt-text.png" alt="کادر متن جایگزین" />
+  <p>همان چیزی که در عکس است را بنویسید. مثال درست: <strong>کیک شکلاتی با توت‌فرنگی</strong>. مثال غلط: عکس، ۱، asdf</p>
+
+  <h2>۳. تغییر قیمت یک محصول</h2>
+  <img src="screenshots/06-price-field.png" alt="کادر قیمت و موجود بودن" />
+  <ol>
+    <li><strong>محصولات</strong> را باز کنید و روی نام محصول بزنید</li>
+    <li>اگر تیک <strong>استعلام قیمت</strong> خورده، آن را بردارید</li>
+    <li>در <strong>قیمت (تومان)</strong> فقط عدد بنویسید — بدون نقطه یا ویرگول</li>
+    <li>مثال: برای سیصد و پنجاه هزار تومان بنویسید <strong>350000</strong></li>
+    <li><strong>ذخیره</strong> کنید</li>
+  </ol>
+
+  <h2>۴. وقتی قیمت مشخص نیست — «استعلام قیمت»</h2>
+  <ol>
+    <li>محصول را باز کنید</li>
+    <li>تیک <strong>استعلام قیمت</strong> را بزنید</li>
+    <li>در سایت به‌جای عدد نوشته می‌شود «استعلام قیمت»</li>
+    <li><strong>ذخیره</strong> کنید</li>
+  </ol>
+
+  <h2>۵. پنهان کردن محصولی که تمام شده</h2>
+  <p>محصول را پاک نکنید.</p>
+  <ol>
+    <li>محصول را باز کنید</li>
+    <li>تیک <strong>موجود است</strong> را بردارید</li>
+    <li><strong>ذخیره</strong> کنید</li>
+  </ol>
+  <p>در سایت نوشته می‌شود «فعلاً موجود نیست». هر وقت آماده شد، همان تیک را برگردانید.</p>
+
+  <h2>۶. اضافه کردن عکس به گالری</h2>
+  <img src="screenshots/07-gallery-list.png" alt="فهرست نمونه کارها" />
+  <ol>
+    <li>از منوی راست روی <strong>نمونه کارها</strong> بزنید</li>
+    <li>روی <strong>ایجاد مورد جدید</strong> بزنید</li>
+  </ol>
+  <img src="screenshots/08-gallery-create.png" alt="فرم نمونه کار جدید" />
+  <ol start="3">
+    <li>عکس را بارگذاری کنید و <strong>متن جایگزین</strong> را بنویسید</li>
+    <li><strong>دسته‌بندی</strong> را انتخاب کنید</li>
+    <li><strong>توضیح</strong> اختیاری است</li>
+    <li><strong>ذخیره</strong> کنید</li>
+  </ol>
+  <p>برای حذف عکس از سایت، از همین فهرست کل نمونه کار را حذف کنید. روی خودِ عکس دکمه حذف نزنید.</p>
+
+  <h2>۷. دیدن سفارش‌ها و تغییر وضعیت</h2>
+  <img src="screenshots/09-order-detail.png" alt="صفحه یک سفارش" />
+  <ol>
+    <li>از منوی راست روی <strong>سفارش‌ها</strong> بزنید</li>
+    <li>روی نام مشتری بزنید</li>
+    <li>نام و شماره و تاریخ را بخوانید — عوضشان نکنید</li>
+    <li>فقط <strong>وضعیت</strong> را عوض کنید</li>
+    <li><strong>ذخیره</strong> کنید</li>
+  </ol>
+  <table>
+    <thead><tr><th>وضعیت</th><th>یعنی</th></tr></thead>
+    <tbody>
+      <tr><td>🆕 جدید</td><td>تازه آمده؛ هنوز جواب نداده‌اید</td></tr>
+      <tr><td>✅ تأیید شده</td><td>با مشتری هماهنگ کرده‌اید</td></tr>
+      <tr><td>📦 تحویل شده</td><td>کار تمام شده</td></tr>
+      <tr><td>❌ لغو شده</td><td>سفارش انجام نمی‌شود</td></tr>
+    </tbody>
+  </table>
+  <p>سفارش جدید از داخل پنل نسازید.</p>
+
+  <h2>۸. تغییر شماره تماس، واتساپ و اینستاگرام</h2>
+  <img src="screenshots/10-site-settings.png" alt="تنظیمات سایت" />
+  <ol>
+    <li>از منوی راست روی <strong>تنظیمات سایت</strong> بزنید</li>
+    <li>صفحه را پایین بکشید تا برسید به <strong>اطلاعات تماس</strong></li>
+    <li>هر کدام را که لازم است عوض کنید و <strong>ذخیره</strong> کنید</li>
+  </ol>
+  <table>
+    <thead><tr><th>نام کادر</th><th>چطور بنویسید</th></tr></thead>
+    <tbody>
+      <tr><td>شماره تماس</td><td>مثلاً 09369088311</td></tr>
+      <tr><td>شماره واتساپ</td><td>با کد ایران و بدون صفر اول: 989369088311</td></tr>
+      <tr><td>آیدی اینستاگرام</td><td>بدون @ — مثلاً ghanad_bashi_asal5</td></tr>
+      <tr><td>محدوده فعالیت</td><td>اصفهان، بهارستان و حومه</td></tr>
+    </tbody>
+  </table>
+  <div class="note">اگر واتساپ را با صفر بنویسید، دکمه واتساپ سایت برای مشتری کار نمی‌کند.</div>
+
+  <h2>۹. عکس خوب چه ویژگی‌هایی دارد؟</h2>
+  <ul>
+    <li>در نور روز گرفته شده باشد</li>
+    <li>تقریباً مربع باشد</li>
+    <li>حجمش کمتر از ۴ مگابایت باشد</li>
+    <li>خود محصول در وسط باشد</li>
+    <li>متن جایگزین را همیشه بنویسید: همان چیزی که در عکس است</li>
+  </ul>
+
+  <h2>۱۰. اگر مشکلی پیش آمد</h2>
+  <ol>
+    <li>صفحه را ببندید و همان آدرس پنل را دوباره باز کنید</li>
+    <li>خروج بزنید و دوباره وارد شوید</li>
+    <li>اینترنت گوشی را یک‌بار خاموش و روشن کنید</li>
+    <li>از وای‌فای به اینترنت همراه بروید، یا برعکس</li>
+    <li>اگر عکس بالا نمی‌رود، حجمش را کم کنید و متن جایگزین را خالی نگذارید</li>
+  </ol>
+  <p>اگر بعد از این پنج کار هنوز گیر کردید، پیام بدهید و بگویید کدام صفحه بود و چه دکمه‌ای را زدید.</p>
+  <div class="note">
+    خودتان انجام بدهید: قیمت، موجود بودن، عکس جدید، درباره من، شماره تماس، دیدن سفارش.<br />
+    جداگانه حساب می‌شود: صفحه جدید، شکل تازه برای سایت، پرداخت آنلاین.
+  </div>
+  <footer>قناد باشی عسل — راهنمای مدیریت سایت</footer>
+</body>
+</html>

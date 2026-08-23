@@ -63,7 +63,7 @@ export const Media: CollectionConfig = {
       label: 'متن جایگزین',
       required: true,
       admin: {
-        description: 'توضیح کوتاه تصویر برای دسترس‌پذیری و سئو.',
+        description: 'همان چیزی که در عکس است را بنویسید. مثال: کیک شکلاتی با توت‌فرنگی',
       },
     },
   ],
