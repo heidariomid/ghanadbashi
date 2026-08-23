@@ -5,7 +5,8 @@ import { Resend } from 'resend'
 import { z } from 'zod'
 
 import { phoneHref } from '@/lib/contact'
-import { CART_MAX_LINES, CART_MAX_QUANTITY } from '@/lib/cart'
+import { CART_MAX_LINES, CART_MAX_QUANTITY, type CartItemKind } from '@/lib/cart'
+import { categoryLabel } from '@/lib/categories'
 import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
 import { getPayloadClient } from '@/lib/payload'
 import { resolveOrigin } from '@/lib/site-url'
@@ -21,7 +22,7 @@ const messages = {
   phone: 'شماره تماس معتبر نیست',
   product: 'لطفاً حداقل یک محصول را به سبد اضافه کنید',
   productOther: 'لطفاً نام محصول را بنویسید',
-  productUnavailable: 'یکی از محصولات سبد دیگر موجود نیست',
+  productUnavailable: 'یکی از اقلام سبد دیگر موجود نیست',
   quantity: 'تعداد باید بین ۱ تا ۱۰۰۰ باشد',
   date: 'تاریخ تحویل را انتخاب کنید',
   notes: 'توضیحات نباید بیشتر از ۱۰۰۰ حرف باشد',
@@ -36,6 +37,7 @@ export type SubmitOrderResult =
   | { success: false; error: string; fieldErrors?: Record<string, string> }
 
 const lineSchema = z.object({
+  kind: z.enum(['product', 'gallery']).default('product'),
   id: z.number().int().positive(),
   quantity: z.number().int().min(1).max(CART_MAX_QUANTITY),
 })
@@ -56,6 +58,7 @@ const orderFieldsSchema = z.object({
 })
 
 interface OrderLine {
+  kind: CartItemKind
   id: number
   quantity: number
 }
@@ -261,10 +264,13 @@ async function saveOrder(
 ): Promise<{ id: number; lines: string[] }> {
   const payload = await getPayloadClient()
   const lines: string[] = []
+  const productLines = data.items.filter((item) => item.kind === 'product')
+  const galleryLines = data.items.filter((item) => item.kind === 'gallery')
   const items: { product: number; quantity: number }[] = []
+  const galleryItems: { gallery: number; quantity: number }[] = []
 
-  if (data.items.length > 0) {
-    const ids = data.items.map((item) => item.id)
+  if (productLines.length > 0) {
+    const ids = productLines.map((item) => item.id)
     const { docs } = await payload.find({
       collection: 'products',
       where: {
@@ -279,13 +285,40 @@ async function saveOrder(
     }
 
     const byId = new Map(docs.map((doc) => [doc.id, doc]))
-    for (const item of data.items) {
+    for (const item of productLines) {
       const product = byId.get(item.id)
       if (!product) {
         throw new OrderFieldError({ items: messages.productUnavailable })
       }
       items.push({ product: product.id, quantity: item.quantity })
       lines.push(`${product.title} × ${faNumber(item.quantity)}`)
+    }
+  }
+
+  if (galleryLines.length > 0) {
+    const ids = galleryLines.map((item) => item.id)
+    const { docs } = await payload.find({
+      collection: 'gallery',
+      where: {
+        and: [{ id: { in: ids } }, { isAvailable: { equals: true } }],
+      },
+      limit: ids.length,
+      depth: 0,
+    })
+
+    if (docs.length !== ids.length) {
+      throw new OrderFieldError({ items: messages.productUnavailable })
+    }
+
+    const byId = new Map(docs.map((doc) => [doc.id, doc]))
+    for (const item of galleryLines) {
+      const photo = byId.get(item.id)
+      if (!photo) {
+        throw new OrderFieldError({ items: messages.productUnavailable })
+      }
+      galleryItems.push({ gallery: photo.id, quantity: item.quantity })
+      const title = photo.caption?.trim() || categoryLabel(photo.category)
+      lines.push(`نمونه کار: ${title} × ${faNumber(item.quantity)}`)
     }
   }
 
@@ -315,6 +348,7 @@ async function saveOrder(
       customerName: data.customerName,
       phone: data.phone,
       items,
+      galleryItems,
       productNote: data.otherSelected ? data.productNote : undefined,
       otherQuantity: data.otherSelected ? data.otherQuantity : undefined,
       deliveryDate: data.deliveryDate,

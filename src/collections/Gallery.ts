@@ -13,7 +13,7 @@ export const Gallery: CollectionConfig = {
     useAsTitle: 'caption',
     description:
       'عکس‌های نمونه کار که در بخش «نمونه کارها» سایت نمایش داده می‌شوند. برای حذف یک عکس از سایت، از همین لیست «حذف» بزنید — نه از دکمه حذف روی خود عکس.',
-    defaultColumns: ['image', 'caption', 'category', 'sortOrder'],
+    defaultColumns: ['image', 'caption', 'category', 'isAvailable', 'sortOrder'],
   },
   access: {
     create: isAdmin,
@@ -56,6 +56,15 @@ export const Gallery: CollectionConfig = {
       label: 'توضیح',
       admin: {
         description: 'اختیاری. زیر عکس نمایش داده می‌شود.',
+      },
+    },
+    {
+      name: 'isAvailable',
+      type: 'checkbox',
+      label: 'موجود است',
+      defaultValue: true,
+      admin: {
+        description: 'اگر تیک را بردارید، دکمه افزودن به سبد روی این نمونه کار نمایش داده نمی‌شود.',
       },
     },
     {

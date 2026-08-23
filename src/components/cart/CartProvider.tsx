@@ -32,8 +32,8 @@ interface CartContextValue {
   setOpen: (open: boolean) => void
   addItem: (product: CartProductInput, addBy?: number) => void
   ensureItem: (product: CartProductInput) => void
-  setQuantity: (id: number, quantity: number) => void
-  removeItem: (id: number) => void
+  setQuantity: (key: string, quantity: number) => void
+  removeItem: (key: string) => void
   clear: () => void
 }
 
@@ -92,15 +92,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   )
 
   const setQuantity = useCallback(
-    (id: number, quantity: number) => {
-      update((current) => setCartQuantity(current, id, quantity))
+    (key: string, quantity: number) => {
+      update((current) => setCartQuantity(current, key, quantity))
     },
     [update],
   )
 
   const removeItem = useCallback(
-    (id: number) => {
-      update((current) => current.filter((item) => item.id !== id))
+    (key: string) => {
+      update((current) => current.filter((item) => item.key !== key))
     },
     [update],
   )

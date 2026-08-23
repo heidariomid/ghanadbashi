@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { GalleryGrid, type GalleryPhoto } from '@/components/gallery/GalleryGrid'
+import { GalleryGrid } from '@/components/gallery/GalleryGrid'
 import { Container } from '@/components/layout/Container'
 import { SectionIntro } from '@/components/ui/SectionIntro'
 import { content } from '@/data/content'
 import { parseCategoryParam, sortByCategoryOrder } from '@/lib/categories'
-import { resolveImage } from '@/lib/media'
+import { galleryPhotoFrom, type GalleryPhoto } from '@/lib/gallery'
 import { queryPayload } from '@/lib/payload'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -36,16 +36,8 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
   const docs = result?.docs ?? []
 
   const photos = docs.reduce<GalleryPhoto[]>((all, doc) => {
-    const image = resolveImage(doc.image)
-    if (!image) return all
-
-    all.push({
-      id: String(doc.id),
-      category: doc.category,
-      caption: doc.caption ?? '',
-      src: image.src,
-      alt: image.alt || doc.caption || title,
-    })
+    const photo = galleryPhotoFrom(doc, title)
+    if (photo) all.push(photo)
     return all
   }, [])
 

@@ -3,20 +3,21 @@
 import { QuantityStepper } from '@/components/cart/QuantityStepper'
 import { useCart } from '@/components/cart/CartProvider'
 import { content } from '@/data/content'
-import { CART_MAX_QUANTITY, type CartProductInput } from '@/lib/cart'
+import { CART_MAX_QUANTITY, cartLineKey, type CartProductInput } from '@/lib/cart'
 
 export function AddToCartButton({ product }: { product: CartProductInput }) {
   const { items, addItem, setQuantity } = useCart()
   const copy = content.cart
-  const current = items.find((item) => item.id === product.id)
+  const key = cartLineKey(product.kind ?? 'product', product.id)
+  const current = items.find((item) => item.key === key)
 
   return (
     <div className="mt-3">
       {current ? (
         <QuantityStepper
           value={current.quantity}
-          onDecrease={() => setQuantity(product.id, current.quantity - 1)}
-          onIncrease={() => setQuantity(product.id, current.quantity + 1)}
+          onDecrease={() => setQuantity(key, current.quantity - 1)}
+          onIncrease={() => setQuantity(key, current.quantity + 1)}
           decreaseLabel={copy.decrement}
           increaseLabel={copy.increment}
           disableIncrease={current.quantity >= CART_MAX_QUANTITY}

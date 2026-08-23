@@ -69,13 +69,22 @@ export function CartDrawer() {
             <div className="py-16 text-center">
               <p className="text-body text-card-foreground">{copy.empty}</p>
               <p className="mt-2 text-small text-muted-foreground">{copy.emptyHint}</p>
-              <a
-                href="/products"
-                onClick={() => setOpen(false)}
-                className="mt-6 inline-flex min-h-11 items-center text-small text-primary-strong"
-              >
-                {copy.browse}
-              </a>
+              <div className="mt-6 flex flex-col items-center gap-2">
+                <a
+                  href="/products"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex min-h-11 items-center text-small text-primary-strong"
+                >
+                  {copy.browse}
+                </a>
+                <a
+                  href="/gallery"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex min-h-11 items-center text-small text-primary-strong"
+                >
+                  {copy.browseGallery}
+                </a>
+              </div>
             </div>
           ) : (
             <CartItems />

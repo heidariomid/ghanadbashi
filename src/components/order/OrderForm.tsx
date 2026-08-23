@@ -124,7 +124,9 @@ export function OrderForm({ preselected }: OrderFormProps) {
     setPreview(null)
   }
 
-  const itemsJson = JSON.stringify(items.map((item) => ({ id: item.id, quantity: item.quantity })))
+  const itemsJson = JSON.stringify(
+    items.map((item) => ({ kind: item.kind, id: item.id, quantity: item.quantity })),
+  )
 
   return (
     <div>
@@ -140,9 +142,14 @@ export function OrderForm({ preselected }: OrderFormProps) {
           <div className="mt-4 rounded-xl border border-border bg-background px-4 py-6 text-center">
             <p className="text-body text-card-foreground">{copy.emptyCart}</p>
             <p className="mt-2 text-small text-muted-foreground">{copy.emptyCartHint}</p>
-            <a href="/products" className="mt-4 inline-flex min-h-11 items-center text-small text-primary-strong">
-              {content.cart.browse}
-            </a>
+            <div className="mt-4 flex flex-col items-center gap-1">
+              <a href="/products" className="inline-flex min-h-11 items-center text-small text-primary-strong">
+                {content.cart.browse}
+              </a>
+              <a href="/gallery" className="inline-flex min-h-11 items-center text-small text-primary-strong">
+                {content.cart.browseGallery}
+              </a>
+            </div>
           </div>
         ) : (
           <CartItems />

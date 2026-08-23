@@ -261,6 +261,10 @@ export interface Gallery {
    */
   caption?: string | null;
   /**
+   * اگر تیک را بردارید، دکمه افزودن به سبد روی این نمونه کار نمایش داده نمی‌شود.
+   */
+  isAvailable?: boolean | null;
+  /**
    * عدد کوچک‌تر جلوتر نمایش داده می‌شود.
    */
   sortOrder?: number | null;
@@ -287,6 +291,16 @@ export interface Order {
   items?:
     | {
         product: number | Product;
+        quantity: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * نمونه کارهایی که مشتری از گالری به سبد اضافه کرده است، با تعداد هر کدام.
+   */
+  galleryItems?:
+    | {
+        gallery: number | Gallery;
         quantity: number;
         id?: string | null;
       }[]
@@ -452,6 +466,7 @@ export interface GallerySelect<T extends boolean = true> {
   image?: T;
   category?: T;
   caption?: T;
+  isAvailable?: T;
   sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -468,6 +483,13 @@ export interface OrdersSelect<T extends boolean = true> {
     | T
     | {
         product?: T;
+        quantity?: T;
+        id?: T;
+      };
+  galleryItems?:
+    | T
+    | {
+        gallery?: T;
         quantity?: T;
         id?: T;
       };

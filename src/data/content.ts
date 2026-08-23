@@ -82,6 +82,7 @@ export interface CartCopy {
   empty: string
   emptyHint: string
   browse: string
+  browseGallery: string
   checkout: string
   add: string
   remove: string
@@ -132,7 +133,7 @@ export interface SiteContent {
       unavailable: string
     }
   }
-  gallery: SectionIntro
+  gallery: SectionIntro & { unavailable: string }
   about: About
   orderCta: OrderCta
   orderForm: OrderFormCopy
@@ -201,6 +202,7 @@ export const content: SiteContent = {
     title: 'از آشپزخانه‌ی ما',
     description:
       'سفارش‌هایی که تا امروز آماده کرده‌ایم. برای دیدن هر دسته، از دکمه‌های بالای عکس‌ها استفاده کنید.',
+    unavailable: 'فعلاً موجود نیست',
   },
 
   about: {
@@ -248,7 +250,8 @@ export const content: SiteContent = {
     photoHint: 'فقط تصویر، حداکثر ۴ مگابایت',
     photoClear: 'حذف عکس',
     emptyCart: 'سبد شما خالی است',
-    emptyCartHint: 'از صفحه محصولات به سبد اضافه کنید، یا اگر در فهرست نیست در «سایر» بنویسید.',
+    emptyCartHint:
+      'از صفحه محصولات یا نمونه کارها به سبد اضافه کنید، یا اگر در فهرست نیست در «سایر» بنویسید.',
     reviewTitle: 'اقلام سبد',
     fields: {
       customerName: 'نام و نام خانوادگی',
@@ -263,8 +266,9 @@ export const content: SiteContent = {
   cart: {
     title: 'سبد سفارش',
     empty: 'سبد شما خالی است',
-    emptyHint: 'از صفحه محصولات به سبد اضافه کنید.',
+    emptyHint: 'از صفحه محصولات یا نمونه کارها به سبد اضافه کنید.',
     browse: 'مشاهده محصولات',
+    browseGallery: 'مشاهده نمونه کارها',
     checkout: 'ادامه سفارش',
     add: 'افزودن به سبد',
     remove: 'حذف',

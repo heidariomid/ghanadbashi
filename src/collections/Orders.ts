@@ -84,6 +84,31 @@ export const Orders: CollectionConfig = {
       ],
     },
     {
+      name: 'galleryItems',
+      type: 'array',
+      label: 'اقلام نمونه کار',
+      admin: {
+        description: 'نمونه کارهایی که مشتری از گالری به سبد اضافه کرده است، با تعداد هر کدام.',
+        readOnly: true,
+      },
+      fields: [
+        {
+          name: 'gallery',
+          type: 'relationship',
+          relationTo: 'gallery',
+          label: 'نمونه کار',
+          required: true,
+        },
+        {
+          name: 'quantity',
+          type: 'number',
+          label: 'تعداد',
+          required: true,
+          min: 1,
+        },
+      ],
+    },
+    {
       name: 'productNote',
       type: 'text',
       label: 'محصول (متن آزاد)',

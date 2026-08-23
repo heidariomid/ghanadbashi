@@ -12,7 +12,7 @@ export function CartItems() {
   return (
     <ul className="divide-y divide-border">
       {items.map((item) => (
-        <li key={item.id} className="flex gap-4 py-4">
+        <li key={item.key} className="flex gap-4 py-4">
           <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted">
             {item.imageSrc ? (
               // CMS / blob URLs; next/image needs a configured host per deploy
@@ -28,15 +28,15 @@ export function CartItems() {
             <p className="text-small font-semibold text-card-foreground">{item.title}</p>
             <QuantityStepper
               value={item.quantity}
-              onDecrease={() => setQuantity(item.id, item.quantity - 1)}
-              onIncrease={() => setQuantity(item.id, item.quantity + 1)}
+              onDecrease={() => setQuantity(item.key, item.quantity - 1)}
+              onIncrease={() => setQuantity(item.key, item.quantity + 1)}
               decreaseLabel={copy.decrement}
               increaseLabel={copy.increment}
               disableIncrease={item.quantity >= CART_MAX_QUANTITY}
             />
             <button
               type="button"
-              onClick={() => removeItem(item.id)}
+              onClick={() => removeItem(item.key)}
               className="min-h-11 text-caption text-muted-foreground underline-offset-4 hover:text-primary-strong hover:underline"
             >
               {copy.remove}

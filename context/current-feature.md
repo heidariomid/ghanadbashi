@@ -44,8 +44,8 @@ Not Started
 - Phase 6 — Gallery: add the gallery page. Scope cut from the spec's three
   routes to `/gallery` alone — the homepage and footer already carry the about
   and contact details, so `/about` and `/contact` would have been a third copy.
-  Nav «نمونه کارها» now points at the route; the `gallery` collection reuses the
-  existing revalidation hook. After-review caught `priority` sitting in the
+  Nav «نمونه کارها» now points at the route; the `gallery` collection reuses
+  the existing revalidation hook. After-review caught `priority` sitting in the
   shared `GalleryGrid`, which made `/` preload a below-the-fold photo alongside
   the hero; it is now behind a `priorityFirst` prop that only `/gallery` sets.
 - Phase 7 — Launch: SEO, sharing previews and the accessibility pass. The site
@@ -95,7 +95,7 @@ Not Started
   cookies to diet cookies) and added one price-on-request product per empty
   category, left off the homepage «محصولات منتخب» row on purpose. A category
   with no gallery photo now falls back to its product image, which keeps the
-  borrowed stand-ins for «ارده، عسل و کره بادام‌زمینی» and «معجون رژیمی و
+  borrowed stand-ins for «ارده، عسل و کره بادام‌زمینی» و «معجون رژیمی و
   ورزشکاری» out of her public portfolio; both carry a `borrowedPhoto` note in
   the seed manifest so `rg borrowedPhoto` finds every product still waiting on
   a real photo.
@@ -109,3 +109,9 @@ Not Started
   Homepage category tiles with portfolio photos linked to `#gallery`, which
   always opened «همه». They now go to `/gallery?category=` so the matching
   chip is selected; a category with no photos still goes to `/products`.
+- feat: allow adding all available products and gallery items to the cart.
+  Homepage «محصولات منتخب» was the only surface that felt orderable. Available
+  products on `/products` already had the button; نمونه کارها now do too, with
+  the same «موجود است» toggle. Cart lines carry a kind so product and gallery
+  ids cannot collide, and orders keep a new `galleryItems` array so old rows
+  stay intact.

@@ -2,16 +2,12 @@
 
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { categoryLabel } from '@/lib/categories'
+import { AddToCartButton } from '@/components/cart/AddToCartButton'
 import { CloseIcon } from '@/components/ui/icons'
-
-export interface GalleryPhoto {
-  id: string
-  category: string
-  caption: string
-  src: string
-  alt: string
-}
+import { content } from '@/data/content'
+import { cartGalleryFrom } from '@/lib/cart'
+import { categoryLabel } from '@/lib/categories'
+import type { GalleryPhoto } from '@/lib/gallery'
 
 interface GalleryGridProps {
   photos: GalleryPhoto[]
@@ -148,7 +144,7 @@ export function GalleryGrid({
 
       <ul className="mt-8 grid grid-cols-2 gap-4 sm:mt-11 sm:gap-5 lg:grid-cols-3 lg:gap-8">
         {visible.map((photo, index) => (
-          <li key={photo.id}>
+          <li key={photo.id} className="flex flex-col">
             <button
               type="button"
               onClick={() => setOpenIndex(index)}
@@ -163,13 +159,21 @@ export function GalleryGrid({
                   preload={priorityFirst && index === 0}
                   fetchPriority={priorityFirst && index === 0 ? 'high' : undefined}
                   sizes="(max-width: 640px) 45vw, (max-width: 1024px) 45vw, 30vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={`object-cover transition-transform duration-500 group-hover:scale-105 ${
+                    photo.available ? '' : 'grayscale'
+                  }`}
                 />
+                {photo.available ? null : (
+                  <span className="absolute inset-s-2 top-2 rounded-full bg-card/95 px-2.5 py-1 text-caption text-muted-foreground shadow-warm sm:inset-s-3 sm:top-3 sm:px-3 sm:py-1.5">
+                    {content.gallery.unavailable}
+                  </span>
+                )}
               </div>
-              {photo.caption && (
-                <p className="mt-3 text-caption text-muted-foreground">{photo.caption}</p>
-              )}
             </button>
+            {photo.caption ? (
+              <p className="mt-3 text-caption text-muted-foreground">{photo.caption}</p>
+            ) : null}
+            {photo.available ? <AddToCartButton product={cartGalleryFrom(photo)} /> : null}
           </li>
         ))}
       </ul>
