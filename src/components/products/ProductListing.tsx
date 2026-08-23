@@ -3,7 +3,7 @@ import { Container } from '@/components/layout/Container'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Photo } from '@/components/ui/Photo'
 import { content } from '@/data/content'
-import { categoryLabel } from '@/lib/categories'
+import { categorySlugOf, type CategoryChip } from '@/lib/categories'
 import { cartProductFrom } from '@/lib/cart'
 import { faPrice } from '@/lib/format'
 import { resolveImage } from '@/lib/media'
@@ -11,7 +11,7 @@ import type { Product } from '@/payload-types'
 
 interface ProductListingProps {
   products: Product[]
-  categories: string[]
+  categories: CategoryChip[]
   /** Active filter from `?category=`. `undefined` means «همه». */
   category: string | undefined
 }
@@ -20,7 +20,9 @@ export function ProductListing({ products, categories, category }: ProductListin
   const { listing } = content.products
   const showAll = category === undefined
   const ready = products.filter((product) => resolveImage(product.image))
-  const visible = showAll ? ready : ready.filter((product) => product.category === category)
+  const visible = showAll
+    ? ready
+    : ready.filter((product) => categorySlugOf(product.category) === category)
 
   return (
     <section className="bg-card py-section">
@@ -38,12 +40,12 @@ export function ProductListing({ products, categories, category }: ProductListin
         {categories.length > 0 ? (
           <nav aria-label="فیلتر دسته‌بندی" className="mt-8 flex flex-wrap justify-center gap-2 sm:mt-10 sm:gap-3">
             <Chip href="/products" label={listing.all} active={showAll} />
-            {categories.map((value) => (
+            {categories.map((chip) => (
               <Chip
-                key={value}
-                href={`/products?category=${value}`}
-                label={categoryLabel(value)}
-                active={category === value}
+                key={chip.slug}
+                href={`/products?category=${chip.slug}`}
+                label={chip.title}
+                active={category === chip.slug}
               />
             ))}
           </nav>

@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
-import { categoryOptions } from '@/lib/categories'
 import { revalidatePublicSite } from '@/lib/revalidate'
 
 export const Gallery: CollectionConfig = {
@@ -40,14 +39,14 @@ export const Gallery: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'categories',
       label: 'دسته‌بندی',
       required: true,
       index: true,
-      options: categoryOptions,
       admin: {
         description:
-          'دکمه‌های فیلتر بالای گالری از روی همین دسته‌بندی ساخته می‌شوند. دسته‌ای که عکسی نداشته باشد در سایت نمایش داده نمی‌شود.',
+          'دکمه‌های فیلتر بالای گالری از روی همین دسته‌بندی ساخته می‌شوند. دسته‌ای که عکسی نداشته باشد در سایت نمایش داده نمی‌شود. برای افزودن دسته جدید به «دسته‌بندی‌ها» بروید.',
       },
     },
     {

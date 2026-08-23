@@ -1,4 +1,4 @@
-import { categoryLabel } from '@/lib/categories'
+import { resolveCategory } from '@/lib/categories'
 import { resolveImage } from '@/lib/media'
 
 export interface GalleryPhoto {
@@ -14,7 +14,9 @@ export interface GalleryPhoto {
 export function galleryPhotoFrom(
   doc: {
     id: number
-    category: string
+    category:
+      | number
+      | { id: number; slug?: string | null; title: string; emoji?: string | null }
     caption?: string | null
     isAvailable?: boolean | null
     image: Parameters<typeof resolveImage>[0]
@@ -22,13 +24,14 @@ export function galleryPhotoFrom(
   fallbackAlt: string,
 ): GalleryPhoto | null {
   const image = resolveImage(doc.image)
-  if (!image) return null
+  const category = resolveCategory(doc.category)
+  if (!image || !category) return null
 
   return {
     id: doc.id,
-    category: doc.category,
+    category: category.slug,
     caption: doc.caption ?? '',
-    title: doc.caption?.trim() || categoryLabel(doc.category),
+    title: doc.caption?.trim() || category.title,
     src: image.src,
     alt: image.alt || doc.caption || fallbackAlt,
     available: doc.isAvailable !== false,

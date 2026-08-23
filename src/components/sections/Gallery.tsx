@@ -3,20 +3,24 @@ import { Container } from '@/components/layout/Container'
 import { SectionIntro } from '@/components/ui/SectionIntro'
 import { content } from '@/data/content'
 import { sortByCategoryOrder } from '@/lib/categories'
+import { queryCategories } from '@/lib/query-categories'
 import { galleryPhotoFrom, type GalleryPhoto } from '@/lib/gallery'
 import { queryPayload } from '@/lib/payload'
 
 export async function Gallery() {
   const { eyebrow, title, description } = content.gallery
 
-  const result = await queryPayload((payload) =>
-    payload.find({
-      collection: 'gallery',
-      limit: 200,
-      sort: 'sortOrder',
-      depth: 1,
-    }),
-  )
+  const [chips, result] = await Promise.all([
+    queryCategories(),
+    queryPayload((payload) =>
+      payload.find({
+        collection: 'gallery',
+        limit: 200,
+        sort: 'sortOrder',
+        depth: 1,
+      }),
+    ),
+  ])
   const docs = result?.docs ?? []
 
   const photos = docs.reduce<GalleryPhoto[]>((all, doc) => {
@@ -29,7 +33,13 @@ export async function Gallery() {
 
   // Chips come from what is published, so an empty category never renders one
   // and a newly filled one appears without a code change.
-  const categories = sortByCategoryOrder([...new Set(photos.map((photo) => photo.category))])
+  const published = sortByCategoryOrder(
+    [...new Set(photos.map((photo) => photo.category))],
+    chips.map((chip) => chip.slug),
+  )
+  const categories = published
+    .map((slug) => chips.find((chip) => chip.slug === slug))
+    .filter((chip): chip is NonNullable<typeof chip> => Boolean(chip))
 
   return (
     <section id="gallery" className="py-section">

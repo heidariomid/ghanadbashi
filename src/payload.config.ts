@@ -8,6 +8,7 @@ import { fa } from '@payloadcms/translations/languages/fa'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import type { CollectionConfig, GlobalConfig, Plugin } from 'payload'
+import { Categories } from './collections/Categories'
 import { Gallery } from './collections/Gallery'
 import { Media } from './collections/Media'
 import { Orders } from './collections/Orders'
@@ -28,7 +29,7 @@ const localEnv = path.resolve(dirname, '../.env.local')
 if (!process.env.BLOB_READ_WRITE_TOKEN && existsSync(localEnv)) {
   process.loadEnvFile(localEnv)
 }
-const collections: CollectionConfig[] = [Products, Gallery, Orders, Media, Users]
+const collections: CollectionConfig[] = [Categories, Products, Gallery, Orders, Media, Users]
 const globals: GlobalConfig[] = [SiteSettings]
 
 // Vercel's filesystem is read-only, so uploads must go to Blob in production.

@@ -67,6 +67,7 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    categories: Category;
     products: Product;
     gallery: Gallery;
     orders: Order;
@@ -79,6 +80,7 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
@@ -126,6 +128,30 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * دسته‌هایی که در محصولات، گالری و صفحه اصلی دیده می‌شوند. برای حذف یک دسته، اول محصولات و نمونه کارهای آن را به دسته دیگری ببرید.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  /**
+   * خودکار از روی نام ساخته می‌شود. لینک فیلتر سایت از روی همین مقدار است.
+   */
+  slug?: string | null;
+  /**
+   * اگر این دسته هنوز عکسی نداشته باشد، همین ایموجی روی کارت صفحه اصلی دیده می‌شود.
+   */
+  emoji?: string | null;
+  /**
+   * عدد کوچک‌تر جلوتر نمایش داده می‌شود.
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * محصولاتی که در سایت نمایش داده می‌شوند.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -138,17 +164,10 @@ export interface Product {
    * خودکار از روی نام محصول ساخته می‌شود. اگر لازم بود می‌توانید تغییرش دهید.
    */
   slug?: string | null;
-  category:
-    | 'birthday-cakes'
-    | 'cafe-cakes'
-    | 'cookies'
-    | 'dry-pastries'
-    | 'desserts'
-    | 'healthy'
-    | 'diet-cookies'
-    | 'spreads'
-    | 'gift-packs'
-    | 'sport-drinks';
+  /**
+   * برای افزودن یا تغییر نام یک دسته، از منوی «دسته‌بندی‌ها» استفاده کنید.
+   */
+  category: number | Category;
   /**
    * یک عکس واضح از خود محصول. بدون عکس، محصول در سایت جذاب دیده نمی‌شود.
    */
@@ -243,19 +262,9 @@ export interface Gallery {
    */
   image: number | Media;
   /**
-   * دکمه‌های فیلتر بالای گالری از روی همین دسته‌بندی ساخته می‌شوند. دسته‌ای که عکسی نداشته باشد در سایت نمایش داده نمی‌شود.
+   * دکمه‌های فیلتر بالای گالری از روی همین دسته‌بندی ساخته می‌شوند. دسته‌ای که عکسی نداشته باشد در سایت نمایش داده نمی‌شود. برای افزودن دسته جدید به «دسته‌بندی‌ها» بروید.
    */
-  category:
-    | 'birthday-cakes'
-    | 'cafe-cakes'
-    | 'cookies'
-    | 'dry-pastries'
-    | 'desserts'
-    | 'healthy'
-    | 'diet-cookies'
-    | 'spreads'
-    | 'gift-packs'
-    | 'sport-drinks';
+  category: number | Category;
   /**
    * اختیاری. زیر عکس نمایش داده می‌شود.
    */
@@ -379,6 +388,10 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
         relationTo: 'products';
         value: number | Product;
       } | null)
@@ -439,6 +452,18 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  emoji?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

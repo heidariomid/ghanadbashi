@@ -1,60 +1,66 @@
 /**
- * The one list of product categories. Both `products` and `gallery` build their
- * `select` options from this, so the client never sees two lists that disagree.
+ * Starting rows written by the migration and by `pnpm seed`. After that the
+ * baker owns the list in `/admin` — this array is not what the site reads.
  */
+export const SEED_CATEGORIES = [
+  { slug: 'birthday-cakes', emoji: '🎂', title: 'کیک تولد و مناسبتی' },
+  { slug: 'cafe-cakes', emoji: '🍰', title: 'کیک‌های کافه‌ای و عصرانه' },
+  { slug: 'cookies', emoji: '🍪', title: 'کوکی' },
+  { slug: 'dry-pastries', emoji: '🧁', title: 'شیرینی خشک' },
+  { slug: 'desserts', emoji: '🍮', title: 'دسرها' },
+  { slug: 'healthy', emoji: '🌿', title: 'محصولات سلامت‌محور و رژیمی' },
+  { slug: 'diet-cookies', emoji: '🥗', title: 'شیرینی و کیک‌های رژیمی و کوکی' },
+  { slug: 'spreads', emoji: '🥜', title: 'ارده، عسل و کره بادام‌زمینی' },
+  { slug: 'gift-packs', emoji: '🎁', title: 'پک‌های هدیه' },
+  { slug: 'sport-drinks', emoji: '🥤', title: 'معجون رژیمی و ورزشکاری' },
+] as const
 
-export interface Category {
-  value: string
+export type CategoryValue = (typeof SEED_CATEGORIES)[number]['slug']
+
+export interface CategoryChip {
+  slug: string
+  title: string
   emoji: string
-  label: string
 }
 
-export const CATEGORIES = [
-  { value: 'birthday-cakes', emoji: '🎂', label: 'کیک تولد و مناسبتی' },
-  { value: 'cafe-cakes', emoji: '🍰', label: 'کیک‌های کافه‌ای و عصرانه' },
-  { value: 'cookies', emoji: '🍪', label: 'کوکی' },
-  { value: 'dry-pastries', emoji: '🧁', label: 'شیرینی خشک' },
-  { value: 'desserts', emoji: '🍮', label: 'دسرها' },
-  { value: 'healthy', emoji: '🌿', label: 'محصولات سلامت‌محور و رژیمی' },
-  { value: 'diet-cookies', emoji: '🥗', label: 'شیرینی و کیک‌های رژیمی و کوکی' },
-  { value: 'spreads', emoji: '🥜', label: 'ارده، عسل و کره بادام‌زمینی' },
-  { value: 'gift-packs', emoji: '🎁', label: 'پک‌های هدیه' },
-  { value: 'sport-drinks', emoji: '🥤', label: 'معجون رژیمی و ورزشکاری' },
-] as const satisfies readonly Category[]
-
-export type CategoryValue = (typeof CATEGORIES)[number]['value']
-
-/** Emoji make the admin's long select list scannable at a glance. */
-export const categoryOptions = CATEGORIES.map(({ value, emoji, label }) => ({
-  value,
-  label: `${emoji} ${label}`,
-}))
-
-const byValue = new Map<string, Category>(CATEGORIES.map((c) => [c.value, c]))
-
-/** Falls back to the raw value so a category retired from this list still renders. */
-export function categoryLabel(value: string): string {
-  return byValue.get(value)?.label ?? value
+export function resolveCategory(
+  value:
+    | number
+    | { id: number; slug?: string | null; title: string; emoji?: string | null }
+    | null
+    | undefined,
+): CategoryChip | null {
+  if (!value || typeof value === 'number') return null
+  return {
+    slug: value.slug || String(value.id),
+    title: value.title,
+    emoji: value.emoji || '',
+  }
 }
 
-export function findCategory(value: string): Category | undefined {
-  return byValue.get(value)
+export function categorySlugOf(
+  value: number | { id: number; slug?: string | null } | null | undefined,
+): string | undefined {
+  if (!value || typeof value === 'number') return undefined
+  return value.slug || String(value.id)
 }
 
-/** Reads `?category=` from a page's searchParams. Unknown values become «همه». */
+/** Reads `?category=`. Unknown or missing values become «همه». */
 export function parseCategoryParam(
   raw: string | string[] | undefined,
-): CategoryValue | undefined {
+  slugs: string[],
+): string | undefined {
   const value = Array.isArray(raw) ? raw[0] : raw
   if (!value) return undefined
-  return CATEGORIES.find((category) => category.value === value)?.value
+  return slugs.includes(value) ? value : undefined
 }
 
-/**
- * Orders arbitrary category values by their position above, so filter chips
- * always appear in the same order regardless of what the query returned.
- */
-export function sortByCategoryOrder(values: string[]): string[] {
-  const order: string[] = CATEGORIES.map((c) => c.value)
-  return [...values].sort((a, b) => order.indexOf(a) - order.indexOf(b))
+/** Orders chip slugs by the CMS sort, unknown values last. */
+export function sortByCategoryOrder(values: string[], order: string[]): string[] {
+  return [...values].sort((a, b) => {
+    const ai = order.indexOf(a)
+    const bi = order.indexOf(b)
+    return (ai === -1 ? order.length : ai) - (bi === -1 ? order.length : bi)
+  })
 }
+

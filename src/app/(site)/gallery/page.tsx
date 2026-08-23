@@ -4,6 +4,7 @@ import { Container } from '@/components/layout/Container'
 import { SectionIntro } from '@/components/ui/SectionIntro'
 import { content } from '@/data/content'
 import { parseCategoryParam, sortByCategoryOrder } from '@/lib/categories'
+import { queryCategories } from '@/lib/query-categories'
 import { galleryPhotoFrom, type GalleryPhoto } from '@/lib/gallery'
 import { queryPayload } from '@/lib/payload'
 import { buildPageMetadata } from '@/lib/seo'
@@ -22,16 +23,22 @@ interface GalleryPageProps {
 
 export default async function GalleryPage({ searchParams }: GalleryPageProps) {
   const params = await searchParams
-  const category = parseCategoryParam(params.category)
   const { eyebrow, title, description } = content.gallery
 
-  const result = await queryPayload((payload) =>
-    payload.find({
-      collection: 'gallery',
-      limit: 200,
-      sort: 'sortOrder',
-      depth: 1,
-    }),
+  const [chips, result] = await Promise.all([
+    queryCategories(),
+    queryPayload((payload) =>
+      payload.find({
+        collection: 'gallery',
+        limit: 200,
+        sort: 'sortOrder',
+        depth: 1,
+      }),
+    ),
+  ])
+  const category = parseCategoryParam(
+    params.category,
+    chips.map((chip) => chip.slug),
   )
   const docs = result?.docs ?? []
 
@@ -41,7 +48,13 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
     return all
   }, [])
 
-  const categories = sortByCategoryOrder([...new Set(photos.map((photo) => photo.category))])
+  const published = sortByCategoryOrder(
+    [...new Set(photos.map((photo) => photo.category))],
+    chips.map((chip) => chip.slug),
+  )
+  const categories = published
+    .map((slug) => chips.find((chip) => chip.slug === slug))
+    .filter((chip): chip is NonNullable<typeof chip> => Boolean(chip))
 
   return (
     <main>

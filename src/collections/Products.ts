@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
-import { categoryOptions } from '@/lib/categories'
 import { revalidatePublicSite } from '@/lib/revalidate'
 import { slugify } from '@/lib/slug'
 
@@ -55,11 +54,14 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'categories',
       label: 'دسته‌بندی',
       required: true,
       index: true,
-      options: categoryOptions,
+      admin: {
+        description: 'برای افزودن یا تغییر نام یک دسته، از منوی «دسته‌بندی‌ها» استفاده کنید.',
+      },
     },
     {
       name: 'image',

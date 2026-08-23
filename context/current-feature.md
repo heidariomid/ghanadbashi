@@ -115,3 +115,7 @@ Not Started
   the same «موجود است» toggle. Cart lines carry a kind so product and gallery
   ids cannot collide, and orders keep a new `galleryItems` array so old rows
   stay intact.
+- feat: let the baker add, edit and delete categories in admin.
+  The ten baked-in selects became a `categories` collection so she can add
+  more, rename, or remove them. Existing slugs stay so filter URLs do not
+  break; a category still used by a product or نمونه کار cannot be deleted.

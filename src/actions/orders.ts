@@ -6,7 +6,7 @@ import { z } from 'zod'
 
 import { phoneHref } from '@/lib/contact'
 import { CART_MAX_LINES, CART_MAX_QUANTITY, type CartItemKind } from '@/lib/cart'
-import { categoryLabel } from '@/lib/categories'
+import { resolveCategory } from '@/lib/categories'
 import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
 import { getPayloadClient } from '@/lib/payload'
 import { resolveOrigin } from '@/lib/site-url'
@@ -303,7 +303,7 @@ async function saveOrder(
         and: [{ id: { in: ids } }, { isAvailable: { equals: true } }],
       },
       limit: ids.length,
-      depth: 0,
+      depth: 1,
     })
 
     if (docs.length !== ids.length) {
@@ -317,7 +317,7 @@ async function saveOrder(
         throw new OrderFieldError({ items: messages.productUnavailable })
       }
       galleryItems.push({ gallery: photo.id, quantity: item.quantity })
-      const title = photo.caption?.trim() || categoryLabel(photo.category)
+      const title = photo.caption?.trim() || resolveCategory(photo.category)?.title || 'نمونه کار'
       lines.push(`نمونه کار: ${title} × ${faNumber(item.quantity)}`)
     }
   }

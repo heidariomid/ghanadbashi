@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { ProductListing } from '@/components/products/ProductListing'
 import { content } from '@/data/content'
-import { CATEGORIES } from '@/lib/categories'
+import { parseCategoryParam } from '@/lib/categories'
+import { queryCategories } from '@/lib/query-categories'
 import { queryPayload } from '@/lib/payload'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -17,8 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const params = await searchParams
-  const raw = params.category
-  const category = Array.isArray(raw) ? raw[0] : raw
+  const categories = await queryCategories()
+  const category = parseCategoryParam(
+    params.category,
+    categories.map((chip) => chip.slug),
+  )
 
   const result = await queryPayload((payload) =>
     payload.find({
@@ -29,8 +33,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     }),
   )
   const docs = result?.docs ?? []
-
-  const categories = CATEGORIES.map((category) => category.value)
 
   return (
     <main>

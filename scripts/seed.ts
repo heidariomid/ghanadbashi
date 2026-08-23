@@ -13,6 +13,7 @@ import path from 'node:path'
 import { getPayload } from 'payload'
 import type { Payload, RequiredDataFromCollectionSlug } from 'payload'
 import config from '@payload-config'
+import { SEED_CATEGORIES } from '@/lib/categories'
 import {
   ABOUT_PHOTO,
   HERO_PHOTO,
@@ -73,6 +74,27 @@ async function main() {
   }
 
   const payload = await getPayload({ config })
+  const categoryIds = new Map<string, number>()
+
+  for (const [index, category] of SEED_CATEGORIES.entries()) {
+    const existing = await payload.find({
+      collection: 'categories',
+      where: { slug: { equals: category.slug } },
+      limit: 1,
+    })
+    const data = {
+      title: category.title,
+      slug: category.slug,
+      emoji: category.emoji,
+      sortOrder: index,
+    }
+    const doc = existing.docs[0]
+      ? await payload.update({ collection: 'categories', id: existing.docs[0].id, data })
+      : await payload.create({ collection: 'categories', data })
+    categoryIds.set(category.slug, doc.id)
+  }
+  payload.logger.info(`categories: ${SEED_CATEGORIES.length}`)
+
   const mediaIds = new Map<string, number>()
 
   for (const photo of SEED_PHOTOS) {
@@ -85,7 +107,7 @@ async function main() {
   for (const [index, photo] of SEED_PHOTOS.entries()) {
     const data = {
       image: mediaIds.get(photo.file)!,
-      category: photo.category,
+      category: categoryIds.get(photo.category)!,
       caption: photo.title,
       sortOrder: index,
     }
@@ -110,7 +132,7 @@ async function main() {
   for (const [index, photo] of featured.entries()) {
     await upsertProduct(payload, {
       title: photo.title,
-      category: photo.category,
+      category: categoryIds.get(photo.category)!,
       image: mediaIds.get(photo.file)!,
       priceOnRequest: true,
       isAvailable: true,
@@ -125,7 +147,7 @@ async function main() {
   for (const [index, product] of SEED_PRODUCTS.entries()) {
     await upsertProduct(payload, {
       title: product.title,
-      category: product.category,
+      category: categoryIds.get(product.category)!,
       image: mediaIds.get(product.photo)!,
       description: product.description,
       priceOnRequest: true,

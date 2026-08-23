@@ -6,13 +6,13 @@ import { AddToCartButton } from '@/components/cart/AddToCartButton'
 import { CloseIcon } from '@/components/ui/icons'
 import { content } from '@/data/content'
 import { cartGalleryFrom } from '@/lib/cart'
-import { categoryLabel } from '@/lib/categories'
+import type { CategoryChip } from '@/lib/categories'
 import type { GalleryPhoto } from '@/lib/gallery'
 
 interface GalleryGridProps {
   photos: GalleryPhoto[]
   /** Only categories that actually have photos, already in display order. */
-  categories: string[]
+  categories: CategoryChip[]
   /**
    * Preload the first photo. Only true where the grid starts near the top of
    * the page; on the homepage it sits far below the hero, which owns the
@@ -27,8 +27,8 @@ interface GalleryGridProps {
 
 const ALL = 'all'
 
-function resolveActive(category: string | undefined, categories: string[]): string {
-  if (category && categories.includes(category)) return category
+function resolveActive(category: string | undefined, categories: CategoryChip[]): string {
+  if (category && categories.some((chip) => chip.slug === category)) return category
   return ALL
 }
 
@@ -103,9 +103,11 @@ export function GalleryGrid({
           aria-label="فیلتر دسته‌بندی"
           className="mt-8 flex flex-wrap justify-center gap-2 sm:mt-10 sm:gap-3"
         >
-          {[ALL, ...categories].map((value) => {
-            const isActive = value === active
-            const label = value === ALL ? 'همه' : categoryLabel(value)
+          {[
+            { slug: ALL, title: 'همه' },
+            ...categories,
+          ].map((chip) => {
+            const isActive = chip.slug === active
             const className = `min-h-11 rounded-full border px-4 text-small transition-colors duration-200 sm:px-5 ${
               isActive
                 ? 'border-primary bg-primary text-primary-foreground'
@@ -113,29 +115,29 @@ export function GalleryGrid({
             }`
 
             if (filterBasePath) {
-              const href = value === ALL ? filterBasePath : `${filterBasePath}?category=${value}`
+              const href = chip.slug === ALL ? filterBasePath : `${filterBasePath}?category=${chip.slug}`
               return (
                 <a
-                  key={value}
+                  key={chip.slug}
                   href={href}
                   aria-current={isActive ? 'page' : undefined}
                   className={`inline-flex items-center ${className}`}
                 >
-                  {label}
+                  {chip.title}
                 </a>
               )
             }
 
             return (
               <button
-                key={value}
+                key={chip.slug}
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setLocalActive(value)}
+                onClick={() => setLocalActive(chip.slug)}
                 className={className}
               >
-                {label}
+                {chip.title}
               </button>
             )
           })}
