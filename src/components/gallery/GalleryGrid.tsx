@@ -23,13 +23,30 @@ interface GalleryGridProps {
    * preload slot.
    */
   priorityFirst?: boolean
+  /** Active filter from `?category=`. `undefined` means «همه». */
+  category?: string
+  /** When set, chips are links on this path instead of local-state buttons. */
+  filterBasePath?: string
 }
 
 const ALL = 'all'
 
-export function GalleryGrid({ photos, categories, priorityFirst = false }: GalleryGridProps) {
-  const [active, setActive] = useState<string>(ALL)
+function resolveActive(category: string | undefined, categories: string[]): string {
+  if (category && categories.includes(category)) return category
+  return ALL
+}
+
+export function GalleryGrid({
+  photos,
+  categories,
+  priorityFirst = false,
+  category,
+  filterBasePath,
+}: GalleryGridProps) {
+  const urlActive = resolveActive(category, categories)
+  const [localActive, setLocalActive] = useState<string>(ALL)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const active = filterBasePath ? urlActive : localActive
 
   const visible = useMemo(
     () => (active === ALL ? photos : photos.filter((photo) => photo.category === active)),
@@ -85,31 +102,48 @@ export function GalleryGrid({ photos, categories, priorityFirst = false }: Galle
   return (
     <>
       {categories.length > 1 && (
-        <div
-          role="tablist"
+        <nav
+          role={filterBasePath ? undefined : 'tablist'}
           aria-label="فیلتر دسته‌بندی"
           className="mt-8 flex flex-wrap justify-center gap-2 sm:mt-10 sm:gap-3"
         >
-          {[ALL, ...categories].map((category) => {
-            const isActive = category === active
+          {[ALL, ...categories].map((value) => {
+            const isActive = value === active
+            const label = value === ALL ? 'همه' : categoryLabel(value)
+            const className = `min-h-11 rounded-full border px-4 text-small transition-colors duration-200 sm:px-5 ${
+              isActive
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border text-muted-foreground hover:border-input hover:text-card-foreground'
+            }`
+
+            if (filterBasePath) {
+              const href = value === ALL ? filterBasePath : `${filterBasePath}?category=${value}`
+              return (
+                <a
+                  key={value}
+                  href={href}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`inline-flex items-center ${className}`}
+                >
+                  {label}
+                </a>
+              )
+            }
+
             return (
               <button
-                key={category}
+                key={value}
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setActive(category)}
-                className={`min-h-11 rounded-full border px-4 text-small transition-colors duration-200 sm:px-5 ${
-                  isActive
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border text-muted-foreground hover:border-input hover:text-card-foreground'
-                }`}
+                onClick={() => setLocalActive(value)}
+                className={className}
               >
-                {category === ALL ? 'همه' : categoryLabel(category)}
+                {label}
               </button>
             )
           })}
-        </div>
+        </nav>
       )}
 
       <ul className="mt-8 grid grid-cols-2 gap-4 sm:mt-11 sm:gap-5 lg:grid-cols-3 lg:gap-8">

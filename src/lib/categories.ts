@@ -41,6 +41,15 @@ export function findCategory(value: string): Category | undefined {
   return byValue.get(value)
 }
 
+/** Reads `?category=` from a page's searchParams. Unknown values become «همه». */
+export function parseCategoryParam(
+  raw: string | string[] | undefined,
+): CategoryValue | undefined {
+  const value = Array.isArray(raw) ? raw[0] : raw
+  if (!value) return undefined
+  return CATEGORIES.find((category) => category.value === value)?.value
+}
+
 /**
  * Orders arbitrary category values by their position above, so filter chips
  * always appear in the same order regardless of what the query returned.

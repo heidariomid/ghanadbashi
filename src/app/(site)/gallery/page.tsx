@@ -3,7 +3,7 @@ import { GalleryGrid, type GalleryPhoto } from '@/components/gallery/GalleryGrid
 import { Container } from '@/components/layout/Container'
 import { SectionIntro } from '@/components/ui/SectionIntro'
 import { content } from '@/data/content'
-import { sortByCategoryOrder } from '@/lib/categories'
+import { parseCategoryParam, sortByCategoryOrder } from '@/lib/categories'
 import { resolveImage } from '@/lib/media'
 import { queryPayload } from '@/lib/payload'
 import { buildPageMetadata } from '@/lib/seo'
@@ -16,7 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({ title: eyebrow, description, path: '/gallery' })
 }
 
-export default async function GalleryPage() {
+interface GalleryPageProps {
+  searchParams: Promise<{ category?: string | string[] }>
+}
+
+export default async function GalleryPage({ searchParams }: GalleryPageProps) {
+  const params = await searchParams
+  const category = parseCategoryParam(params.category)
   const { eyebrow, title, description } = content.gallery
 
   const result = await queryPayload((payload) =>
@@ -51,7 +57,13 @@ export default async function GalleryPage() {
         <Container>
           <SectionIntro eyebrow={eyebrow} title={title} description={description} />
           {photos.length > 0 ? (
-            <GalleryGrid photos={photos} categories={categories} priorityFirst />
+            <GalleryGrid
+              photos={photos}
+              categories={categories}
+              category={category}
+              filterBasePath="/gallery"
+              priorityFirst
+            />
           ) : (
             <p className="mt-8 text-center text-body text-muted-foreground sm:mt-11">
               به زودی عکس‌های بیشتری اضافه می‌شود

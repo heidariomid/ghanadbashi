@@ -62,7 +62,9 @@ export async function Categories() {
           {CATEGORIES.map((category) => {
             const cover = covers.get(category.value)
             const image = cover ?? productCovers.get(category.value)
-            const href = cover ? '#gallery' : `/products?category=${category.value}`
+            const href = cover
+              ? `/gallery?category=${category.value}`
+              : `/products?category=${category.value}`
 
             return (
               <li key={category.value}>

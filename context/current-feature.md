@@ -1,18 +1,20 @@
 # Current Feature
 
+Filter gallery from product category tiles
+
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
-
-Not Started
+In Progress
 
 ## Goals
 
-<!-- What success looks like, as bullets -->
+- Clicking a product category tile that has portfolio photos (e.g. کوکی) opens نمونه کارها already filtered to that category
+- The matching filter chip is selected; switching chips still works
+- A category with no portfolio photos still goes to the products list, not an empty gallery
 
 ## Notes
 
-<!-- Context, constraints or details from the spec -->
+Homepage category tiles currently link to `#gallery`. The homepage (and `/gallery`) grid always starts on «همه», so the destination never matches the tile. Products already use `?category=`; the gallery page should do the same.
 
 ## History
 
