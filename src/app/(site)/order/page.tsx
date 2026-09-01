@@ -8,6 +8,9 @@ import { resolveImage } from '@/lib/media'
 import { queryPayload } from '@/lib/payload'
 import { buildPageMetadata } from '@/lib/seo'
 
+/** Lets the SMS.ir calls finish after the 8s abort we saw in production. */
+export const maxDuration = 60
+
 interface OrderPageProps {
   searchParams: Promise<{ product?: string | string[] }>
 }

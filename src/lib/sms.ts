@@ -2,7 +2,7 @@ import { toLatinDigits } from '@/lib/format'
 
 const VERIFY_URL = 'https://api.sms.ir/v1/send/verify'
 const PARAM_MAX = 25
-const REQUEST_TIMEOUT_MS = 8_000
+const REQUEST_TIMEOUT_MS = 20_000
 
 /** SMS.ir sandbox accepts only this id and a `Code` parameter. */
 const SMSIR_SANDBOX_TEMPLATE_ID = 123456

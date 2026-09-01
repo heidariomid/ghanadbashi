@@ -12,6 +12,9 @@ import { getPayloadClient } from '@/lib/payload'
 import { resolveOrigin } from '@/lib/site-url'
 import { parametersForTemplate, parseTemplateId, sendSms } from '@/lib/sms'
 
+/** SMS.ir from Vercel to Iran often exceeds the default 10s function cap. */
+export const maxDuration = 60
+
 const OTHER_PRODUCT_VALUE = '__other__'
 const MAX_SAMPLE_IMAGE_BYTES = 4 * 1024 * 1024
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
