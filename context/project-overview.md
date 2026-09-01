@@ -221,7 +221,7 @@ Deliberately excluded to keep the project small. Possible later, at cost:
 
 - Online payment / checkout
 - User accounts for customers
-- Customer order-tracking page (Phase 8 notifies by email/SMS only)
+- Customer order-tracking page (Phase 8 / 10 notify by email / SMS only)
 - Multi-language (English)
 - Blog or recipes
 - Inventory management
@@ -258,9 +258,25 @@ Ordered and independently implementable — see @context/features/:
    already carry both — **done**
 7. @context/features/phase-7-launch-spec.md — launch: SEO, sharing previews,
    sitemap, performance, production checks
-8. @context/features/phase-8-order-status-notify-spec.md — new order emails +
-   SMS her; status change emails + SMS the customer (OTP on the form first).
+8. @context/features/phase-8-order-status-email-spec.md — ایمیل field, email
+   OTP, customer mail on وضعیت change. Phase 5 already emails her on submit.
    **Deprioritised** — the team agreed there is no Phase 8 before launch
 9. @context/features/phase-9-client-guide-spec.md — the Persian client guide,
    screenshots, PDF and handoff. Split out of Phase 7 so it runs **last**,
    after the admin UI work, and the screenshots match what she sees
+10. SMS.ir `send/verify` (never `/v1/send/bulk`), split into three after
+    pre-review so the smallest, safest piece can ship on its own. Independent
+    of Phase 8 email. Switched from Kavenegar for the sandbox and a free پنل
+    پایه that holds exactly the two templates 10a needs. Parameters are named
+    (`#ORDER#`, `#NAME#`) and capped at 25 characters
+    - @context/features/phase-10a-new-order-sms-spec.md — the wrapper, plus an
+      SMS to her **and** to the customer the moment an order saves. Her alert
+      number moves into تنظیمات سایت with field-level read access, so it stays
+      off the public API
+    - @context/features/phase-10b-order-status-sms-spec.md — customer SMS on
+      وضعیت change, and a read-only «آخرین پیامک به مشتری» note so she can see
+      a failure. Needs پنل برنزی (three more templates)
+    - @context/features/phase-10c-phone-verification-spec.md — code on the
+      phone before the order saves. Runs last and only if 10b shows wrong
+      numbers are a real problem; codes and spend caps live in Postgres, never
+      in memory

@@ -13,8 +13,9 @@ match what she actually sees.
 **This is the phase that determines whether the project was profitable.** It is
 also the easiest to skip when the build feels finished — don't.
 
-Numbered 9 to avoid colliding with the existing (and deprioritised)
-`phase-8-order-status-notify-spec.md`.
+Numbered 9 to avoid colliding with the deprioritised email and SMS
+notify specs (`phase-8-order-status-email-spec.md`, and the `phase-10a` /
+`phase-10b` / `phase-10c` SMS specs).
 
 ## Requirements
 

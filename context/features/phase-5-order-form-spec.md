@@ -171,8 +171,11 @@ Extend the Phase 4 hooks:
   islands. `/order` stays a server page around the checkout form.
 - Digit normalisation is Persian/Arabic → Latin for input. Display still uses
   `toLocaleString('fa-IR')` / `faNumber`
-- Admin SMS on submit, and customer email/SMS on وضعیت change, are Phase 8.
-  See @context/features/phase-8-order-status-notify-spec.md
+- Customer email on وضعیت change is Phase 8.
+  See @context/features/phase-8-order-status-email-spec.md
+- SMS to her and to the customer on submit is Phase 10a; customer SMS on
+  وضعیت change is Phase 10b.
+  See @context/features/phase-10a-new-order-sms-spec.md
 
 ## References
 
