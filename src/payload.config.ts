@@ -33,17 +33,19 @@ const collections: CollectionConfig[] = [Categories, Products, Gallery, Orders, 
 const globals: GlobalConfig[] = [SiteSettings]
 
 // Vercel's filesystem is read-only, so uploads must go to Blob in production.
-// Locally the token is absent and Payload falls back to `staticDir`, which
-// keeps `pnpm dev` working without anyone provisioning a store first.
+// `vercel env pull` writes the token into `.env.local`, which would turn Blob
+// on for `pnpm dev` too — then `/api/media/file/…` only looks on Blob and
+// 404s every photo that only exists in local `media/` or `seed/images`.
 const blobToken = process.env.BLOB_READ_WRITE_TOKEN
-const plugins: Plugin[] = blobToken
-  ? [
-      vercelBlobStorage({
-        collections: { [Media.slug]: true },
-        token: blobToken,
-      }),
-    ]
-  : []
+const plugins: Plugin[] =
+  blobToken && process.env.VERCEL
+    ? [
+        vercelBlobStorage({
+          collections: { [Media.slug]: true },
+          token: blobToken,
+        }),
+      ]
+    : []
 
 const secret = process.env.PAYLOAD_SECRET
 

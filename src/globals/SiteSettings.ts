@@ -137,6 +137,17 @@ export const SiteSettings: GlobalConfig = {
             description: 'مثال: اصفهان، بهارستان و حومه',
           },
         },
+        {
+          name: 'orderNotificationPhone',
+          type: 'text',
+          label: 'شماره برای اطلاع سفارش جدید',
+          access: {
+            read: ({ req }) => Boolean(req.user),
+          },
+          admin: {
+            description: 'فقط برای خبر دادن سفارش تازه. در سایت نمایش داده نمی‌شود.',
+          },
+        },
       ],
     },
   ],

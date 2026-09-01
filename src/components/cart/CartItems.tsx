@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 import { QuantityStepper } from '@/components/cart/QuantityStepper'
 import { useCart } from '@/components/cart/CartProvider'
 import { content } from '@/data/content'
@@ -15,12 +17,12 @@ export function CartItems() {
         <li key={item.key} className="flex gap-4 py-4">
           <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted">
             {item.imageSrc ? (
-              // CMS / blob URLs; next/image needs a configured host per deploy
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={item.imageSrc}
                 alt={item.imageAlt || item.title}
-                className="size-full object-cover"
+                fill
+                sizes="80px"
+                className="object-cover"
               />
             ) : null}
           </div>

@@ -10,6 +10,7 @@ import { resolveCategory } from '@/lib/categories'
 import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
 import { getPayloadClient } from '@/lib/payload'
 import { resolveOrigin } from '@/lib/site-url'
+import { parametersForTemplate, parseTemplateId, sendSms } from '@/lib/sms'
 
 const OTHER_PRODUCT_VALUE = '__other__'
 const MAX_SAMPLE_IMAGE_BYTES = 4 * 1024 * 1024
@@ -244,9 +245,14 @@ export async function submitOrder(formData: FormData): Promise<SubmitOrderResult
   try {
     const sampleBuffer = sampleImage ? Buffer.from(await sampleImage.arrayBuffer()) : null
     const saved = await saveOrder(fields.data, sampleImage, sampleBuffer)
-    await notifyBaker(fields.data, saved, sampleImage, sampleBuffer).catch((error: unknown) => {
-      console.error('Order notification email failed', error)
-    })
+    await Promise.all([
+      notifyBaker(fields.data, saved, sampleImage, sampleBuffer).catch((error: unknown) => {
+        console.error('Order notification email failed', error)
+      }),
+      notifyOrderSms(fields.data, saved).catch((error: unknown) => {
+        console.error('Order notification SMS failed', error)
+      }),
+    ])
     return { success: true }
   } catch (error) {
     if (error instanceof OrderFieldError) {
@@ -393,6 +399,56 @@ async function notifyBaker(
         ? [{ filename: sampleImage.name || 'sample.jpg', content: sampleBuffer }]
         : undefined,
   })
+}
+
+async function notifyOrderSms(
+  data: OrderFields,
+  saved: { id: number; lines: string[] },
+): Promise<void> {
+  const order = String(saved.id)
+  const bakerTemplate = parseTemplateId(process.env.SMSIR_TEMPLATE_NEW_ORDER)
+  const customerTemplate = parseTemplateId(process.env.SMSIR_TEMPLATE_ORDER_RECEIVED)
+  const bakerPhone = await resolveBakerNotificationPhone()
+
+  await Promise.all([
+    sendSms({
+      mobile: bakerPhone,
+      templateId: bakerTemplate,
+      parameters: bakerTemplate
+        ? parametersForTemplate(bakerTemplate, {
+            ORDER: order,
+            NAME: data.customerName,
+            COUNT: String(saved.lines.length),
+          })
+        : {},
+    }),
+    sendSms({
+      mobile: data.phone,
+      templateId: customerTemplate,
+      parameters: customerTemplate
+        ? parametersForTemplate(customerTemplate, {
+            ORDER: order,
+            NAME: data.customerName,
+          })
+        : {},
+    }),
+  ])
+}
+
+async function resolveBakerNotificationPhone(): Promise<string | null> {
+  try {
+    const payload = await getPayloadClient()
+    const settings = await payload.findGlobal({
+      slug: 'site-settings',
+      depth: 0,
+      overrideAccess: true,
+    })
+    const fromCms = normalizePhone(settings.contact?.orderNotificationPhone ?? '')
+    if (fromCms) return fromCms
+  } catch (error) {
+    console.error('Could not read orderNotificationPhone', error)
+  }
+  return normalizePhone(process.env.ORDER_NOTIFICATION_PHONE ?? '')
 }
 
 function orderAdminUrl(orderId: number): string | null {

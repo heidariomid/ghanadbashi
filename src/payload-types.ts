@@ -710,6 +710,10 @@ export interface SiteSetting {
      * مثال: اصفهان، بهارستان و حومه
      */
     serviceArea?: string | null;
+    /**
+     * فقط برای خبر دادن سفارش تازه. در سایت نمایش داده نمی‌شود.
+     */
+    orderNotificationPhone?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -742,6 +746,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         whatsapp?: T;
         instagram?: T;
         serviceArea?: T;
+        orderNotificationPhone?: T;
       };
   updatedAt?: T;
   createdAt?: T;
