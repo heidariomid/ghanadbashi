@@ -20,8 +20,8 @@ export const Orders: CollectionConfig = {
     description: 'سفارش‌هایی که مشتری‌ها از طریق فرم سایت ثبت کرده‌اند.',
     defaultColumns: ['orderNumber', 'customerName', 'phone', 'deliveryDate', 'status'],
     listSearchableFields: ['orderNumber', 'customerName', 'phone'],
-    disableBulkEdit: true,
   },
+  disableBulkEdit: true,
   hooks: {
     beforeOperation: [expandOrderSearch],
     afterChange: [notifyStatusSms],
