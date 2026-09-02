@@ -1,6 +1,5 @@
 'use server'
 
-import { headers } from 'next/headers'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
@@ -10,13 +9,21 @@ import { resolveCategory } from '@/lib/categories'
 import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
 import { formatOrderNumber, publicOrderNumber } from '@/lib/order-number'
 import { getPayloadClient } from '@/lib/payload'
+import {
+  checkOrderOtp,
+  clientIp,
+  consumeOrderOtp,
+  isOtpRequired,
+  isSubmitRateLimited,
+  normalizeOtp,
+  normalizePhone,
+  otpMessages,
+} from '@/lib/phone-verification'
 import { resolveOrigin } from '@/lib/site-url'
 import { parametersForTemplate, parseTemplateId, sendSms } from '@/lib/sms'
 
 const OTHER_PRODUCT_VALUE = '__other__'
 const MAX_SAMPLE_IMAGE_BYTES = 4 * 1024 * 1024
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
-const RATE_LIMIT_MAX = 5
 
 const messages = {
   name: 'نام باید حداقل ۲ حرف باشد',
@@ -30,7 +37,7 @@ const messages = {
   notes: 'توضیحات نباید بیشتر از ۱۰۰۰ حرف باشد',
   imageType: 'فقط فایل تصویری مجاز است',
   imageSize: 'حجم عکس نباید بیشتر از ۴ مگابایت باشد',
-  rateLimit: 'تعداد درخواست‌ها بیش از حد است. کمی بعد دوباره تلاش کنید.',
+  rateLimit: otpMessages.rateLimit,
   generic: 'ثبت سفارش ممکن نشد. لطفاً دوباره تلاش کنید.',
 }
 
@@ -85,30 +92,6 @@ class OrderFieldError extends Error {
   }
 }
 
-const recentHits = new Map<string, number[]>()
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const recent = (recentHits.get(ip) ?? []).filter((at) => now - at < RATE_LIMIT_WINDOW_MS)
-  if (recent.length >= RATE_LIMIT_MAX) {
-    recentHits.set(ip, recent)
-    return true
-  }
-  recent.push(now)
-  recentHits.set(ip, recent)
-  return false
-}
-
-async function clientIp(): Promise<string> {
-  const headerList = await headers()
-  const forwarded = headerList.get('x-forwarded-for')
-  if (forwarded) {
-    const first = forwarded.split(',')[0]?.trim()
-    if (first) return first
-  }
-  return headerList.get('x-real-ip') ?? 'unknown'
-}
-
 function readString(formData: FormData, key: string): string {
   const value = formData.get(key)
   return typeof value === 'string' ? value : ''
@@ -133,11 +116,6 @@ function firstFieldError(error: z.ZodError): Record<string, string> {
     }
   }
   return fieldErrors
-}
-
-function normalizePhone(raw: string): string | null {
-  const phone = toLatinDigits(raw).replace(/[\s-]/g, '')
-  return /^09\d{9}$/.test(phone) ? phone : null
 }
 
 function normalizeQuantity(raw: string): number | null {
@@ -218,13 +196,20 @@ export async function submitOrder(formData: FormData): Promise<SubmitOrderResult
     return { success: true }
   }
 
-  if (isRateLimited(await clientIp())) {
+  if (await isSubmitRateLimited(await clientIp())) {
     return { success: false, error: messages.rateLimit }
   }
 
   const fields = validateFields(formData)
   if (!fields.ok) {
     return { success: false, error: messages.generic, fieldErrors: fields.fieldErrors }
+  }
+
+  const otp = isOtpRequired()
+    ? await checkOrderOtp(fields.data.phone, normalizeOtp(readString(formData, 'otpCode')))
+    : { ok: true as const, id: null }
+  if (!otp.ok) {
+    return { success: false, error: otp.error, fieldErrors: { otpCode: otp.error } }
   }
 
   const sampleImage = readSampleFile(formData)
@@ -246,6 +231,11 @@ export async function submitOrder(formData: FormData): Promise<SubmitOrderResult
   try {
     const sampleBuffer = sampleImage ? Buffer.from(await sampleImage.arrayBuffer()) : null
     const saved = await saveOrder(fields.data, sampleImage, sampleBuffer)
+    if (otp.id != null) {
+      await consumeOrderOtp(otp.id).catch((error: unknown) => {
+        console.error('Could not consume OTP after order save', error)
+      })
+    }
     await Promise.all([
       notifyBaker(fields.data, saved, sampleImage, sampleBuffer).catch((error: unknown) => {
         console.error('Order notification email failed', error)

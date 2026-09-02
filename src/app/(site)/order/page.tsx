@@ -6,6 +6,7 @@ import { content } from '@/data/content'
 import { cartProductFrom } from '@/lib/cart'
 import { resolveImage } from '@/lib/media'
 import { queryPayload } from '@/lib/payload'
+import { isOtpRequired } from '@/lib/phone-verification'
 import { buildPageMetadata } from '@/lib/seo'
 
 /** Lets the SMS.ir calls finish after the 8s abort we saw in production. */
@@ -38,7 +39,7 @@ export default async function OrderPage({ searchParams }: OrderPageProps) {
       <section className="flex flex-1 flex-col justify-center bg-card py-section">
         <Container>
           <div className="mx-auto max-w-xl">
-            <OrderForm preselected={preselected} />
+            <OrderForm preselected={preselected} otpRequired={isOtpRequired()} />
           </div>
         </Container>
       </section>

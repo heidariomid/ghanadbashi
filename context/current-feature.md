@@ -132,3 +132,7 @@
   Changing وضعیت to تأیید شده، تحویل شده، or لغو شده sends a Verify SMS
   and writes the result on a read-only «آخرین پیامک به مشتری» sidebar. A
   failed send never blocks the save. Templates live on her SMS.ir account.
+- feat: add SMS.ir phone OTP on the order form, off by default.
+  Codes live in a hidden collection with spend caps so a public send
+  button cannot burn her credit. The form stays as it is until
+  OTP_REQUIRED=1. Success is a short green card.

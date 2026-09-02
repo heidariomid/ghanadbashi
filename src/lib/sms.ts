@@ -65,7 +65,7 @@ export function parametersForTemplate(
   parameters: Record<string, string>,
 ): Record<string, string> {
   if (templateId === SMSIR_SANDBOX_TEMPLATE_ID) {
-    return { Code: parameters.ORDER ?? parameters.NAME ?? '1' }
+    return { Code: parameters.CODE ?? parameters.ORDER ?? parameters.NAME ?? '1' }
   }
   return parameters
 }

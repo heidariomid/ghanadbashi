@@ -53,6 +53,7 @@ export interface OrderFormCopy {
   eyebrow: string
   title: string
   description: string
+  otpDescription: string
   metaTitle: string
   metaDescription: string
   submit: string
@@ -68,9 +69,14 @@ export interface OrderFormCopy {
   emptyCart: string
   emptyCartHint: string
   reviewTitle: string
+  sendCode: string
+  sendCodeWait: string
+  sendingCode: string
+  codeSent: string
   fields: {
     customerName: string
     phone: string
+    otpCode: string
     quantity: string
     deliveryDate: string
     notes: string
@@ -239,13 +245,15 @@ export const content: SiteContent = {
     title: 'سبد را نهایی کنید',
     description:
       'اقلام سبد را بازبینی کنید، بعد نام، شماره تماس و تاریخ تحویل را بنویسید. اگر عکسی از نمونه دارید، همان‌جا پیوست کنید.',
+    otpDescription:
+      'اقلام سبد را بازبینی کنید، بعد نام، شماره تماس و تاریخ تحویل را بنویسید. برای ثبت، یک کد به شماره شما پیامک می‌شود.',
     metaTitle: 'ثبت سفارش',
     metaDescription:
       'سفارش کیک و شیرینی خانگی — سبد را بازبینی کنید و نام، تاریخ تحویل و توضیحات را بنویسید.',
     submit: 'ثبت سفارش',
     submitting: 'در حال ارسال...',
     loading: 'در حال بارگذاری سبد…',
-    success: 'سفارش شما ثبت شد. به زودی با شما تماس می‌گیریم.',
+    success: 'سفارش شما ثبت شد.',
     error: 'ثبت سفارش ممکن نشد. لطفاً دوباره تلاش کنید.',
     otherProduct: 'سایر / مورد دیگر',
     otherProductLabel: 'نام محصول',
@@ -256,9 +264,14 @@ export const content: SiteContent = {
     emptyCartHint:
       'از صفحه محصولات یا نمونه کارها به سبد اضافه کنید، یا اگر در فهرست نیست در «سایر» بنویسید.',
     reviewTitle: 'اقلام سبد',
+    sendCode: 'ارسال کد',
+    sendCodeWait: 'دوباره ({seconds})',
+    sendingCode: 'در حال ارسال کد...',
+    codeSent: 'کد تأیید به این شماره پیامک شد.',
     fields: {
       customerName: 'نام و نام خانوادگی',
       phone: 'شماره تماس',
+      otpCode: 'کد تأیید',
       quantity: 'تعداد',
       deliveryDate: 'تاریخ تحویل',
       notes: 'توضیحات',

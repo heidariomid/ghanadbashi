@@ -71,6 +71,7 @@ export interface Config {
     products: Product;
     gallery: Gallery;
     orders: Order;
+    'phone-verifications': PhoneVerification;
     media: Media;
     users: User;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
+    'phone-verifications': PhoneVerificationsSelect<false> | PhoneVerificationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -345,6 +347,21 @@ export interface Order {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "phone-verifications".
+ */
+export interface PhoneVerification {
+  id: number;
+  phone: string;
+  codeHash: string;
+  expiresAt: string;
+  attempts: number;
+  consumedAt?: string | null;
+  ip: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * کاربران واردشونده به پنل مدیریت سایت.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -415,6 +432,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'orders';
         value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'phone-verifications';
+        value: number | PhoneVerification;
       } | null)
     | ({
         relationTo: 'media';
@@ -545,6 +566,20 @@ export interface OrdersSelect<T extends boolean = true> {
   deliveryDate?: T;
   notes?: T;
   sampleImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "phone-verifications_select".
+ */
+export interface PhoneVerificationsSelect<T extends boolean = true> {
+  phone?: T;
+  codeHash?: T;
+  expiresAt?: T;
+  attempts?: T;
+  consumedAt?: T;
+  ip?: T;
   updatedAt?: T;
   createdAt?: T;
 }

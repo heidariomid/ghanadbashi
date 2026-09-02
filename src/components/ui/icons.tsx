@@ -50,6 +50,14 @@ export function MoonIcon({ className }: IconProps) {
   )
 }
 
+export function CheckIcon({ className }: IconProps) {
+  return (
+    <svg {...shared} className={className}>
+      <path d="M5 12.5 10 17.5 19 7" />
+    </svg>
+  )
+}
+
 export function BagIcon({ className }: IconProps) {
   return (
     <svg {...shared} className={className}>

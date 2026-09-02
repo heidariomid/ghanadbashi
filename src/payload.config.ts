@@ -12,6 +12,7 @@ import { Categories } from './collections/Categories'
 import { Gallery } from './collections/Gallery'
 import { Media } from './collections/Media'
 import { Orders } from './collections/Orders'
+import { PhoneVerifications } from './collections/PhoneVerifications'
 import { Products } from './collections/Products'
 import { Users } from './collections/Users'
 import { SiteSettings } from './globals/SiteSettings'
@@ -29,7 +30,15 @@ const localEnv = path.resolve(dirname, '../.env.local')
 if (!process.env.BLOB_READ_WRITE_TOKEN && existsSync(localEnv)) {
   process.loadEnvFile(localEnv)
 }
-const collections: CollectionConfig[] = [Categories, Products, Gallery, Orders, Media, Users]
+const collections: CollectionConfig[] = [
+  Categories,
+  Products,
+  Gallery,
+  Orders,
+  PhoneVerifications,
+  Media,
+  Users,
+]
 const globals: GlobalConfig[] = [SiteSettings]
 
 // Vercel's filesystem is read-only, so uploads must go to Blob in production.

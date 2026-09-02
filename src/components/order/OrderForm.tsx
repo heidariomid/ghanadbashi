@@ -7,14 +7,18 @@ import persian from 'react-date-object/calendars/persian'
 import persian_fa from 'react-date-object/locales/persian_fa'
 
 import { submitOrder } from '@/actions/orders'
+import { sendOrderOtp } from '@/actions/phone-verification'
 import { CartItems } from '@/components/cart/CartItems'
 import { useCart } from '@/components/cart/CartProvider'
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { CheckIcon } from '@/components/ui/icons'
 import { content } from '@/data/content'
 import type { CartProductInput } from '@/lib/cart'
+import { faNumber } from '@/lib/format'
 
 interface OrderFormProps {
   preselected: CartProductInput | null
+  otpRequired?: boolean
 }
 
 const OTHER_PRODUCT_VALUE = '__other__'
@@ -24,7 +28,7 @@ const TARGET_SAMPLE_IMAGE_BYTES = 1.5 * 1024 * 1024
 const inputClass =
   'min-h-11 w-full rounded-lg border border-input bg-background px-4 text-body text-card-foreground transition-colors duration-200 focus:border-primary'
 
-export function OrderForm({ preselected }: OrderFormProps) {
+export function OrderForm({ preselected, otpRequired = false }: OrderFormProps) {
   const copy = content.orderForm
   const formId = useId()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -38,6 +42,11 @@ export function OrderForm({ preselected }: OrderFormProps) {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [phone, setPhone] = useState('')
+  const [otpCode, setOtpCode] = useState('')
+  const [codeSent, setCodeSent] = useState(false)
+  const [sendingCode, setSendingCode] = useState(false)
+  const [cooldown, setCooldown] = useState(0)
 
   useEffect(() => {
     if (!ready || !preselected || seeded.current) return
@@ -51,15 +60,16 @@ export function OrderForm({ preselected }: OrderFormProps) {
     }
   }, [preview])
 
+  useEffect(() => {
+    if (cooldown <= 0) return
+    const timer = window.setInterval(() => {
+      setCooldown((current) => (current <= 1 ? 0 : current - 1))
+    }, 1000)
+    return () => window.clearInterval(timer)
+  }, [cooldown])
+
   if (success) {
-    return (
-      <p className="py-16 text-center text-h2 font-semibold text-card-foreground text-balance md:py-24">
-        <span aria-hidden="true" className="mb-4 block text-4xl">
-          ✅
-        </span>
-        {copy.success}
-      </p>
-    )
+    return <OrderSuccess message={copy.success} />
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -106,6 +116,53 @@ export function OrderForm({ preselected }: OrderFormProps) {
     }
   }
 
+  function clearVerification() {
+    setCodeSent(false)
+    setOtpCode('')
+    setCooldown(0)
+    setFieldErrors((current) => {
+      if (!current.otpCode && !current.phone) return current
+      const next = { ...current }
+      delete next.otpCode
+      delete next.phone
+      return next
+    })
+  }
+
+  function onPhoneChange(value: string) {
+    setPhone(value)
+    if (codeSent || otpCode) clearVerification()
+  }
+
+  async function onSendCode(form: HTMLFormElement) {
+    setSendingCode(true)
+    setError(null)
+    setFieldErrors((current) => {
+      if (!current.otpCode && !current.phone) return current
+      const next = { ...current }
+      delete next.otpCode
+      delete next.phone
+      return next
+    })
+
+    try {
+      const formData = new FormData(form)
+      const result = await sendOrderOtp(formData)
+      if (result.success) {
+        setCodeSent(true)
+        setCooldown(result.cooldownSeconds)
+        return
+      }
+
+      setError(result.error)
+      if (result.retryAfterSeconds) setCooldown(result.retryAfterSeconds)
+    } catch {
+      setError(copy.error)
+    } finally {
+      setSendingCode(false)
+    }
+  }
+
   function onFileChange() {
     const file = fileRef.current?.files?.[0]
     if (preview) URL.revokeObjectURL(preview)
@@ -134,7 +191,9 @@ export function OrderForm({ preselected }: OrderFormProps) {
       <h1 className="mt-5.5 text-h1 font-black text-card-foreground text-balance">
         {copy.title}
       </h1>
-      <p className="mt-5.5 text-body text-muted-foreground">{copy.description}</p>
+      <p className="mt-5.5 text-body text-muted-foreground">
+        {otpRequired ? copy.otpDescription : copy.description}
+      </p>
 
       <section className="mt-10">
         <h2 className="text-small font-semibold text-card-foreground">{copy.reviewTitle}</h2>
@@ -203,17 +262,76 @@ export function OrderForm({ preselected }: OrderFormProps) {
         </Field>
 
         <Field id={`${formId}-phone`} label={copy.fields.phone} error={fieldErrors.phone} required>
-          <input
-            id={`${formId}-phone`}
-            name="phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            required
-            className={inputClass}
-            dir="ltr"
-          />
+          {otpRequired ? (
+            <div className="flex gap-2">
+              <input
+                id={`${formId}-phone`}
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+                value={phone}
+                onChange={(event) => onPhoneChange(event.target.value)}
+                className={`${inputClass} min-w-0 flex-1`}
+                dir="ltr"
+              />
+              <button
+                type="button"
+                disabled={sendingCode || cooldown > 0 || pending}
+                onClick={(event) => {
+                  const form = event.currentTarget.form
+                  if (form) void onSendCode(form)
+                }}
+                className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-input bg-card px-4 text-small font-semibold text-card-foreground transition-colors duration-200 hover:border-primary hover:text-primary-strong disabled:opacity-70"
+              >
+                {sendingCode
+                  ? copy.sendingCode
+                  : cooldown > 0
+                    ? copy.sendCodeWait.replace('{seconds}', faNumber(cooldown))
+                    : copy.sendCode}
+              </button>
+            </div>
+          ) : (
+            <input
+              id={`${formId}-phone`}
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              className={inputClass}
+              dir="ltr"
+            />
+          )}
         </Field>
+
+        {otpRequired && codeSent ? (
+          <Field
+            id={`${formId}-otp`}
+            label={copy.fields.otpCode}
+            error={fieldErrors.otpCode}
+            required
+          >
+            <input
+              id={`${formId}-otp`}
+              name="otpCode"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              dir="ltr"
+              maxLength={6}
+              required
+              value={otpCode}
+              onChange={(event) => setOtpCode(event.target.value)}
+              className={inputClass}
+              aria-describedby={codeSent ? `${formId}-otp-hint` : undefined}
+            />
+            <p id={`${formId}-otp-hint`} className="text-caption text-muted-foreground">
+              {copy.codeSent}
+            </p>
+          </Field>
+        ) : null}
 
         <label className="flex min-h-11 cursor-pointer items-center gap-3 text-body text-card-foreground">
           <input
@@ -332,7 +450,7 @@ export function OrderForm({ preselected }: OrderFormProps) {
 
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || (otpRequired && !otpCode.trim())}
           className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-primary px-8 text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95 disabled:translate-y-0 disabled:opacity-70 disabled:shadow-none"
         >
           {pending ? (
@@ -345,6 +463,25 @@ export function OrderForm({ preselected }: OrderFormProps) {
           )}
         </button>
       </form>
+    </div>
+  )
+}
+
+function OrderSuccess({ message }: { message: string }) {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex justify-center px-4 py-16 md:py-24"
+    >
+      <div className="w-fit max-w-full rounded-3xl border border-white/80 bg-white/60 px-8 py-8 text-center shadow-warm backdrop-blur-xl dark:border-white/10 dark:bg-white/8">
+        <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-success text-success-foreground">
+          <CheckIcon className="size-7" />
+        </div>
+        <p className="mt-4 text-h2 font-semibold tracking-tight text-card-foreground text-balance">
+          {message}
+        </p>
+      </div>
     </div>
   )
 }

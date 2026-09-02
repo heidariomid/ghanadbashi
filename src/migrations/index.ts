@@ -4,6 +4,7 @@ import * as migration_20260823_093136_gallery_cart from './20260823_093136_galle
 import * as migration_20260823_095000_cms_categories from './20260823_095000_cms_categories';
 import * as migration_20260901_204610_order_notification_phone from './20260901_204610_order_notification_phone';
 import * as migration_20260902_093253_last_customer_sms from './20260902_093253_last_customer_sms';
+import * as migration_20260902_181206_phone_verifications from './20260902_181206_phone_verifications';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260902_093253_last_customer_sms.up,
     down: migration_20260902_093253_last_customer_sms.down,
-    name: '20260902_093253_last_customer_sms'
+    name: '20260902_093253_last_customer_sms',
+  },
+  {
+    up: migration_20260902_181206_phone_verifications.up,
+    down: migration_20260902_181206_phone_verifications.down,
+    name: '20260902_181206_phone_verifications'
   },
 ];

@@ -41,6 +41,9 @@
   --color-border: #e8dfcf;
   --color-input: #94876f;
   --color-blob-pink: #f6d2cb;
+  /* Confirmations only — not a brand color. White on this clears AA. */
+  --color-success: #1f8a4c;
+  --color-success-foreground: #ffffff;
 
   --font-sans:
     var(--font-vazirmatn-arabic), var(--font-vazirmatn-latin), 'Vazirmatn', system-ui,
@@ -208,6 +211,8 @@ html.dark {
   --color-border: #3a3a3c;
   --color-input: #6b6b70;
   --color-blob-pink: #3a2725;
+  --color-success: #30d158;
+  --color-success-foreground: #003d1a;
   --shadow-warm: 0 10px 30px -18px rgba(0, 0, 0, 0.55);
   --shadow-portrait: 0 24px 60px -28px rgba(0, 0, 0, 0.6);
   --shadow-float: 0 14px 34px -14px rgba(0, 0, 0, 0.7);
