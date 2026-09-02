@@ -122,7 +122,8 @@ export async function sendSms(options: {
       }
 
       const message = statusMessage(status, parsed?.message)
-      console.error('SMS failed', { templateId: options.templateId, status, message })
+      console.error('SMS failed', { templateId: options.templateId, status, message, attempt })
+      if (status === 0 && attempt < MAX_ATTEMPTS) continue
       return { outcome: 'failed', status, message }
     } catch (error) {
       const message = fetchErrorMessage(error)

@@ -412,29 +412,28 @@ async function notifyOrderSms(
   const customerTemplate = parseTemplateId(process.env.SMSIR_TEMPLATE_ORDER_RECEIVED)
   const bakerPhone = await resolveBakerNotificationPhone()
 
-  await Promise.all([
-    sendSms({
-      mobile: bakerPhone,
-      templateId: bakerTemplate,
-      parameters: bakerTemplate
-        ? parametersForTemplate(bakerTemplate, {
-            ORDER: order,
-            NAME: data.customerName,
-            COUNT: String(saved.lines.length),
-          })
-        : {},
-    }),
-    sendSms({
-      mobile: data.phone,
-      templateId: customerTemplate,
-      parameters: customerTemplate
-        ? parametersForTemplate(customerTemplate, {
-            ORDER: order,
-            NAME: data.customerName,
-          })
-        : {},
-    }),
-  ])
+  // Sequential: two parallel verify calls to SMS.ir often return status 0 on the second.
+  await sendSms({
+    mobile: bakerPhone,
+    templateId: bakerTemplate,
+    parameters: bakerTemplate
+      ? parametersForTemplate(bakerTemplate, {
+          ORDER: order,
+          NAME: data.customerName,
+          COUNT: String(saved.lines.length),
+        })
+      : {},
+  })
+  await sendSms({
+    mobile: data.phone,
+    templateId: customerTemplate,
+    parameters: customerTemplate
+      ? parametersForTemplate(customerTemplate, {
+          ORDER: order,
+          NAME: data.customerName,
+        })
+      : {},
+  })
 }
 
 async function resolveBakerNotificationPhone(): Promise<string | null> {
