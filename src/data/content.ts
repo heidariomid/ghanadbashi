@@ -57,6 +57,7 @@ export interface OrderFormCopy {
   metaDescription: string
   submit: string
   submitting: string
+  loading: string
   success: string
   error: string
   otherProduct: string
@@ -84,6 +85,7 @@ export interface CartCopy {
   browse: string
   browseGallery: string
   checkout: string
+  checkoutPending: string
   add: string
   remove: string
   countLabel: string
@@ -242,6 +244,7 @@ export const content: SiteContent = {
       'سفارش کیک و شیرینی خانگی — سبد را بازبینی کنید و نام، تاریخ تحویل و توضیحات را بنویسید.',
     submit: 'ثبت سفارش',
     submitting: 'در حال ارسال...',
+    loading: 'در حال بارگذاری سبد…',
     success: 'سفارش شما ثبت شد. به زودی با شما تماس می‌گیریم.',
     error: 'ثبت سفارش ممکن نشد. لطفاً دوباره تلاش کنید.',
     otherProduct: 'سایر / مورد دیگر',
@@ -270,6 +273,7 @@ export const content: SiteContent = {
     browse: 'مشاهده محصولات',
     browseGallery: 'مشاهده نمونه کارها',
     checkout: 'ادامه سفارش',
+    checkoutPending: 'در حال انتقال…',
     add: 'افزودن به سبد',
     remove: 'حذف',
     countLabel: 'سبد سفارش',

@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/lib/access'
+import { publicOrderNumber } from '@/lib/order-number'
+import { expandOrderSearch } from '@/lib/order-search'
 
 /**
  * An order is a record of what a customer sent, not a document to edit. Every
@@ -15,7 +17,11 @@ export const Orders: CollectionConfig = {
   admin: {
     useAsTitle: 'customerName',
     description: 'سفارش‌هایی که مشتری‌ها از طریق فرم سایت ثبت کرده‌اند.',
-    defaultColumns: ['customerName', 'phone', 'deliveryDate', 'status'],
+    defaultColumns: ['orderNumber', 'customerName', 'phone', 'deliveryDate', 'status'],
+    listSearchableFields: ['orderNumber', 'customerName', 'phone'],
+  },
+  hooks: {
+    beforeOperation: [expandOrderSearch],
   },
   access: {
     // REST create is admin-only. The public form writes through the Local API.
@@ -26,6 +32,27 @@ export const Orders: CollectionConfig = {
   },
   defaultSort: '-createdAt',
   fields: [
+    {
+      name: 'orderNumber',
+      type: 'text',
+      label: 'شماره سفارش',
+      virtual: true,
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        description: 'همان شماره‌ای که در پیامک سفارش آمده است.',
+        components: {
+          Cell: '/src/components/admin/OrderNumberCell#OrderNumberCell',
+          Field: '/src/components/admin/OrderNumberField#OrderNumberField',
+        },
+      },
+      hooks: {
+        afterRead: [
+          ({ siblingData }) =>
+            siblingData?.id != null ? String(publicOrderNumber(Number(siblingData.id))) : undefined,
+        ],
+      },
+    },
     {
       name: 'status',
       type: 'select',

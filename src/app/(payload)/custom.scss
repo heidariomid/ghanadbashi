@@ -65,25 +65,25 @@ html[data-theme='light'] {
   --theme-elevation-950: #14110e;
   --theme-elevation-1000: #0c0a08;
 
-  --theme-success-50: #fbf0ee;
-  --theme-success-100: #f6e2df;
-  --theme-success-150: #f0d3cf;
-  --theme-success-200: #e8c4bf;
-  --theme-success-250: var(--bakery-blush);
-  --theme-success-300: #d9a6a0;
-  --theme-success-350: #d19892;
-  --theme-success-400: var(--bakery-rose);
-  --theme-success-450: #c97f7a;
-  --theme-success-500: var(--bakery-rose-hover);
-  --theme-success-550: #b66d68;
-  --theme-success-600: var(--bakery-rose-strong);
-  --theme-success-650: #975049;
-  --theme-success-700: #864740;
-  --theme-success-750: #753e38;
-  --theme-success-800: #643530;
-  --theme-success-850: #532c28;
-  --theme-success-900: #422320;
-  --theme-success-950: #311a18;
+  --theme-success-50: #eef8f1;
+  --theme-success-100: #d9f0df;
+  --theme-success-150: #c4e7cd;
+  --theme-success-200: #aedcba;
+  --theme-success-250: #8fcd9f;
+  --theme-success-300: #70be84;
+  --theme-success-350: #56ad6c;
+  --theme-success-400: #3d9a55;
+  --theme-success-450: #2f8a47;
+  --theme-success-500: #247a3c;
+  --theme-success-550: #1f6c35;
+  --theme-success-600: #1a5e2e;
+  --theme-success-650: #165027;
+  --theme-success-700: #124321;
+  --theme-success-750: #0e371b;
+  --theme-success-800: #0b2c16;
+  --theme-success-850: #082211;
+  --theme-success-900: #05180c;
+  --theme-success-950: #030f07;
 }
 
 html[data-theme='dark'] {
@@ -116,25 +116,25 @@ html[data-theme='dark'] {
   --theme-elevation-950: #fefefe;
   --theme-elevation-1000: #ffffff;
 
-  --theme-success-50: #2a1f20;
-  --theme-success-100: #3b2829;
-  --theme-success-150: #4c3233;
-  --theme-success-200: #5d3c3d;
-  --theme-success-250: #6e4748;
-  --theme-success-300: #86585a;
-  --theme-success-350: #9e6b6d;
-  --theme-success-400: #b87f81;
-  --theme-success-450: #d08f91;
-  --theme-success-500: #ff8a80;
-  --theme-success-550: #ff9b93;
-  --theme-success-600: #ffaca5;
-  --theme-success-650: #ffbdb8;
-  --theme-success-700: #ffcdc9;
-  --theme-success-750: #ffdcd9;
-  --theme-success-800: #ffe8e6;
-  --theme-success-850: #fff1f0;
-  --theme-success-900: #fff7f6;
-  --theme-success-950: #fffcfb;
+  --theme-success-50: #0c1a11;
+  --theme-success-100: #13261a;
+  --theme-success-150: #1a3323;
+  --theme-success-200: #22412d;
+  --theme-success-250: #2d5a3c;
+  --theme-success-300: #3a734d;
+  --theme-success-350: #4a8d60;
+  --theme-success-400: #5ea874;
+  --theme-success-450: #73c089;
+  --theme-success-500: #86d49b;
+  --theme-success-550: #99deab;
+  --theme-success-600: #ade8bc;
+  --theme-success-650: #c1f0cd;
+  --theme-success-700: #d2f5db;
+  --theme-success-750: #e1f9e7;
+  --theme-success-800: #edfcf1;
+  --theme-success-850: #f4fef6;
+  --theme-success-900: #f9fefb;
+  --theme-success-950: #fcfffd;
 }
 
 html[data-theme] button,
@@ -374,6 +374,13 @@ html[data-theme] .react-select__control--is-focused {
 html[data-theme] .field-type label,
 html[data-theme] .field-label {
   margin-bottom: 0.4rem;
+}
+
+.order-number-field__value {
+  margin: 0.15rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--theme-text);
 }
 
 @media (max-width: 768px) {

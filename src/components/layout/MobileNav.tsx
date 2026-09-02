@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import { CloseIcon, MenuIcon } from '@/components/ui/icons'
@@ -80,13 +81,14 @@ export function MobileNav({ items, primaryCta, whatsapp, brandName }: MobileNavP
         </nav>
 
         <div className="mt-auto flex flex-col gap-3 px-6 pb-8">
-          <a
+          <Link
             href={primaryCta.href}
+            prefetch
             onClick={() => setOpen(false)}
             className="flex min-h-13 items-center justify-center rounded-full bg-primary text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95"
           >
             {primaryCta.label}
-          </a>
+          </Link>
           {whatsapp ? (
             <a
               href={whatsapp.href}

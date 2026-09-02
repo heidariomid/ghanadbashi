@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
+import { latinizeListSearch } from '@/lib/order-search'
 import { revalidatePublicSite } from '@/lib/revalidate'
 
 export const Gallery: CollectionConfig = {
@@ -22,6 +23,7 @@ export const Gallery: CollectionConfig = {
   },
   defaultSort: 'sortOrder',
   hooks: {
+    beforeOperation: [latinizeListSearch],
     afterChange: [() => revalidatePublicSite()],
     afterDelete: [() => revalidatePublicSite()],
   },

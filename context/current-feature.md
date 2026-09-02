@@ -122,3 +122,9 @@
   After an order saves, she and the customer each get a Verify SMS. Her
   alert number lives in تنظیمات سایت and stays off the public API. A failed
   send never fails the submit. Local sandbox does not put a text on the phone.
+- feat: add shop-style order numbers, admin search, and checkout loading.
+  سفارش‌ها show ۱۰۰۱+ as the first column — the same number SMS and email
+  send — and one search box finds a row by name, mobile, or order number in
+  Persian or English digits. Success toasts are green again. Cart checkout
+  prefetches `/order`, closes the drawer, and paints a loading state so the
+  customer is not left on a frozen homepage.

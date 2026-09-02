@@ -289,6 +289,10 @@ export interface Gallery {
 export interface Order {
   id: number;
   /**
+   * همان شماره‌ای که در پیامک سفارش آمده است.
+   */
+  orderNumber?: string | null;
+  /**
    * تنها فیلدی که شما تغییر می‌دهید.
    */
   status: 'new' | 'confirmed' | 'delivered' | 'cancelled';
@@ -501,6 +505,7 @@ export interface GallerySelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
   status?: T;
   customerName?: T;
   phone?: T;

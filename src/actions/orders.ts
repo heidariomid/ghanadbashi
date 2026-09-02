@@ -8,6 +8,7 @@ import { phoneHref } from '@/lib/contact'
 import { CART_MAX_LINES, CART_MAX_QUANTITY, type CartItemKind } from '@/lib/cart'
 import { resolveCategory } from '@/lib/categories'
 import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
+import { formatOrderNumber, publicOrderNumber } from '@/lib/order-number'
 import { getPayloadClient } from '@/lib/payload'
 import { resolveOrigin } from '@/lib/site-url'
 import { parametersForTemplate, parseTemplateId, sendSms } from '@/lib/sms'
@@ -386,6 +387,7 @@ async function notifyBaker(
     to,
     subject: `سفارش جدید از ${data.customerName}`,
     html: orderEmailHtml({
+      orderNumber: formatOrderNumber(saved.id),
       customerName: data.customerName,
       phone: data.phone,
       callHref,
@@ -405,7 +407,7 @@ async function notifyOrderSms(
   data: OrderFields,
   saved: { id: number; lines: string[] },
 ): Promise<void> {
-  const order = String(saved.id)
+  const order = String(publicOrderNumber(saved.id))
   const bakerTemplate = parseTemplateId(process.env.SMSIR_TEMPLATE_NEW_ORDER)
   const customerTemplate = parseTemplateId(process.env.SMSIR_TEMPLATE_ORDER_RECEIVED)
   const bakerPhone = await resolveBakerNotificationPhone()
@@ -458,6 +460,7 @@ function orderAdminUrl(orderId: number): string | null {
 }
 
 function orderEmailHtml({
+  orderNumber,
   customerName,
   phone,
   callHref,
@@ -466,6 +469,7 @@ function orderEmailHtml({
   notes,
   adminHref,
 }: {
+  orderNumber: string
   customerName: string
   phone: string
   callHref: string | null
@@ -492,6 +496,7 @@ function orderEmailHtml({
 <html lang="fa" dir="rtl">
   <body style="font-family:Tahoma,Arial,sans-serif;line-height:1.8;color:#2c2620">
     <h1 style="font-size:20px">سفارش جدید</h1>
+    <p><strong>شماره سفارش:</strong> ${escapeHtml(orderNumber)}</p>
     <p><strong>نام:</strong> ${escapeHtml(customerName)}</p>
     <p><strong>شماره تماس:</strong> ${phoneHtml}</p>
     <p><strong>اقلام:</strong></p>

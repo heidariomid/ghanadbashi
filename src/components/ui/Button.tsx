@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 import { isExternalHref, newTabProps } from '@/lib/links'
@@ -42,14 +43,19 @@ export function Button({
   className,
   dir,
 }: ButtonProps) {
+  const classes = `${base} ${variants[variant]} ${sizes[size]} ${className ?? ''}`
+
+  if (isExternalHref(href)) {
+    return (
+      <a href={href} dir={dir} {...newTabProps} className={classes}>
+        {children}
+      </a>
+    )
+  }
+
   return (
-    <a
-      href={href}
-      dir={dir}
-      {...(isExternalHref(href) ? newTabProps : {})}
-      className={`${base} ${variants[variant]} ${sizes[size]} ${className ?? ''}`}
-    >
+    <Link href={href} prefetch dir={dir} className={classes}>
       {children}
-    </a>
+    </Link>
   )
 }

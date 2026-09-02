@@ -61,12 +61,13 @@ export async function Header() {
               {whatsapp.label}
             </a>
           ) : null}
-          <a
+          <Link
             href={primaryCta.href}
+            prefetch
             className="hidden min-h-11 items-center rounded-full bg-primary px-7 text-small font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95 md:inline-flex"
           >
             {primaryCta.label}
-          </a>
+          </Link>
           <MobileNav
             items={nav}
             primaryCta={primaryCta}

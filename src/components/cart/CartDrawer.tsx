@@ -1,5 +1,7 @@
 'use client'
 
+import Link, { useLinkStatus } from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 import { CartItems } from '@/components/cart/CartItems'
@@ -11,6 +13,12 @@ import { faNumber } from '@/lib/format'
 export function CartDrawer() {
   const { items, count, open, setOpen } = useCart()
   const copy = content.cart
+  const router = useRouter()
+
+  useEffect(() => {
+    if (items.length === 0) return
+    router.prefetch('/order')
+  }, [items.length, router])
 
   useEffect(() => {
     if (!open) return
@@ -93,16 +101,33 @@ export function CartDrawer() {
 
         {items.length > 0 ? (
           <div className="border-t border-border px-6 py-5">
-            <a
+            <Link
               href="/order"
+              prefetch
               onClick={() => setOpen(false)}
               className="flex min-h-13 items-center justify-center rounded-full bg-primary text-body font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary active:translate-y-0 active:brightness-95"
             >
-              {copy.checkout}
-            </a>
+              <CheckoutLabel idle={copy.checkout} busy={copy.checkoutPending} />
+            </Link>
           </div>
         ) : null}
       </aside>
     </div>
+  )
+}
+
+function CheckoutLabel({ idle, busy }: { idle: string; busy: string }) {
+  const { pending } = useLinkStatus()
+
+  if (!pending) return idle
+
+  return (
+    <span className="inline-flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className="size-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground motion-reduce:animate-none"
+      />
+      {busy}
+    </span>
   )
 }

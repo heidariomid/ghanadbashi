@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { APIError } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
 import { formatCategoryInUseMessage, getCategoryReferences } from '@/lib/category-references'
+import { latinizeListSearch } from '@/lib/order-search'
 import { revalidatePublicSite } from '@/lib/revalidate'
 import { slugify } from '@/lib/slug'
 
@@ -26,6 +27,7 @@ export const Categories: CollectionConfig = {
   },
   defaultSort: 'sortOrder',
   hooks: {
+    beforeOperation: [latinizeListSearch],
     afterChange: [() => revalidatePublicSite()],
     afterDelete: [() => revalidatePublicSite()],
     beforeDelete: [

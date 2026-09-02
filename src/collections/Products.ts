@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
+import { latinizeListSearch } from '@/lib/order-search'
 import { revalidatePublicSite } from '@/lib/revalidate'
 import { slugify } from '@/lib/slug'
 
@@ -23,6 +24,7 @@ export const Products: CollectionConfig = {
   },
   defaultSort: 'sortOrder',
   hooks: {
+    beforeOperation: [latinizeListSearch],
     afterChange: [() => revalidatePublicSite()],
     afterDelete: [() => revalidatePublicSite()],
   },
