@@ -10,6 +10,8 @@ import { buildPageMetadata } from '@/lib/seo'
 
 /** Lets the SMS.ir calls finish after the 8s abort we saw in production. */
 export const maxDuration = 60
+/** Frankfurt is a shorter path to api.sms.ir than the default iad1. */
+export const preferredRegion = 'fra1'
 
 interface OrderPageProps {
   searchParams: Promise<{ product?: string | string[] }>

@@ -1,8 +1,14 @@
+import { setDefaultResultOrder } from 'node:dns'
+
 import { toLatinDigits } from '@/lib/format'
 
 const VERIFY_URL = 'https://api.sms.ir/v1/send/verify'
 const PARAM_MAX = 25
 const REQUEST_TIMEOUT_MS = 20_000
+const MAX_ATTEMPTS = 2
+
+// Vercel often tries IPv6 first; api.sms.ir's AAAA path from US regions dies.
+setDefaultResultOrder('ipv4first')
 
 /** SMS.ir sandbox accepts only this id and a `Code` parameter. */
 const SMSIR_SANDBOX_TEMPLATE_ID = 123456
@@ -89,38 +95,55 @@ export async function sendSms(options: {
     .filter(([name]) => name.trim().length > 0)
     .map(([name, value]) => ({ name, value: sanitizeSmsValue(value) }))
 
-  try {
-    const response = await fetch(VERIFY_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'text/plain',
-        'x-api-key': apiKey,
-      },
-      body: JSON.stringify({
-        mobile,
-        templateId: options.templateId,
-        parameters,
-      }),
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    })
+  const body = JSON.stringify({
+    mobile,
+    templateId: options.templateId,
+    parameters,
+  })
 
-    const body = await parseSmsBody(response)
-    const status = typeof body?.status === 'number' ? body.status : null
-    if (status === 1) {
-      const messageId = readMessageId(body)
-      console.info('SMS sent', { templateId: options.templateId, messageId })
-      return { outcome: 'sent', messageId }
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const response = await fetch(VERIFY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'text/plain',
+          'x-api-key': apiKey,
+        },
+        body,
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      })
+      const parsed = await parseSmsBody(response)
+      const status = typeof parsed?.status === 'number' ? parsed.status : null
+      if (status === 1) {
+        const messageId = readMessageId(parsed)
+        console.info('SMS sent', { templateId: options.templateId, messageId })
+        return { outcome: 'sent', messageId }
+      }
+
+      const message = statusMessage(status, parsed?.message)
+      console.error('SMS failed', { templateId: options.templateId, status, message })
+      return { outcome: 'failed', status, message }
+    } catch (error) {
+      const message = fetchErrorMessage(error)
+      console.error('SMS failed', { templateId: options.templateId, attempt, message })
+      if (attempt === MAX_ATTEMPTS) {
+        return { outcome: 'failed', status: null, message }
+      }
     }
-
-    const message = statusMessage(status, body?.message)
-    console.error('SMS failed', { templateId: options.templateId, status, message })
-    return { outcome: 'failed', status, message }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'ارسال پیامک ممکن نشد'
-    console.error('SMS failed', { templateId: options.templateId, message })
-    return { outcome: 'failed', status: null, message }
   }
+
+  return { outcome: 'failed', status: null, message: 'ارسال پیامک ممکن نشد' }
+}
+
+function fetchErrorMessage(error: unknown): string {
+  if (!(error instanceof Error)) return 'ارسال پیامک ممکن نشد'
+  const cause = error.cause
+  if (cause instanceof Error) {
+    const code = 'code' in cause && typeof cause.code === 'string' ? cause.code : ''
+    return code ? `${error.message} (${code}: ${cause.message})` : `${error.message}: ${cause.message}`
+  }
+  return error.message
 }
 
 function statusMessage(status: number | null, providerMessage: unknown): string {
