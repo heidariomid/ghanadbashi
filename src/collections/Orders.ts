@@ -20,6 +20,7 @@ export const Orders: CollectionConfig = {
     description: 'سفارش‌هایی که مشتری‌ها از طریق فرم سایت ثبت کرده‌اند.',
     defaultColumns: ['orderNumber', 'customerName', 'phone', 'deliveryDate', 'status'],
     listSearchableFields: ['orderNumber', 'customerName', 'phone'],
+    disableBulkEdit: true,
   },
   hooks: {
     beforeOperation: [expandOrderSearch],
@@ -69,8 +70,11 @@ export const Orders: CollectionConfig = {
         { value: 'cancelled', label: '❌ لغو شده' },
       ],
       admin: {
-        description: 'تنها فیلدی که شما تغییر می‌دهید.',
+        description: 'تنها فیلدی که شما تغییر می‌دهید. از همین لیست هم عوض می‌شود.',
         position: 'sidebar',
+        components: {
+          Cell: '/src/components/admin/OrderStatusCell#OrderStatusCell',
+        },
       },
     },
     {

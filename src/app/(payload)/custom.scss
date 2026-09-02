@@ -383,6 +383,65 @@ html[data-theme] .field-label {
   color: var(--theme-text);
 }
 
+.order-status-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 10.5rem;
+}
+
+.order-status-cell__select {
+  min-height: 2.5rem;
+  max-width: 11.5rem;
+  padding-inline: 0.55rem;
+  border-radius: var(--style-radius-s);
+  border: 1px solid var(--theme-elevation-200);
+  background: var(--theme-input-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-weight: 600;
+}
+
+.order-status-cell__note {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--theme-elevation-500);
+  white-space: nowrap;
+}
+
+.order-status-cell__note.is-ok {
+  color: var(--theme-success-500);
+}
+
+.order-status-cell__note.is-err {
+  color: #a8443e;
+}
+
+// Payload's saving toast sat white-on-parchment in the corner.
+html[data-theme] [data-sonner-toast],
+html[data-theme] .toast,
+html[data-theme] [class*='payload-toast'] {
+  min-height: 3rem;
+  padding: 0.75rem 1rem !important;
+  border-radius: 13px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 10px 28px rgba(44, 38, 32, 0.22) !important;
+}
+
+html[data-theme='light'] [data-sonner-toast],
+html[data-theme='light'] .toast,
+html[data-theme='light'] [class*='payload-toast'] {
+  background: var(--bakery-espresso) !important;
+  color: #fffdf8 !important;
+  border: 0 !important;
+}
+
+html[data-theme='light'] [data-sonner-toast][data-type='success'],
+html[data-theme='light'] [class*='payload-toast'][data-type='success'] {
+  background: var(--theme-success-500) !important;
+  color: #fff !important;
+}
+
 @media (max-width: 768px) {
   .nav__link {
     min-height: 2.75rem;

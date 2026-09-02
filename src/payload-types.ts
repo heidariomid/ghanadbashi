@@ -293,7 +293,7 @@ export interface Order {
    */
   orderNumber?: string | null;
   /**
-   * تنها فیلدی که شما تغییر می‌دهید.
+   * تنها فیلدی که شما تغییر می‌دهید. از همین لیست هم عوض می‌شود.
    */
   status: 'new' | 'confirmed' | 'delivered' | 'cancelled';
   /**
