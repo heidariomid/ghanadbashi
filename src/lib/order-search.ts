@@ -10,13 +10,14 @@ import { parseOrderNumberTerm } from '@/lib/order-number'
  */
 export const expandOrderSearch: CollectionBeforeOperationHook = ({ args, operation, req }) => {
   if (operation !== 'read' && operation !== 'count') return args
+  if (!hasWhere(args)) return args
 
   const query = req.query as { search?: unknown } | undefined
   if (typeof query?.search === 'string') {
     query.search = toLatinDigits(query.search)
   }
 
-  const where = args.where as Where | undefined
+  const where = args.where
   if (!where) return args
 
   const terms = collectSearchTerms(where)
@@ -44,15 +45,20 @@ export const expandOrderSearch: CollectionBeforeOperationHook = ({ args, operati
 /** Any admin list `like` / `contains` — Persian and English digits both match. */
 export const latinizeListSearch: CollectionBeforeOperationHook = ({ args, operation, req }) => {
   if (operation !== 'read' && operation !== 'count') return args
+  if (!hasWhere(args)) return args
 
   const query = req.query as { search?: unknown } | undefined
   if (typeof query?.search === 'string') {
     query.search = toLatinDigits(query.search)
   }
 
-  const where = args.where as Where | undefined
+  const where = args.where
   if (!where) return args
   return { ...args, where: latinizeWhereDigits(where) as Where }
+}
+
+function hasWhere(args: object): args is { where?: Where } {
+  return 'where' in args
 }
 
 function latinizeWhereDigits(node: unknown): unknown {
