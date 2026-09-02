@@ -29,9 +29,9 @@
   Payload CLI can load them.
 - Phase 2 — CMS Schema: products, gallery, orders, site-settings, media on
   Vercel Blob; gallery filters, seed data, admin QA checklist.
-- Phase 3 — Homepage CMS Wiring: wired site-settings contact and aboutText to
-  the public site, footer polish, empty states; simplified about rich-text
-  editor; mandatory `/feature review` gate before complete.
+- Phase 3 — Homepage CMS Wiring: wired site-settings contact and aboutText to the
+  public site, footer polish, empty states; simplified about rich-text editor;
+  mandatory `/feature review` gate before complete.
 - Phase 4 — Products: added `/products` with URL category chips, moved site
   chrome into the layout, and revalidate `/` and `/products` when products or
   site-settings change.
@@ -128,3 +128,7 @@
   Persian or English digits. Success toasts are green again. Cart checkout
   prefetches `/order`, closes the drawer, and paints a loading state so the
   customer is not left on a frozen homepage.
+- feat: text the customer when an order status changes.
+  Changing وضعیت to تأیید شده، تحویل شده، or لغو شده sends a Verify SMS
+  and writes the result on a read-only «آخرین پیامک به مشتری» sidebar. A
+  failed send never blocks the save. Templates live on her SMS.ir account.

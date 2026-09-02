@@ -296,6 +296,15 @@ export interface Order {
    * تنها فیلدی که شما تغییر می‌دهید.
    */
   status: 'new' | 'confirmed' | 'delivered' | 'cancelled';
+  /**
+   * نتیجه آخرین پیامکی که با تغییر وضعیت برای مشتری فرستاده شد.
+   */
+  lastCustomerSms?: {
+    sentAt?: string | null;
+    ok?: boolean | null;
+    note?: string | null;
+    messageId?: string | null;
+  };
   customerName: string;
   phone: string;
   /**
@@ -507,6 +516,14 @@ export interface GallerySelect<T extends boolean = true> {
 export interface OrdersSelect<T extends boolean = true> {
   orderNumber?: T;
   status?: T;
+  lastCustomerSms?:
+    | T
+    | {
+        sentAt?: T;
+        ok?: T;
+        note?: T;
+        messageId?: T;
+      };
   customerName?: T;
   phone?: T;
   items?:

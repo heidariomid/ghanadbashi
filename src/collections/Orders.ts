@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/lib/access'
 import { publicOrderNumber } from '@/lib/order-number'
 import { expandOrderSearch } from '@/lib/order-search'
+import { notifyStatusSms } from '@/lib/order-status-sms'
 
 /**
  * An order is a record of what a customer sent, not a document to edit. Every
@@ -22,6 +23,7 @@ export const Orders: CollectionConfig = {
   },
   hooks: {
     beforeOperation: [expandOrderSearch],
+    afterChange: [notifyStatusSms],
   },
   access: {
     // REST create is admin-only. The public form writes through the Local API.
@@ -70,6 +72,41 @@ export const Orders: CollectionConfig = {
         description: 'تنها فیلدی که شما تغییر می‌دهید.',
         position: 'sidebar',
       },
+    },
+    {
+      name: 'lastCustomerSms',
+      type: 'group',
+      label: 'آخرین پیامک به مشتری',
+      admin: {
+        position: 'sidebar',
+        description: 'نتیجه آخرین پیامکی که با تغییر وضعیت برای مشتری فرستاده شد.',
+      },
+      fields: [
+        {
+          name: 'sentAt',
+          type: 'date',
+          label: 'زمان',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'ok',
+          type: 'checkbox',
+          label: 'ارسال شد',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'note',
+          type: 'text',
+          label: 'نتیجه',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'messageId',
+          type: 'text',
+          label: 'شناسه پیامک',
+          admin: { readOnly: true },
+        },
+      ],
     },
     {
       name: 'customerName',
