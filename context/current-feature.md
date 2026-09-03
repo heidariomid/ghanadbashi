@@ -136,3 +136,8 @@
   Codes live in a hidden collection with spend caps so a public send
   button cannot burn her credit. The form stays as it is until
   OTP_REQUIRED=1. Success is a short green card.
+- feat: improve order admin with receipt UI, deposit SMS, and receipt upload.
+  سفارش‌ها open from the list again; the edit page shows a kitchen-ticket
+  receipt; the baker sends a variable deposit SMS with card number and a
+  short `/r/` link; customers upload the bank receipt there and it lands on
+  the same order in admin.

@@ -47,9 +47,12 @@ export function parseTemplateId(raw: string | undefined): number | null {
   return Number.isInteger(id) && id > 0 ? id : null
 }
 
-/** Collapse whitespace, Latin digits, hard 25-character cap. */
-function sanitizeSmsValue(value: string): string {
-  return toLatinDigits(value).replace(/\s+/g, ' ').trim().slice(0, PARAM_MAX)
+/** Collapse whitespace, hard 25-character cap. Latin digits only for codes and numbers. */
+function sanitizeSmsParameter(name: string, value: string): string {
+  const collapsed = value.replace(/\s+/g, ' ').trim()
+  const readable =
+    name === 'NAME' || name === 'AMOUNT' || name === 'WHATSAPP' ? collapsed : toLatinDigits(collapsed)
+  return readable.slice(0, PARAM_MAX)
 }
 
 function isSmsMobile(value: string): boolean {
@@ -93,7 +96,7 @@ export async function sendSms(options: {
 
   const parameters = Object.entries(options.parameters)
     .filter(([name]) => name.trim().length > 0)
-    .map(([name, value]) => ({ name, value: sanitizeSmsValue(value) }))
+    .map(([name, value]) => ({ name, value: sanitizeSmsParameter(name, value) }))
 
   const body = JSON.stringify({
     mobile,

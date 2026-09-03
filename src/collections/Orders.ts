@@ -2,7 +2,9 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/lib/access'
 import { publicOrderNumber } from '@/lib/order-number'
 import { expandOrderSearch } from '@/lib/order-search'
+import { formatOrderSummary } from '@/lib/order-summary'
 import { notifyStatusSms } from '@/lib/order-status-sms'
+import { preserveSubmittedOrder } from '@/lib/preserve-order'
 
 /**
  * An order is a record of what a customer sent, not a document to edit. Every
@@ -18,12 +20,13 @@ export const Orders: CollectionConfig = {
   admin: {
     useAsTitle: 'customerName',
     description: 'سفارش‌هایی که مشتری‌ها از طریق فرم سایت ثبت کرده‌اند.',
-    defaultColumns: ['orderNumber', 'customerName', 'phone', 'deliveryDate', 'status'],
+    defaultColumns: ['orderNumber', 'customerName', 'orderSummary', 'deliveryDate', 'status'],
     listSearchableFields: ['orderNumber', 'customerName', 'phone'],
   },
   disableBulkEdit: true,
   hooks: {
     beforeOperation: [expandOrderSearch],
+    beforeChange: [preserveSubmittedOrder],
     afterChange: [notifyStatusSms],
   },
   access: {
@@ -78,12 +81,22 @@ export const Orders: CollectionConfig = {
       },
     },
     {
-      name: 'lastCustomerSms',
-      type: 'group',
-      label: 'آخرین پیامک به مشتری',
+      name: 'depositAmount',
+      type: 'number',
+      label: 'مبلغ واریز',
+      min: 1,
       admin: {
-        position: 'sidebar',
-        description: 'نتیجه آخرین پیامکی که با تغییر وضعیت برای مشتری فرستاده شد.',
+        hidden: true,
+        disableListColumn: true,
+      },
+    },
+    {
+      name: 'lastDepositSms',
+      type: 'group',
+      label: 'آخرین پیامک واریز',
+      admin: {
+        hidden: true,
+        disableListColumn: true,
       },
       fields: [
         {
@@ -113,26 +126,121 @@ export const Orders: CollectionConfig = {
       ],
     },
     {
+      name: 'depositReceiptToken',
+      type: 'text',
+      label: 'کد لینک رسید',
+      index: true,
+      unique: true,
+      admin: {
+        hidden: true,
+        disableListColumn: true,
+      },
+    },
+    {
+      name: 'depositReceipt',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'رسید بیعانه',
+      admin: {
+        readOnly: true,
+        description: 'عکس رسید واریزی که مشتری از لینک پیامک فرستاده است.',
+        condition: (data) => Boolean(data.depositReceipt),
+      },
+    },
+    {
+      name: 'depositReceiptAt',
+      type: 'date',
+      label: 'زمان دریافت رسید',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        condition: (data) => Boolean(data.depositReceiptAt),
+      },
+    },
+    {
+      name: 'lastCustomerSms',
+      type: 'group',
+      label: 'آخرین پیامک به مشتری',
+      admin: {
+        position: 'sidebar',
+        description: 'نتیجه آخرین پیامکی که با تغییر وضعیت برای مشتری فرستاده شد.',
+        condition: (data) =>
+          Boolean(data.lastCustomerSms?.sentAt || data.lastCustomerSms?.note),
+      },
+      fields: [
+        {
+          name: 'sentAt',
+          type: 'date',
+          label: 'زمان',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'ok',
+          type: 'checkbox',
+          label: 'ارسال شد',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'note',
+          type: 'text',
+          label: 'نتیجه',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'messageId',
+          type: 'text',
+          label: 'شناسه پیامک',
+          admin: { readOnly: true },
+        },
+      ],
+    },
+    {
+      name: 'orderSummary',
+      type: 'textarea',
+      label: 'اقلام سفارش',
+      virtual: true,
+      admin: {
+        readOnly: true,
+        components: {
+          Cell: '/src/components/admin/OrderSummaryCell#OrderSummaryCell',
+          Field: '/src/components/admin/OrderSummaryField#OrderSummaryField',
+        },
+      },
+      hooks: {
+        afterRead: [
+          ({ siblingData, req }) => formatOrderSummary(siblingData ?? {}, req.payload),
+        ],
+      },
+    },
+    {
       name: 'customerName',
       type: 'text',
       label: 'نام مشتری',
       required: true,
-      admin: { readOnly: true },
+      admin: {
+        readOnly: true,
+        condition: () => false,
+      },
     },
     {
       name: 'phone',
       type: 'text',
       label: 'شماره تماس',
       required: true,
-      admin: { readOnly: true },
+      admin: {
+        readOnly: true,
+        condition: () => false,
+      },
     },
     {
       name: 'items',
       type: 'array',
-      label: 'اقلام سفارش',
+      label: 'اقلام سفارش (خام)',
       admin: {
         description: 'محصولاتی که مشتری از سبد ثبت کرده است، با تعداد هر کدام.',
         readOnly: true,
+        hidden: true,
+        disableListColumn: true,
       },
       fields: [
         {
@@ -158,6 +266,8 @@ export const Orders: CollectionConfig = {
       admin: {
         description: 'نمونه کارهایی که مشتری از گالری به سبد اضافه کرده است، با تعداد هر کدام.',
         readOnly: true,
+        hidden: true,
+        disableListColumn: true,
       },
       fields: [
         {
@@ -181,8 +291,8 @@ export const Orders: CollectionConfig = {
       type: 'text',
       label: 'محصول (متن آزاد)',
       admin: {
-        description: 'اگر مشتری «سایر» را هم نوشته باشد، اینجا می‌آید.',
         readOnly: true,
+        condition: () => false,
       },
     },
     {
@@ -191,22 +301,27 @@ export const Orders: CollectionConfig = {
       label: 'تعداد (سایر)',
       min: 1,
       admin: {
-        description: 'تعداد محصول متن آزاد.',
         readOnly: true,
-        condition: (data) => Boolean(data.productNote),
+        condition: () => false,
       },
     },
     {
       name: 'deliveryDate',
       type: 'text',
       label: 'تاریخ تحویل',
-      admin: { readOnly: true },
+      admin: {
+        readOnly: true,
+        condition: () => false,
+      },
     },
     {
       name: 'notes',
       type: 'textarea',
       label: 'توضیحات',
-      admin: { readOnly: true },
+      admin: {
+        readOnly: true,
+        condition: (data) => Boolean(data.notes),
+      },
     },
     {
       name: 'sampleImage',
@@ -214,8 +329,8 @@ export const Orders: CollectionConfig = {
       relationTo: 'media',
       label: 'عکس نمونه',
       admin: {
-        description: 'عکسی که مشتری به‌عنوان نمونه فرستاده است.',
         readOnly: true,
+        condition: (data) => Boolean(data.sampleImage),
       },
     },
   ],

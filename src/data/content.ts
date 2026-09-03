@@ -49,6 +49,26 @@ export interface OrderCta {
   steps: string[]
 }
 
+export interface DepositReceiptCopy {
+  eyebrow: string
+  title: string
+  description: string
+  metaTitle: string
+  metaDescription: string
+  submit: string
+  submitting: string
+  successTitle: string
+  successBody: string
+  error: string
+  missingFile: string
+  invalidType: string
+  tooLarge: string
+  photoHint: string
+  fields: {
+    receipt: string
+  }
+}
+
 export interface OrderFormCopy {
   eyebrow: string
   title: string
@@ -145,6 +165,7 @@ export interface SiteContent {
   about: About
   orderCta: OrderCta
   orderForm: OrderFormCopy
+  depositReceipt: DepositReceiptCopy
   cart: CartCopy
   contact: Contact
   footer: { credit: string }
@@ -276,6 +297,27 @@ export const content: SiteContent = {
       deliveryDate: 'تاریخ تحویل',
       notes: 'توضیحات',
       sampleImage: 'عکس نمونه',
+    },
+  },
+
+  depositReceipt: {
+    eyebrow: 'رسید بیعانه',
+    title: 'ارسال رسید واریز',
+    description:
+      'بعد از واریز بیعانه، عکس رسید بانک را اینجا بفرستید تا سفارش شما تأیید شود.',
+    metaTitle: 'ارسال رسید واریز',
+    metaDescription: 'ارسال عکس رسید بیعانه برای تأیید سفارش.',
+    submit: 'ارسال رسید',
+    submitting: 'در حال ارسال…',
+    successTitle: 'رسید دریافت شد',
+    successBody: 'ممنون — رسید شما ثبت شد. به‌زودی با شما تماس می‌گیریم.',
+    error: 'ارسال رسید ممکن نشد. لطفاً دوباره تلاش کنید.',
+    missingFile: 'لطفاً عکس رسید را انتخاب کنید.',
+    invalidType: 'فقط فایل تصویری مجاز است.',
+    tooLarge: 'حجم عکس نباید بیشتر از ۴ مگابایت باشد.',
+    photoHint: 'فقط تصویر، حداکثر ۴ مگابایت',
+    fields: {
+      receipt: 'عکس رسید واریز',
     },
   },
 

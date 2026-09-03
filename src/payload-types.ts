@@ -298,6 +298,19 @@ export interface Order {
    * تنها فیلدی که شما تغییر می‌دهید. از همین لیست هم عوض می‌شود.
    */
   status: 'new' | 'confirmed' | 'delivered' | 'cancelled';
+  depositAmount?: number | null;
+  lastDepositSms?: {
+    sentAt?: string | null;
+    ok?: boolean | null;
+    note?: string | null;
+    messageId?: string | null;
+  };
+  depositReceiptToken?: string | null;
+  /**
+   * عکس رسید واریزی که مشتری از لینک پیامک فرستاده است.
+   */
+  depositReceipt?: (number | null) | Media;
+  depositReceiptAt?: string | null;
   /**
    * نتیجه آخرین پیامکی که با تغییر وضعیت برای مشتری فرستاده شد.
    */
@@ -307,8 +320,9 @@ export interface Order {
     note?: string | null;
     messageId?: string | null;
   };
-  customerName: string;
-  phone: string;
+  orderSummary?: string | null;
+  customerName?: string | null;
+  phone?: string | null;
   /**
    * محصولاتی که مشتری از سبد ثبت کرده است، با تعداد هر کدام.
    */
@@ -329,19 +343,10 @@ export interface Order {
         id?: string | null;
       }[]
     | null;
-  /**
-   * اگر مشتری «سایر» را هم نوشته باشد، اینجا می‌آید.
-   */
   productNote?: string | null;
-  /**
-   * تعداد محصول متن آزاد.
-   */
   otherQuantity?: number | null;
   deliveryDate?: string | null;
   notes?: string | null;
-  /**
-   * عکسی که مشتری به‌عنوان نمونه فرستاده است.
-   */
   sampleImage?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
@@ -537,6 +542,18 @@ export interface GallerySelect<T extends boolean = true> {
 export interface OrdersSelect<T extends boolean = true> {
   orderNumber?: T;
   status?: T;
+  depositAmount?: T;
+  lastDepositSms?:
+    | T
+    | {
+        sentAt?: T;
+        ok?: T;
+        note?: T;
+        messageId?: T;
+      };
+  depositReceiptToken?: T;
+  depositReceipt?: T;
+  depositReceiptAt?: T;
   lastCustomerSms?:
     | T
     | {
@@ -545,6 +562,7 @@ export interface OrdersSelect<T extends boolean = true> {
         note?: T;
         messageId?: T;
       };
+  orderSummary?: T;
   customerName?: T;
   phone?: T;
   items?:
@@ -771,6 +789,10 @@ export interface SiteSetting {
      * فقط برای خبر دادن سفارش تازه. در سایت نمایش داده نمی‌شود.
      */
     orderNotificationPhone?: string | null;
+    /**
+     * ۱۶ رقم. در سایت دیده نمی‌شود. با پیامک واریز برای مشتری فرستاده می‌شود.
+     */
+    cardNumber?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -804,6 +826,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         instagram?: T;
         serviceArea?: T;
         orderNotificationPhone?: T;
+        cardNumber?: T;
       };
   updatedAt?: T;
   createdAt?: T;

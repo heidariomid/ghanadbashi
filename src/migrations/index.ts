@@ -5,6 +5,8 @@ import * as migration_20260823_095000_cms_categories from './20260823_095000_cms
 import * as migration_20260901_204610_order_notification_phone from './20260901_204610_order_notification_phone';
 import * as migration_20260902_093253_last_customer_sms from './20260902_093253_last_customer_sms';
 import * as migration_20260902_181206_phone_verifications from './20260902_181206_phone_verifications';
+import * as migration_20260903_191500_deposit_sms from './20260903_191500_deposit_sms';
+import * as migration_20260903_200000_deposit_receipt from './20260903_200000_deposit_receipt';
 
 export const migrations = [
   {
@@ -41,5 +43,15 @@ export const migrations = [
     up: migration_20260902_181206_phone_verifications.up,
     down: migration_20260902_181206_phone_verifications.down,
     name: '20260902_181206_phone_verifications'
+  },
+  {
+    up: migration_20260903_191500_deposit_sms.up,
+    down: migration_20260903_191500_deposit_sms.down,
+    name: '20260903_191500_deposit_sms',
+  },
+  {
+    up: migration_20260903_200000_deposit_receipt.up,
+    down: migration_20260903_200000_deposit_receipt.down,
+    name: '20260903_200000_deposit_receipt',
   },
 ];

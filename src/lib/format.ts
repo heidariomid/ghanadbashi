@@ -25,3 +25,13 @@ export function faPrice(value: number): string {
 export function faPhone(value: string): string {
   return value.replace(/\d/g, (digit) => faNumber(Number(digit)))
 }
+
+/** ۰۹… for SMS — reads from CMS whatsapp (989…) or phone. */
+export function formatSmsMobile(raw: string | null | undefined): string {
+  if (!raw?.trim()) return ''
+  let digits = toLatinDigits(raw).replace(/\D/g, '')
+  if (digits.startsWith('98') && digits.length >= 12) digits = `0${digits.slice(2, 12)}`
+  else if (!digits.startsWith('0') && digits.length >= 10) digits = `0${digits.slice(-10)}`
+  if (!/^09\d{9}$/.test(digits)) return ''
+  return faPhone(digits)
+}

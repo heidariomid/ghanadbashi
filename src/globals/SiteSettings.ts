@@ -6,6 +6,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import type { GlobalConfig } from 'payload'
 import { isAdmin, isPublic } from '@/lib/access'
+import { toLatinDigits } from '@/lib/format'
 import { revalidatePublicSite } from '@/lib/revalidate'
 
 /** Paragraphs only — the full default editor trips Lexical's horizontalrule node. */
@@ -146,6 +147,33 @@ export const SiteSettings: GlobalConfig = {
           },
           admin: {
             description: 'فقط برای خبر دادن سفارش تازه. در سایت نمایش داده نمی‌شود.',
+          },
+        },
+        {
+          name: 'cardNumber',
+          type: 'text',
+          label: 'شماره کارت برای پیش‌پرداخت',
+          maxLength: 19,
+          access: {
+            read: ({ req }) => Boolean(req.user),
+          },
+          hooks: {
+            beforeChange: [
+              ({ value }) => {
+                if (typeof value !== 'string' || !value.trim()) return value
+                const digits = toLatinDigits(value).replace(/\D/g, '')
+                return digits || value
+              },
+            ],
+          },
+          validate: (value: unknown) => {
+            if (value == null || value === '') return true
+            const digits = toLatinDigits(String(value)).replace(/\D/g, '')
+            return digits.length === 16 || '۱۶ رقم کارت را وارد کنید'
+          },
+          admin: {
+            description:
+              '۱۶ رقم. در سایت دیده نمی‌شود. با پیامک واریز برای مشتری فرستاده می‌شود.',
           },
         },
       ],

@@ -1,6 +1,8 @@
 import { OrderNumberCell as OrderNumberCell_3b343741fbf4d5e513fb3d6163a51d5c } from '../../../../src/components/admin/OrderNumberCell'
 import { OrderNumberField as OrderNumberField_0257a63935aa71def0a0e22d967c4e95 } from '../../../../src/components/admin/OrderNumberField'
 import { OrderStatusCell as OrderStatusCell_a794d7e77c9050aa1f0c971a44c63eb1 } from '../../../../src/components/admin/OrderStatusCell'
+import { OrderSummaryCell as OrderSummaryCell_a0bb65445ac84e5f1167a0ee6cd82ff7 } from '../../../../src/components/admin/OrderSummaryCell'
+import { OrderSummaryField as OrderSummaryField_21fbfa8c16d46d59d0e9684d1279ecea } from '../../../../src/components/admin/OrderSummaryField'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -17,6 +19,8 @@ export const importMap = {
   "/src/components/admin/OrderNumberCell#OrderNumberCell": OrderNumberCell_3b343741fbf4d5e513fb3d6163a51d5c,
   "/src/components/admin/OrderNumberField#OrderNumberField": OrderNumberField_0257a63935aa71def0a0e22d967c4e95,
   "/src/components/admin/OrderStatusCell#OrderStatusCell": OrderStatusCell_a794d7e77c9050aa1f0c971a44c63eb1,
+  "/src/components/admin/OrderSummaryCell#OrderSummaryCell": OrderSummaryCell_a0bb65445ac84e5f1167a0ee6cd82ff7,
+  "/src/components/admin/OrderSummaryField#OrderSummaryField": OrderSummaryField_21fbfa8c16d46d59d0e9684d1279ecea,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
