@@ -142,9 +142,9 @@ export const Orders: CollectionConfig = {
       relationTo: 'media',
       label: 'رسید بیعانه',
       admin: {
-        readOnly: true,
+        hidden: true,
+        disableListColumn: true,
         description: 'عکس رسید واریزی که مشتری از لینک پیامک فرستاده است.',
-        condition: (data) => Boolean(data.depositReceipt),
       },
     },
     {
@@ -152,9 +152,8 @@ export const Orders: CollectionConfig = {
       type: 'date',
       label: 'زمان دریافت رسید',
       admin: {
-        readOnly: true,
-        position: 'sidebar',
-        condition: (data) => Boolean(data.depositReceiptAt),
+        hidden: true,
+        disableListColumn: true,
       },
     },
     {

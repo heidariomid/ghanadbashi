@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { sendDepositSms } from '@/actions/deposit-sms'
-import { faNumber, faPhone, toLatinDigits } from '@/lib/format'
+import { extractDigits, faNumber, faPhone, formatAmountInput } from '@/lib/format'
 
 interface OrderDepositSmsProps {
   orderId: number
@@ -20,7 +20,9 @@ export function OrderDepositSms({
   lastOk,
   cardLast4,
 }: OrderDepositSmsProps) {
-  const [amount, setAmount] = useState(lastAmount != null ? String(lastAmount) : '')
+  const [amount, setAmount] = useState(
+    lastAmount != null ? formatAmountInput(String(lastAmount)) : '',
+  )
   const [sending, setSending] = useState(false)
   const [note, setNote] = useState(lastNote)
   const [ok, setOk] = useState(lastOk)
@@ -33,7 +35,7 @@ export function OrderDepositSms({
       if (result.ok) {
         setOk(true)
         setNote(result.note)
-        setAmount(String(result.amount))
+        setAmount(formatAmountInput(String(result.amount)))
       } else {
         setOk(false)
         setNote(result.error)
@@ -71,12 +73,12 @@ export function OrderDepositSms({
         placeholder="مثلاً ۲۵۰۰۰۰۰"
         value={amount}
         disabled={sending}
-        onChange={(event) => setAmount(event.target.value)}
+        onChange={(event) => setAmount(formatAmountInput(event.target.value))}
       />
       <button
         className="order-deposit__button"
         type="button"
-        disabled={sending || !cardLast4 || !amount.trim()}
+        disabled={sending || !cardLast4 || !extractDigits(amount)}
         onClick={() => void onSend()}
       >
         {sending ? 'در حال ارسال…' : 'ارسال پیامک واریز'}
@@ -91,7 +93,7 @@ export function OrderDepositSms({
 }
 
 function lastAmountDisplay(raw: string): string | null {
-  const digits = toLatinDigits(raw).replace(/\D/g, '')
+  const digits = extractDigits(raw)
   if (!digits) return null
   const amount = Number(digits)
   if (!Number.isInteger(amount) || amount < 1) return null

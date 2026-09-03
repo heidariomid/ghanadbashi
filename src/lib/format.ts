@@ -16,6 +16,18 @@ export function toLatinDigits(value: string): string {
   })
 }
 
+/** Digits only — for amount fields before parse/validate. */
+export function extractDigits(raw: string, maxLength = 12): string {
+  return toLatinDigits(raw).replace(/\D/g, '').slice(0, maxLength)
+}
+
+/** Live amount input — Persian digits with thousand grouping. */
+export function formatAmountInput(raw: string, maxDigits = 12): string {
+  const digits = extractDigits(raw, maxDigits)
+  if (!digits) return ''
+  return faNumber(Number(digits))
+}
+
 /** Price with its currency word, e.g. «۹۸۰٫۰۰۰ تومان» */
 export function faPrice(value: number): string {
   return `${faNumber(value)} تومان`

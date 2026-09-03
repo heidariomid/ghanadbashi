@@ -39,10 +39,14 @@ export default async function DepositReceiptPage({ params }: DepositReceiptPageP
   const alreadyUploaded = order.depositReceipt != null
 
   return (
-    <main className="flex min-h-[calc(100dvh-var(--spacing-nav))] flex-col">
-      <section className="flex flex-1 flex-col justify-center bg-card py-section">
+    <main className="flex min-h-[calc(100dvh-var(--spacing-nav))] flex-col bg-background">
+      <section className="relative flex flex-1 flex-col justify-center overflow-hidden py-section">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-1/2 h-80 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,var(--color-secondary)_0%,transparent_70%)] opacity-60"
+        />
         <Container>
-          <div className="mx-auto max-w-xl">
+          <div className="relative mx-auto max-w-lg">
             <DepositReceiptForm
               token={token}
               orderTitle={orderReceiptTitle(order.id)}

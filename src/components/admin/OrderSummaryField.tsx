@@ -5,6 +5,7 @@ import { cardLastFour, parseCardNumber, parseDepositAmount } from '@/lib/deposit
 import { faNumber, faPhone } from '@/lib/format'
 import { formatOrderNumber } from '@/lib/order-number'
 import { LINE_KIND_LABEL, resolveOrderLines, type OrderLineSource } from '@/lib/order-summary'
+import type { Media } from '@/payload-types'
 
 function asSource(data: unknown): OrderLineSource {
   if (!data || typeof data !== 'object') return {}
@@ -28,6 +29,7 @@ export const OrderSummaryField: TextareaFieldServerComponent = async ({ data, id
   const n = typeof id === 'number' ? id : Number(id)
   const orderNo = Number.isFinite(n) ? formatOrderNumber(n) : ''
   const cardLast4 = await readCardLast4(req.payload)
+  const depositReceipt = await readDepositReceipt(req.payload, data)
 
   return (
     <div className="field-type order-receipt">
@@ -37,10 +39,12 @@ export const OrderSummaryField: TextareaFieldServerComponent = async ({ data, id
           <p className="order-receipt__title">{orderNo ? `شماره ${orderNo}` : 'اقلام سفارش'}</p>
         </div>
         <p className="order-receipt__count">
-          {lines.length === 0 ? 'خالی' : `${faNumber(pieceCount)} قلم`}
+          {lines.length === 0
+            ? 'خالی'
+            : `${faNumber(lines.length)} ردیف · ${faNumber(pieceCount)} عدد`}
         </p>
       </div>
-      {name || phone || deliveryDate ? (
+      {name || phone || deliveryDate || notes ? (
         <dl className="order-receipt__meta">
           {name ? (
             <div className="order-receipt__meta-row">
@@ -64,6 +68,12 @@ export const OrderSummaryField: TextareaFieldServerComponent = async ({ data, id
               <dd>{deliveryDate}</dd>
             </div>
           ) : null}
+          {notes ? (
+            <div className="order-receipt__meta-row order-receipt__meta-row--notes">
+              <dt>توضیحات</dt>
+              <dd>{notes}</dd>
+            </div>
+          ) : null}
         </dl>
       ) : null}
       {lines.length === 0 ? (
@@ -74,17 +84,39 @@ export const OrderSummaryField: TextareaFieldServerComponent = async ({ data, id
             const kind = LINE_KIND_LABEL[line.kind]
             return (
               <li className="order-receipt__row" key={`${line.kind}-${line.title}-${index}`}>
-                <span className="order-receipt__qty">{faNumber(line.quantity)}</span>
                 <div className="order-receipt__item">
                   {kind ? <span className="order-receipt__kind">{kind}</span> : null}
                   <span className="order-receipt__name">{line.title}</span>
+                  <span className="order-receipt__qty-line">
+                    تعداد: <strong>{faNumber(line.quantity)}</strong> عدد
+                  </span>
                 </div>
               </li>
             )
           })}
         </ol>
       )}
-      {notes ? <p className="order-receipt__notes">{notes}</p> : null}
+      {depositReceipt ? (
+        <div className="order-receipt__deposit">
+          <p className="order-receipt__kicker">رسید بیعانه</p>
+          <a
+            className="order-receipt__deposit-image"
+            href={depositReceipt.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element -- admin preview of uploaded receipt */}
+            <img alt={depositReceipt.alt} src={depositReceipt.url} />
+          </a>
+          <a
+            className="order-receipt__deposit-download"
+            href={depositReceipt.url}
+            download={depositReceipt.filename}
+          >
+            دانلود رسید
+          </a>
+        </div>
+      ) : null}
       {Number.isFinite(n) ? (
         <OrderDepositSms
           orderId={n}
@@ -129,4 +161,24 @@ async function readCardLast4(payload: Payload) {
   })
   const card = parseCardNumber(settings.contact?.cardNumber)
   return card ? cardLastFour(card) : null
+}
+
+async function readDepositReceipt(
+  payload: Payload,
+  data: unknown,
+): Promise<{ url: string; alt: string; filename: string } | null> {
+  if (!data || typeof data !== 'object') return null
+  const raw = (data as Record<string, unknown>).depositReceipt
+  let media: Media | null = null
+  if (typeof raw === 'number') {
+    media = await payload.findByID({ collection: 'media', id: raw, depth: 0 }).catch(() => null)
+  } else if (raw && typeof raw === 'object' && 'url' in raw) {
+    media = raw as Media
+  }
+  if (!media?.url) return null
+  return {
+    url: media.url,
+    alt: media.alt?.trim() || 'رسید بیعانه',
+    filename: media.filename?.trim() || 'deposit-receipt.webp',
+  }
 }
