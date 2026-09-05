@@ -71,7 +71,7 @@ export interface DepositReceiptCopy {
   submitting: string
   successTitle: string
   successBody: string
-  error: string
+  networkError: string
   missingFile: string
   invalidType: string
   tooLarge: string
@@ -340,11 +340,11 @@ export const content: SiteContent = {
     submitting: 'در حال ارسال…',
     successTitle: 'رسید دریافت شد',
     successBody: 'ممنون — رسید شما ثبت شد. به‌زودی با شما تماس می‌گیریم.',
-    error: 'ارسال رسید ممکن نشد. لطفاً دوباره تلاش کنید.',
+    networkError: 'اتصال قطع شد. اینترنت را چک کنید و دوباره بفرستید.',
     missingFile: 'لطفاً عکس رسید را انتخاب کنید.',
-    invalidType: 'فقط فایل تصویری مجاز است.',
-    tooLarge: 'حجم عکس نباید بیشتر از ۴ مگابایت باشد.',
-    photoHint: 'فقط تصویر، حداکثر ۴ مگابایت',
+    invalidType: 'فقط عکس مجاز است (JPG، PNG یا WebP). فایل PDF یا سند قبول نمی‌شود.',
+    tooLarge: 'حجم عکس بیشتر از ۴ مگابایت است. لطفاً عکس کوچک‌تر یا با کیفیت کمتر انتخاب کنید.',
+    photoHint: 'JPG یا PNG، حداکثر ۴ مگابایت',
     fields: {
       receipt: 'عکس رسید واریز',
     },

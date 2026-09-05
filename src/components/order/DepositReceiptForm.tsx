@@ -7,8 +7,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { CheckIcon } from '@/components/ui/icons'
 import { content } from '@/data/content'
 import { faCardNumber, faNumber } from '@/lib/format'
-
-const MAX_RECEIPT_BYTES = 4 * 1024 * 1024
+import { isReceiptImageFile, MAX_RECEIPT_BYTES } from '@/lib/receipt-image'
 
 const cardClass =
   'rounded-3xl border border-white/80 bg-white/60 px-6 py-8 shadow-warm backdrop-blur-xl sm:px-8 sm:py-10 dark:border-white/10 dark:bg-white/8'
@@ -62,19 +61,19 @@ export function DepositReceiptForm({
     )
   }
 
+  function validateFile(file: File | undefined): string | null {
+    if (!file || file.size === 0) return copy.missingFile
+    if (!isReceiptImageFile(file)) return copy.invalidType
+    if (file.size > MAX_RECEIPT_BYTES) return copy.tooLarge
+    return null
+  }
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const file = fileRef.current?.files?.[0]
-    if (!file) {
-      setError(copy.missingFile)
-      return
-    }
-    if (!file.type.startsWith('image/')) {
-      setError(copy.invalidType)
-      return
-    }
-    if (file.size > MAX_RECEIPT_BYTES) {
-      setError(copy.tooLarge)
+    const fileError = validateFile(file)
+    if (fileError) {
+      setError(fileError)
       return
     }
 
@@ -82,7 +81,7 @@ export function DepositReceiptForm({
     setError(null)
     try {
       const formData = new FormData()
-      formData.set('receipt', file)
+      formData.set('receipt', file!)
       const result = await submitDepositReceipt(token, formData)
       if (result.success) {
         setSuccess(true)
@@ -90,7 +89,7 @@ export function DepositReceiptForm({
         setError(result.error)
       }
     } catch {
-      setError(copy.error)
+      setError(copy.networkError)
     } finally {
       setPending(false)
     }
@@ -101,10 +100,11 @@ export function DepositReceiptForm({
     if (preview) URL.revokeObjectURL(preview)
     if (!file) {
       setPreview(null)
+      setError(null)
       return
     }
+    setError(validateFile(file))
     setPreview(URL.createObjectURL(file))
-    setError(null)
   }
 
   async function onCopyCard() {
@@ -206,15 +206,15 @@ export function DepositReceiptForm({
               src={preview}
             />
           ) : null}
-        </li>
-
-        <li className="space-y-3">
-          <StepHeading index={3} title={copy.steps[2]} />
           {error ? (
             <p className="text-small font-semibold text-primary-strong" role="alert">
               {error}
             </p>
           ) : null}
+        </li>
+
+        <li className="space-y-3">
+          <StepHeading index={3} title={copy.steps[2]} />
           <button
             className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-success px-8 text-body font-bold text-success-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_-6px_rgba(31,138,76,0.45)] active:translate-y-0 active:brightness-95 disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none"
             type="submit"
