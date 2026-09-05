@@ -1,6 +1,6 @@
 import type { Payload } from 'payload'
 
-import { faNumber, toLatinDigits } from '@/lib/format'
+import { toLatinDigits } from '@/lib/format'
 import {
   createDepositReceiptToken,
   depositReceiptPath,
@@ -87,8 +87,6 @@ export async function sendDepositSmsForOrder(
         ? parametersForTemplate(templateId, {
             ORDER: String(publicOrderNumber(orderId)),
             NAME: customerName,
-            AMOUNT: faNumber(amount),
-            CARD: card,
             TOKEN: receiptToken,
           })
         : {},

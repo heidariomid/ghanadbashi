@@ -53,6 +53,18 @@ export interface DepositReceiptCopy {
   eyebrow: string
   title: string
   description: string
+  whyDeposit: string
+  steps: [string, string, string]
+  paymentTitle: string
+  amountLabel: string
+  cardLabel: string
+  cardHint: string
+  copyCard: string
+  copiedCard: string
+  missingPayment: string
+  missingCard: string
+  missingAmount: string
+  uploadStepTitle: string
   metaTitle: string
   metaDescription: string
   submit: string
@@ -301,12 +313,29 @@ export const content: SiteContent = {
   },
 
   depositReceipt: {
-    eyebrow: 'رسید بیعانه',
-    title: 'ارسال رسید واریز',
-    description:
-      'بعد از واریز بیعانه، عکس رسید بانک را اینجا بفرستید تا سفارش شما تأیید شود.',
-    metaTitle: 'ارسال رسید واریز',
-    metaDescription: 'ارسال عکس رسید بیعانه برای تأیید سفارش.',
+    eyebrow: 'تأیید سفارش',
+    title: 'واریز بیعانه',
+    description: 'مراحل زیر را به ترتیب انجام دهید.',
+    whyDeposit:
+      'سفارش شما ثبت شد. برای شروع پخت، لازم است بخشی از مبلغ سفارش را به‌عنوان بیعانه واریز کنید. بعد از دریافت رسید، سفارش شما تأیید می‌شود و کار پخت آغاز می‌شود.',
+    steps: [
+      'مبلغ بیعانه را به شماره کارت زیر واریز کنید. می‌توانید شماره کارت را کپی کنید.',
+      'بعد از واریز، عکس رسید بانک را انتخاب کنید.',
+      'روی «ارسال رسید» بزنید تا سفارش شما بررسی شود.',
+    ],
+    paymentTitle: 'اطلاعات واریز',
+    amountLabel: 'مبلغ بیعانه',
+    cardLabel: 'شماره کارت قناد',
+    cardHint: 'مبلغ بیعانه را به همین کارت واریز کنید.',
+    copyCard: 'کپی شماره کارت',
+    copiedCard: 'کپی شد',
+    missingPayment:
+      'اطلاعات واریز هنوز آماده نیست. لطفاً با قناد تماس بگیرید یا کمی بعد دوباره امتحان کنید.',
+    missingCard: 'شماره کارت هنوز در سیستم ثبت نشده. لطفاً با قناد تماس بگیرید.',
+    missingAmount: 'مبلغ بیعانه هنوز مشخص نشده. لطفاً با قناد تماس بگیرید.',
+    uploadStepTitle: 'ارسال رسید',
+    metaTitle: 'واریز بیعانه',
+    metaDescription: 'واریز بیعانه و ارسال رسید برای تأیید و شروع پخت سفارش.',
     submit: 'ارسال رسید',
     submitting: 'در حال ارسال…',
     successTitle: 'رسید دریافت شد',

@@ -33,6 +33,12 @@ export function faPrice(value: number): string {
   return `${faNumber(value)} تومان`
 }
 
+/** Card number grouped in fours with Persian digits. */
+export function faCardNumber(value: string): string {
+  const digits = toLatinDigits(value).replace(/\D/g, '')
+  return digits.replace(/(\d{4})(?=\d)/g, '$1 ').replace(/\d/g, (digit) => faNumber(Number(digit)))
+}
+
 /** Phone numbers keep their grouping but render in Persian digits. */
 export function faPhone(value: string): string {
   return value.replace(/\d/g, (digit) => faNumber(Number(digit)))

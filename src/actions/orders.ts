@@ -19,6 +19,7 @@ import {
   normalizePhone,
   otpMessages,
 } from '@/lib/phone-verification'
+import { resolveBakerNotificationPhone } from '@/lib/baker-notification'
 import { resolveOrigin } from '@/lib/site-url'
 import { parametersForTemplate, parseTemplateId, sendSms } from '@/lib/sms'
 
@@ -424,22 +425,6 @@ async function notifyOrderSms(
         })
       : {},
   })
-}
-
-async function resolveBakerNotificationPhone(): Promise<string | null> {
-  try {
-    const payload = await getPayloadClient()
-    const settings = await payload.findGlobal({
-      slug: 'site-settings',
-      depth: 0,
-      overrideAccess: true,
-    })
-    const fromCms = normalizePhone(settings.contact?.orderNotificationPhone ?? '')
-    if (fromCms) return fromCms
-  } catch (error) {
-    console.error('Could not read orderNotificationPhone', error)
-  }
-  return normalizePhone(process.env.ORDER_NOTIFICATION_PHONE ?? '')
 }
 
 function orderAdminUrl(orderId: number): string | null {

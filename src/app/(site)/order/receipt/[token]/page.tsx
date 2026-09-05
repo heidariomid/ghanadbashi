@@ -4,11 +4,13 @@ import { notFound } from 'next/navigation'
 import { DepositReceiptForm } from '@/components/order/DepositReceiptForm'
 import { Container } from '@/components/layout/Container'
 import { content } from '@/data/content'
+import { parseCardNumber } from '@/lib/deposit-sms'
 import {
   depositReceiptReady,
   findOrderByDepositToken,
   orderReceiptTitle,
 } from '@/lib/deposit-receipt'
+import { faPrice } from '@/lib/format'
 import { getPayloadClient } from '@/lib/payload'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -37,6 +39,16 @@ export default async function DepositReceiptPage({ params }: DepositReceiptPageP
 
   const customerName = String(order.customerName ?? '').trim()
   const alreadyUploaded = order.depositReceipt != null
+  const depositAmount =
+    typeof order.depositAmount === 'number' && order.depositAmount >= 1
+      ? order.depositAmount
+      : null
+  const settings = await payload.findGlobal({
+    slug: 'site-settings',
+    depth: 0,
+    overrideAccess: true,
+  })
+  const cardNumber = parseCardNumber(settings.contact?.cardNumber)
 
   return (
     <main className="flex min-h-[calc(100dvh-var(--spacing-nav))] flex-col bg-background">
@@ -51,6 +63,8 @@ export default async function DepositReceiptPage({ params }: DepositReceiptPageP
               token={token}
               orderTitle={orderReceiptTitle(order.id)}
               customerName={customerName}
+              depositAmount={depositAmount != null ? faPrice(depositAmount) : null}
+              cardNumber={cardNumber}
               alreadyUploaded={alreadyUploaded}
             />
           </div>

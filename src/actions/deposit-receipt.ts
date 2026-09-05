@@ -4,7 +4,9 @@ import {
   depositReceiptReady,
   findOrderByDepositToken,
 } from '@/lib/deposit-receipt'
+import { notifyBakerDepositReceiptUploaded } from '@/lib/deposit-receipt-sms'
 import { getPayloadClient } from '@/lib/payload'
+import { after } from 'next/server'
 
 const MAX_RECEIPT_BYTES = 4 * 1024 * 1024
 
@@ -38,6 +40,7 @@ export async function submitDepositReceipt(
 
   const buffer = Buffer.from(await file.arrayBuffer())
   const customerName = String(order.customerName ?? 'مشتری')
+  const firstUpload = order.depositReceipt == null
   const uploaded = await payload.create({
     collection: 'media',
     data: { alt: `رسید بیعانه سفارش ${order.id} — ${customerName}` },
@@ -59,6 +62,14 @@ export async function submitDepositReceipt(
     context: { skipSmsHook: true, skipPreserve: true },
     overrideAccess: true,
   })
+
+  if (firstUpload) {
+    after(() => {
+      notifyBakerDepositReceiptUploaded(order.id, customerName).catch((error: unknown) =>
+        console.error('Deposit receipt baker SMS failed', error),
+      )
+    })
+  }
 
   return { success: true }
 }
